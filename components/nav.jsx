@@ -5,7 +5,7 @@ import React, { useEffect, useRef, useState, useCallback } from "react";
 // import Object3DCollection from "../components/object3D_collection"; // 3D 오브젝트 그리드
 import "../styles/nav.scss";
 
-export function Nav() {
+export default function Nav() {
 
    const [activeTab, setActiveTab] = useState("none");
 
