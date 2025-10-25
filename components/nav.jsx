@@ -225,7 +225,7 @@ export function Nav() {
                 {/* 햄버거 메뉴 버튼 */}
                 <svg
                     width="1.55vw"
-                    height="auto"
+                    height="1.35vw"
                     viewBox="0 0 28 26"
                     fill="none"
                     xmlns="http://www.w3.org/2000/svg"
