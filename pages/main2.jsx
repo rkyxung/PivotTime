@@ -2,7 +2,6 @@
 
 // React 훅들과 함수들을 import
 import React, { useEffect, useRef, useState, useCallback } from "react";
-import Object3DCollection from "../components/object3D_collection"; // 3D 오브젝트 그리드
 
 const Main = () => {
   // DOM 요소 참조를 위한 useRef 훅들
