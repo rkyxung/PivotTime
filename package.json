@@ -22,8 +22,5 @@
     "@tailwindcss/postcss": "^4",
     "sass": "^1.93.2",
     "tailwindcss": "^4"
-  },
-  "engines": {
-    "node": ">=18.0.0"
   }
 }
