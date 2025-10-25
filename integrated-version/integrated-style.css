@@ -1,0 +1,312 @@
+/*
+  [v3] vw 단위를 존중하고 캔버스 위치를 정확히 잡기 위해 수정된 CSS
+*/
+
+/* 폰트 정의는 기존과 동일 */
+@font-face {
+  font-family: "Pretendard";
+  src: url("../fonts/Pretendard-Regular.ttf") format("truetype");
+  font-weight: 400;
+}
+@font-face {
+  font-family: "Pretendard";
+  src: url("../fonts/Pretendard-Medium.ttf") format("truetype");
+  font-weight: 500;
+}
+@font-face {
+  font-family: "Pretendard";
+  src: url("../fonts/Pretendard-SemiBold.ttf") format("truetype");
+  font-weight: 600;
+}
+@font-face {
+  font-family: "Pretendard";
+  src: url("../fonts/Pretendard-Bold.ttf") format("truetype");
+  font-weight: 700;
+}
+@font-face {
+  font-family: "Aventa";
+  src: url("../fonts/EllenLuff - Aventa Light.otf") format("truetype");
+  font-weight: 300;
+}
+@font-face {
+  font-family: "SF Pro";
+  src: url("../fonts/SF-Pro.ttf") format("truetype");
+  font-weight: 600;
+}
+
+* {
+  box-sizing: border-box;
+  font-family: "Pretendard", "Aventa", "SF Pro", sans-serif;
+  font-weight: 500;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: #d5d5d5;
+  width: 100vw;
+  overflow-x: hidden;
+}
+
+main {
+  position: relative;
+  width: 100vw;
+  height: 54.6vw;
+  overflow: hidden;
+}
+
+/* 캔버스 컨테이너의 위치와 크기를 vw 단위로 명확하게 지정 */
+#canvas-container {
+  position: absolute;
+  top: 15.7vw;
+  left: -12.6vw;
+  width: 125.83vw;
+  height: 78.23vw;
+  z-index: 1;
+  transition: all 0.6s ease-in-out;
+}
+
+/* p5.js가 생성하는 canvas는 컨테이너에 꽉 차도록 설정 */
+#canvas-container canvas {
+    width: 100% !important;
+    height: 100% !important;
+}
+
+/* Zoom out 애니메이션 시 캔버스 컨테이너를 제어 */
+main.zoom_out #canvas-container {
+  top: -35%;
+  left: -13%;
+  transform: scale(0.18);
+  pointer-events: none;
+}
+
+
+/* --- 이하 기존 스타일 유지 --- */
+
+.dots {
+  width: 100vw;
+  height: 54.6vw;
+  margin-top: 0.85vw;
+  margin-left: -0.5vw;
+  background-image: radial-gradient(circle, #c8c8c8 0.21vw, transparent 0.21vw);
+  background-size: calc(101vw / 8) calc(50vw / 4);
+}
+
+nav {
+  position: fixed;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  z-index: 10;
+  margin: 1.25vw 3.15vw;
+  gap: 18.5vw;
+  transition: all 0.6s ease-in-out;
+}
+
+.logo {
+  font-family: "SF Pro";
+  font-weight: 600;
+  font-size: 1.67vw;
+  line-height: 160%;
+  color: #004aff;
+  letter-spacing: -0.03em;
+}
+
+nav ul {
+  display: flex;
+}
+
+.Tab_Switcher {
+  width: 10.5vw;
+  background-color: rgba(48, 48, 48, 0.3);
+  gap: 1.125vw;
+  margin-left: 15.9vw;
+  border-radius: 1.56vw;
+  padding: 0.45vw 1.15vw;
+}
+
+.Tab_Switcher li {
+  display: flex;
+  font-size: 1vw;
+  color: #fff;
+  align-items: center;
+  justify-content: center;
+}
+
+.toggle_btn {
+  position: relative;
+  width: 4vw;
+  height: 2vw;
+  top: 0.95vw;
+  left: 2.4vw;
+  background-color: #303030;
+  opacity: 0.3;
+  border-radius: 1.36vw;
+  cursor: pointer;
+}
+
+.toggle_btn::before {
+  position: absolute;
+  width: 1.54vw;
+  height: 1.54vw;
+  content: "";
+  background-color: #ebebeb;
+  stroke: #c9c9c9;
+  stroke-width: 0.05vw;
+  border-radius: 50%;
+  top: 0.225vw;
+  left: 0.26vw;
+}
+
+.nav {
+  position: relative;
+  top: -1.18vw;
+  width: 15vw;
+  background-color: rgba(48, 48, 48, 0.3);
+  gap: 1.3vw;
+  margin-left: 8vw;
+  border-radius: 14.6vw;
+  padding: 0.45vw 13.5vw 0.45vw 1.69vw;
+}
+
+.nav li {
+  display: flex;
+  font-size: 1vw;
+  color: #fff;
+  align-items: center;
+  justify-content: center;
+}
+
+.txtBox {
+  font-family: "pretendard";
+  font-weight: 600;
+  font-size: 1.8vw;
+  color: #004aff;
+  letter-spacing: -0.03em;
+  z-index: 2;
+  pointer-events: none;
+  transition: opacity 0.4s ease-in-out;
+}
+
+.slogan {
+  font-weight: 600;
+  font-size: 1.25vw;
+  color: #fff;
+  background-color: #004aff;
+  margin-top: 0.4vw;
+  margin-left: -0.3vw;
+  letter-spacing: -0.03em;
+}
+
+.fever .slogan {
+  width: 12.8vw;
+  padding: 0.3vw 0.7vw;
+}
+
+.txtBox.fever {
+  position: absolute;
+  top: 24.8vw;
+  left: 5.5vw;
+}
+
+.txtBox.pivot {
+  position: absolute;
+  top: 20.2vw;
+  left: 79.8vw;
+}
+
+.pivot span {
+  display: inline-block;
+  margin: 0.4vw 3.6vw;
+}
+
+.pivot .slogan {
+  width: 9.55vw;
+  padding: 0.3vw 0.7vw;
+}
+
+.main_title {
+  position: absolute;
+  bottom: 0.2vw;
+  left: 3.1vw;
+  font-family: "Aventa";
+  font-weight: 300;
+  font-size: 17.98vw;
+  letter-spacing: -0.02em;
+  color: #004aff;
+}
+
+.info {
+  position: absolute;
+  bottom: 2.09vw;
+  font-size: 0.73vw;
+  letter-spacing: -0.03em;
+  line-height: 135%;
+}
+
+.info.left {
+  left: 3.25vw;
+}
+
+.info.center {
+  left: 18.7vw;
+}
+
+.info.right {
+  right: 3.24vw;
+  text-align: right;
+}
+
+main.zoom_out .txtBox {
+  opacity: 0;
+}
+
+main.zoom_out nav {
+  transform: translateY(-150%);
+  opacity: 0;
+}
+
+main.zoom_out .sub_objects {
+  opacity: 1;
+  transition: opacity 1s ease-in-out;
+}
+
+.sub_objects {
+  position: absolute;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  transition: opacity 0.2s ease-in-out, transform 0.6s ease-in-out;
+}
+
+.sub_objects .objects path,
+.sub_objects .objects ellipse {
+  stroke-width: 1;
+}
+
+.objects {
+  position: absolute;
+  transform: scale(0.45);
+}
+
+.one {
+  top: -8vw;
+  left: 1vw;
+  transform: scale(0.4);
+}
+
+.two {
+  top: -4vw;
+  right: 10vw;
+}
+
+.three {
+  top: 8vw;
+  left: -6vw;
+}
+
+.four {
+  top: 10.5vw;
+  right: -2vw;
+}

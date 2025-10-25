@@ -1,0 +1,219 @@
+@font-face {
+    font-family: 'Pretendard';
+    src: url('https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Thin.woff') format('woff');
+    font-weight: 100;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Pretendard';
+    src: url('https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-ExtraLight.woff') format('woff');
+    font-weight: 200;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Pretendard';
+    src: url('https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Light.woff') format('woff');
+    font-weight: 300;
+    font-display: swap;
+}
+
+@font-face {
+  font-family: "Pretendard";
+  src: url("/fonts/Pretendard-Regular.otf") format("truetype");
+  font-weight: 400;
+}
+@font-face {
+  font-family: "Pretendard";
+  src: url("/fonts/Pretendard-Medium.otf") format("truetype");
+  font-weight: 500;
+}
+@font-face {
+  font-family: "Pretendard";
+  src: url("/fonts/Pretendard-SemiBold.otf") format("truetype");
+  font-weight: 600;
+}
+@font-face {
+  font-family: "Pretendard";
+  src: url("/fonts/Pretendard-Bold.otf") format("truetype");
+  font-weight: 700;
+}
+
+@font-face {
+    font-family: 'Pretendard';
+    src: url('https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-ExtraBold.woff') format('woff');
+    font-weight: 800;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Pretendard';
+    src: url('https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Black.woff') format('woff');
+    font-weight: 900;
+    font-display: swap;
+}
+
+
+
+$color-blue : #0051FF;
+$color-lightGray:#E1E1E1;
+
+
+@mixin bodyText {
+    font-size: clamp(14px, 1.04vw, 22px);
+    font-family: 'Pretendard';
+    
+}
+
+@mixin navText {
+    font-size: clamp(13px, 0.99vw, 22px);
+    font-family: 'Prentendard';
+    font-weight: 500;
+    color: #fff;
+    letter-spacing: -0.02em;
+    line-height: 1; 
+
+}
+
+$nav-color : rgba(60, 60, 60, 0.5);
+
+
+// .p{
+//     @include bodyText;
+//     color: $color-blue;
+// }
+
+
+body {
+    width: 100vw;
+    height: auto;
+    margin: 0;
+    top: 0;
+    left: 0;
+    background-color: #000;
+}
+
+.webImage {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: auto;
+    opacity: 0.3;
+    z-index: 0;
+    display: none;
+}
+
+nav {
+    position: fixed;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    z-index: 10;
+    margin: 1.35vw 3.15vw;
+    gap: 19.8vw;
+    transition: all 0.6s ease-in-out;
+    z-index: 5;
+}
+
+.logo {
+    width: clamp(6.25vw, 10.67vw, 16.67vw);  /* 화면 크기에 따라 120~320px 사이로 유연하게 크기 조절 */
+    height: auto;
+    display: block;
+}
+
+nav ul {
+    display: flex;
+}
+
+.Tab_Switcher {
+    display: flex;                      
+    align-items: center;               
+    justify-content: space-between;  
+    width: auto;
+    background-color: $nav-color;
+    backdrop-filter: blur(7.5px);
+    gap: 1.4vw;
+    margin-left: 8.9vw;
+    border-radius: 1.56vw;
+    padding: 0.5vw 1.4vw;
+
+    & li {
+        display: flex;
+        @include navText;
+        align-items: center;
+        justify-content: center;
+        white-space: nowrap; 
+        z-index: 2;
+    }
+
+}
+
+.active-bg {
+    position: absolute;
+    left: 0.2vw;   
+    width: 7vw;                  
+    height: 1.7vw;               
+    background-color: rgba(208, 208, 208, 0.1); 
+    backdrop-filter: blur(7.5px);
+    border-radius: 2vw;          
+    transition: left 0.4s ease;
+    z-index: 1;
+    display: none;
+}
+
+
+
+.toggle-nav {
+    display: flex;               
+    align-items: center;        
+    justify-content: center; 
+    gap: 1vw;                    
+    position: relative;         
+}
+
+.toggle_btn {
+    position: relative;
+    width: 4.10vw;
+    height: 2.29vw;
+    background-color: $nav-color;
+    box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.15) inset;
+    backdrop-filter: blur(6.5226569175720215px);
+    border-radius: 1.36vw;
+    cursor: pointer;
+}
+
+.toggle_btn::before {
+    position: absolute;
+    width: 1.5vw;
+    height: 1.5vw;
+    content: "";
+    background-color: #ebebeb;
+    border: 0.05vw solid #c9c9c9;
+    border-radius: 50%;
+    top: 0.325vw;
+    left: 0.36vw;
+}
+
+.nav {
+    display: flex;               
+    align-items: center;         
+    justify-content: center;   
+    width: auto;                              
+    background-color: $nav-color; 
+    box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.15) inset;
+    backdrop-filter: blur(6.52px);
+    gap: 1.3vw;             
+    border-radius: 14.6vw;     
+    padding: 0.45vw 0.6vw 0.45vw 1.69vw; 
+    margin-left: 0;              
+    position: relative;  
+}
+
+.nav li {
+  display: flex;
+  @include navText;
+  align-items: center;
+  justify-content: center;
+}

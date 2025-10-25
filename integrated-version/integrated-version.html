@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- 수정: 새로운 CSS 파일을 연결합니다. -->
+    <link rel="stylesheet" href="integrated-style.css" />
+    <title>PIVOT - Integrated p5.js Version</title>
+
+    <!-- p5.js 라이브러리를 불러옵니다. -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.0/p5.min.js"></script>
+</head>
+
+<body>
+    <!-- 기존 index.html의 모든 요소들을 그대로 유지합니다. -->
+    <main>
+        <nav>
+            <div class="logo">
+                Pivot Time
+            </div>
+            <ul class="Tab_Switcher">
+                <li class="fever_btn">FEVER</li>
+                <li class="line">
+                    <svg width="0.1vw" height="1.24vw" viewBox="0 0 2 24" fill="none"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <path opacity="0.2" d="M0.685059 0.708984V23.293" stroke="white" />
+                    </svg>
+
+                </li>
+                <li class="fever_btn">PIVOT</li>
+            </ul>
+            <div class="toggle&nav">
+                <div class="toggle_btn"></div>
+                <ul class="nav">
+                    <li class="project_btn">Project</li>
+                    <li class="line">
+                        <svg width="0.1vw" height="1.24vw" viewBox="0 0 2 24" fill="none"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path opacity="0.2" d="M1.45801 0.84375V23.4277" stroke="white" />
+                        </svg>
+
+                    </li>
+                    <li class="student_btn">Student</li>
+                    <li class="hamburger_btn">
+                        <svg width="1.51vw" height="1.4vw" viewBox="0 0 29 27" fill="none"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path d="M4.2627 6.58984H25.1399" stroke="white" stroke-width="1.81946" />
+                            <path d="M4.2627 13.7305H25.1399" stroke="white" stroke-width="1.81946" />
+                            <path d="M4.2627 20.8711H25.1399" stroke="white" stroke-width="1.81946" />
+                        </svg>
+
+                    </li>
+                </ul>
+            </div>
+        </nav>
+
+        <div class="dots"></div>
+
+        <div class="txtBox fever">
+            <span>GET FEVER,</span>
+            <div class="slogan">우리의 전환을 담은 순간</div>
+        </div>
+
+        <div class="txtBox pivot">
+            <div class="slogan">새로운 길을 향해!</div>
+            <span>GO PIVOT!</span>
+        </div>
+        
+        <!-- *** 수정된 부분 *** -->
+        <!-- 기존의 거대한 main_object SVG를 제거하고, p5 캔버스가 들어갈 컨테이너를 추가합니다. -->
+        <div id="canvas-container"></div>
+
+        <div class="main_title">
+            PIVOT TIME
+        </div>
+
+        <div class="info left">
+            Kaywon University of Arts & Design
+            <br>32nd Delight Insight
+        </div>
+        <div class="info center">
+            Digital-media.kr
+            <br>degreeshow/2025
+        </div>
+        <div class="info right">
+            Kaywon Design Hall 5F
+            <br>Nov. 22. FRI - Nov. 24. SUN
+        </div>
+
+        <div class="sub_objects">
+            <svg class="objects one" width="42.6vw" height="33.96vw" viewBox="0 0 819 652" fill="none"
+                xmlns="http://www.w3.org/2000/svg">
+                <path d="M409.646 325.708L818.292 533.494" stroke="#004AFF" stroke-miterlimit="10" />
+                <path d="M409.646 325.709L760.702 517.902" stroke="#004AFF" stroke-miterlimit="10" />
+                <path d="M409.645 325.71L703.111 502.311" stroke="#004AFF" stroke-miterlimit="10" />
+                <path d="M409.645 325.709L645.521 486.714" stroke="#004AFF" stroke-miterlimit="10" />
+                <path d="M409.646 325.708L587.932 471.121" stroke="#004AFF" stroke-miterlimit="10" />
+                <path d="M409.646 325.709L530.341 455.527" stroke="#004AFF" stroke-miterlimit="10" />
+                <path d="M409.647 325.709L472.752 439.935" stroke="#004AFF" stroke-miterlimit="10" />
+                <path d="M409.646 325.709L415.161 424.343" stroke="#004AFF" stroke-miterlimit="10" />
+                <path d="M409.646 325.709L357.571 408.747" stroke="#004AFF" stroke-miterlimit="10" />
+                <path d="M409.646 325.709L299.983 393.155" stroke="#004AFF" stroke-miterlimit="10" />
+                <path d="M409.646 325.709L242.393 377.559" stroke="#004AFF" stroke-miterlimit="10" />
+                <path d="M409.646 325.709L184.803 361.968" stroke="#004AFF" stroke-miterlimit="10" />
+                <path d="M409.646 325.709L1.0001 117.924" stroke="#004AFF" stroke-miterlimit="10" />
+                <path d="M409.646 325.709L58.59 133.516" stroke="#004AFF" stroke-miterlimit="10" />
+                <path d="M409.646 325.709L116.18 149.111" stroke="#004AFF" stroke-miterlimit="10" />
+                <path d="M409.646 325.709L173.77 164.704" stroke="#004AFF" stroke-miterlimit="10" />
+                <path d="M409.646 325.709L231.36 180.296" stroke="#004AFF" stroke-miterlimit="10" />
+                <path d="M409.646 325.709L288.951 195.891" stroke="#004AFF" stroke-miterlimit="10" />
+                <path d="M409.646 325.709L346.541 211.483" stroke="#004AFF" stroke-miterlimit="10" />
+                <path d="M409.646 325.709L404.131 227.079" stroke="#004AFF" stroke-miterlimit="10" />
+                <path d="M409.646 325.709L461.721 242.671" stroke="#004AFF" stroke-miterlimit="10" />
+                <path d="M409.644 325.709L519.309 258.263" stroke="#004AFF" stroke-miterlimit="10" />
+                <path d="M409.645 325.709L576.898 273.859" stroke="#004AFF" stroke-miterlimit="10" />
+                <path d="M409.646 325.709L634.488 289.451" stroke="#004AFF" stroke-miterlimit="10" />
+            </svg>
+
+            <svg class="objects two" width="26.04vw" height="25.47vw" viewBox="0 0 500 489" fill="none"
+                xmlns="http://www.w3.org/2000/svg">
+                <g opacity="0.6">
+                    <ellipse cx="248.438" cy="243.852" rx="18.3907" ry="225.34"
+                        transform="rotate(12.1645 248.438 243.852)" stroke="#004AFF" stroke-width="1.6276" />
+                    <ellipse cx="248.053" cy="240.045" rx="22.2115" ry="225.34"
+                        transform="rotate(84.2636 248.053 240.045)" stroke="#004AFF" stroke-width="1.6276" />
+                    <ellipse cx="248.892" cy="242.947" rx="56.7856" ry="225.34"
+                        transform="rotate(73.7901 248.892 242.947)" stroke="#004AFF" stroke-width="1.6276" />
+                    <ellipse cx="249.687" cy="244.015" rx="112.976" ry="225.34"
+                        transform="rotate(53.3802 249.687 244.015)" stroke="#004AFF" stroke-width="1.6276" />
+                    <ellipse cx="249.687" cy="244.01" rx="112.976" ry="225.34"
+                        transform="rotate(41.1596 249.687 244.01)" stroke="#004AFF" stroke-width="1.6276" />
+                    <ellipse cx="249.684" cy="244.012" rx="126.879" ry="225.34"
+                        transform="rotate(104.289 249.684 244.012)" stroke="#004AFF" stroke-width="1.6276" />
+                    <ellipse cx="249.684" cy="244.015" rx="38.3156" ry="225.34"
+                        transform="rotate(137.126 249.684 244.015)" stroke="#004AFF" stroke-width="1.6276" />
+                    <ellipse cx="249.685" cy="244.015" rx="31.0147" ry="225.34"
+                        transform="rotate(148.217 249.685 244.015)" stroke="#004AFF" stroke-width="1.6276" />
+                </g>
+            </svg>
+
+            <svg class="objects three" width="38.28vw" height="35.47vw" viewBox="0 0 735 681" fill="none"
+                xmlns="http://www.w3.org/2000/svg">
+                <path
+                    d="M392.096 354.73C453.486 248.399 492.072 155.744 478.28 147.781C464.488 139.818 403.54 219.562 342.149 325.894C280.759 432.226 242.173 524.88 255.965 532.843C269.757 540.806 330.705 461.062 392.096 354.73Z"
+                    stroke="#004AFF" />
+                <path
+                    d="M413.095 366.853C471.671 265.397 498.573 171.267 473.183 156.608C447.793 141.949 379.725 212.312 321.149 313.768C262.573 415.225 235.671 509.355 261.061 524.014C286.451 538.673 354.519 468.31 413.095 366.853Z"
+                    stroke="#004AFF" />
+                <path
+                    d="M434.095 378.978C489.856 282.396 505.076 186.79 468.089 165.435C431.101 144.08 355.913 205.064 300.152 301.646C244.39 398.228 229.171 493.835 266.158 515.189C303.145 536.544 378.333 475.56 434.095 378.978Z"
+                    stroke="#004AFF" />
+                <path
+                    d="M455.094 391.101C508.041 299.395 511.577 202.312 462.991 174.262C414.406 146.211 332.098 197.814 279.151 289.521C226.205 381.228 222.669 478.31 271.254 506.361C319.839 534.411 402.147 482.808 455.094 391.101Z"
+                    stroke="#004AFF" />
+                <path
+                    d="M476.092 403.225C526.225 316.393 518.078 217.835 457.896 183.088C397.713 148.342 308.285 190.566 258.153 277.398C208.02 364.23 216.167 462.789 276.35 497.535C336.532 532.282 425.96 490.058 476.092 403.225Z"
+                    stroke="#004AFF" />
+                <path
+                    d="M497.091 415.349C544.409 333.392 524.579 233.357 452.798 191.915C381.018 150.473 284.47 183.316 237.153 265.273C189.835 347.23 209.665 447.265 281.446 488.707C353.226 530.149 449.774 497.306 497.091 415.349Z"
+                    stroke="#004AFF" />
+                <path
+                    d="M518.091 427.473C562.594 350.391 531.08 248.881 447.703 200.743C364.326 152.605 260.658 176.069 216.155 253.15C171.652 330.232 203.166 431.742 286.543 479.88C369.92 528.018 473.588 504.554 518.091 427.473Z"
+                    stroke="#004AFF" />
+                <path
+                    d="M539.09 439.597C580.779 367.39 537.582 264.403 442.606 209.569C347.631 154.735 236.843 168.819 195.155 241.026C153.466 313.233 196.663 416.22 291.638 471.054C386.613 525.887 497.401 511.804 539.09 439.597Z"
+                    stroke="#004AFF" />
+                <path
+                    d="M560.088 451.721C598.962 384.389 544.082 279.926 437.51 218.397C330.938 156.867 213.03 161.571 174.156 228.903C135.282 296.235 190.162 400.697 296.735 462.227C403.307 523.756 521.214 519.053 560.088 451.721Z"
+                    stroke="#004AFF" />
+                <path
+                    d="M581.088 463.845C617.147 401.389 550.583 295.45 432.413 227.225C314.243 158.999 189.215 154.322 153.156 216.779C117.097 279.235 183.661 385.174 301.831 453.399C420.001 521.625 545.029 526.302 581.088 463.845Z"
+                    stroke="#004AFF" />
+                <path
+                    d="M602.086 475.968C635.331 418.386 557.084 310.971 427.317 236.05C297.55 161.129 165.403 147.073 132.158 204.655C98.9127 262.237 177.16 369.652 306.927 444.573C436.694 519.494 568.841 533.55 602.086 475.968Z"
+                    stroke="#004AFF" />
+                <path
+                    d="M623.086 488.092C653.516 435.386 563.586 326.495 422.221 244.878C280.856 163.26 141.588 139.824 111.158 192.53C80.7276 245.237 170.658 354.128 312.023 435.745C453.388 517.362 592.656 540.799 623.086 488.092Z"
+                    stroke="#004AFF" />
+            </svg>
+
+            <svg class="objects four" width="29.84vw" height="30.16vw" viewBox="0 0 573 579" fill="none"
+                xmlns="http://www.w3.org/2000/svg">
+                <path d="M453.987 100.006L132.519 99.9597L280.342 231.469L538.89 242.715L453.987 100.006Z"
+                    stroke="#004AFF" stroke-miterlimit="10" />
+                <path d="M430.142 129.349L120.822 129.795L267.604 254.53L519.763 264.266L430.142 129.349Z"
+                    stroke="#004AFF" stroke-miterlimit="10" />
+                <path d="M406.299 158.681L109.14 159.634L254.882 277.594L500.633 285.824L406.299 158.681Z"
+                    stroke="#004AFF" stroke-miterlimit="10" />
+                <path d="M382.467 188.026L97.4381 189.477L242.157 300.658L481.503 307.374L382.467 188.026Z"
+                    stroke="#004AFF" stroke-miterlimit="10" />
+                <path d="M358.623 217.367L85.7424 219.311L229.439 323.713L462.393 328.929L358.623 217.367Z"
+                    stroke="#004AFF" stroke-miterlimit="10" />
+                <path d="M334.776 246.708L74.0434 249.145L216.716 346.777L443.264 350.479L334.776 246.708Z"
+                    stroke="#004AFF" stroke-miterlimit="10" />
+                <path d="M310.929 276.048L62.36 278.983L203.991 369.841L424.132 372.036L310.929 276.048Z"
+                    stroke="#004AFF" stroke-miterlimit="10" />
+                <path d="M287.087 305.382L50.6613 308.827L191.271 392.906L405.006 393.587L287.087 305.382Z"
+                    stroke="#004AFF" stroke-miterlimit="10" />
+                <path d="M263.24 334.723L38.9626 338.661L178.547 415.97L385.893 415.143L263.24 334.723Z"
+                    stroke="#004AFF" stroke-miterlimit="10" />
+                <path d="M239.393 364.064L27.2788 368.5L165.825 439.026L366.76 436.701L239.393 364.064Z"
+                    stroke="#004AFF" stroke-miterlimit="10" />
+                <path d="M215.549 393.406L15.5831 398.335L153.105 462.091L347.634 458.252L215.549 393.406Z"
+                    stroke="#004AFF" stroke-miterlimit="10" />
+                <path d="M328.514 479.833L191.713 422.769L3.89252 428.2L140.373 485.181L328.514 479.833Z"
+                    stroke="#004AFF" stroke-miterlimit="10" />
+            </svg>
+
+        </div>
+    </main>
+
+    <!-- 수정: 기존 main.js 대신 새로운 통합 스크립트를 연결합니다. -->
+    <script src="integrated-sketch.js"></script>
+
+</body>
+
+</html>
