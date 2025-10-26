@@ -1,66 +1,64 @@
 @font-face {
-  font-family: "Pretendard";
-  src: url("https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Thin.woff")
-    format("woff");
-  font-weight: 100;
-  font-display: swap;
+    font-family: 'Pretendard';
+    src: url('https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Thin.woff') format('woff');
+    font-weight: 100;
+    font-display: swap;
 }
 
 @font-face {
-  font-family: "Pretendard";
-  src: url("https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-ExtraLight.woff")
-    format("woff");
-  font-weight: 200;
-  font-display: swap;
+    font-family: 'Pretendard';
+    src: url('https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-ExtraLight.woff') format('woff');
+    font-weight: 200;
+    font-display: swap;
 }
 
 @font-face {
-  font-family: "Pretendard";
-  src: url("https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Light.woff")
-    format("woff");
-  font-weight: 300;
-  font-display: swap;
+    font-family: 'Pretendard';
+    src: url('https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Light.woff') format('woff');
+    font-weight: 300;
+    font-display: swap;
 }
 
 @font-face {
-  font-family: "Pretendard";
-  src: url("../public/fonts/Pretendard-Regular.ttf") format("truetype");
-  font-weight: 400;
-  font-style: normal;
-}
-@font-face {
-  font-family: "Pretendard";
-  src: url("../public/fonts/Pretendard-Medium.ttf") format("truetype");
-  font-weight: 500;
-  font-style: normal;
-}
-@font-face {
-  font-family: "Pretendard";
-  src: url("../public/fonts/Pretendard-SemiBold.ttf") format("truetype");
-  font-weight: 600;
-  font-style: normal;
-}
-@font-face {
-  font-family: "Pretendard";
-  src: url("../public/fonts/Pretendard-Bold.ttf") format("truetype");
-  font-weight: 700;
-  font-style: normal;
+    font-family: 'Pretendard';
+    src: url('https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff') format('woff');
+    font-weight: 400;
+    font-display: swap;
 }
 
 @font-face {
-  font-family: "Pretendard";
-  src: url("https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-ExtraBold.woff")
-    format("woff");
-  font-weight: 800;
-  font-display: swap;
+    font-family: 'Pretendard';
+    src: url('https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Medium.woff') format('woff');
+    font-weight: 500;
+    font-display: swap;
 }
 
 @font-face {
-  font-family: "Pretendard";
-  src: url("https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Black.woff")
-    format("woff");
-  font-weight: 900;
-  font-display: swap;
+    font-family: 'Pretendard';
+    src: url('https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-SemiBold.woff') format('woff');
+    font-weight: 600;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Pretendard';
+    src: url('https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Bold.woff') format('woff');
+    font-weight: 700;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Pretendard';
+    src: url('https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-ExtraBold.woff') format('woff');
+    font-weight: 800;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Pretendard';
+    src: url('https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Black.woff') format('woff');
+    font-weight: 900;
+    font-display: swap;
 }
 
 $font-main: "Pretendard", sans-serif;
@@ -238,7 +236,7 @@ nav {
   border-radius: 1.56vw;
   padding: 0.5vw 0.3vw;
 
-  .Tab_Switcher__indicator-mask {
+  .Tab_Switcher-marker-mask {
     position: absolute;
     top: 0;
     left: 0;
@@ -276,7 +274,7 @@ nav {
     z-index: 2;
   }
 
-  .Tab_Switcher__indicator {
+  .Tab_Switcher-marker {
     position: absolute;
     top: 50%;
     left: 0;
@@ -343,7 +341,7 @@ nav {
   border-radius: 1.56vw;
   padding: 0.3vw 0.3vw;
 
-  .nav__indicator-mask {
+  .nav-marker-mask {
     position: absolute;
     top: 0;
     left: 0;
@@ -398,7 +396,7 @@ nav {
     z-index: 2;
   }
 
-  .nav__indicator {
+  .nav-marker {
     position: absolute;
     top: 50%;
     left: 0;

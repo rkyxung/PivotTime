@@ -65,14 +65,14 @@ export default function Nav() {
   const [activeTab, setActiveTab] = useState("none");
   const [hoveredTab, setHoveredTab] = useState(null);
   const containerRef = useRef(null);
-  const indicatorRef = useRef(null);
+  const markerRef = useRef(null);
   const tabRefs = useRef({});
 
   // .nav 상태
   const [activeNavTab, setActiveNavTab] = useState(null);
   const [hoveredNavTab, setHoveredNavTab] = useState(null);
   const navContainerRef = useRef(null);
-  const navIndicatorRef = useRef(null);
+  const navMarkerRef = useRef(null);
   const navTabRefs = useRef({});
 
   const [isToggled, setIsToggled] = useState(false);
@@ -101,14 +101,14 @@ export default function Nav() {
     setIsToggled((current) => !current);
   };
 
-  const animateIndicator = useCallback(() => {
-    const indicator = indicatorRef.current;
+  const animateMarker = useCallback(() => {
+    const marker = markerRef.current;
     const container = containerRef.current;
-    if (!indicator || !container) return;
+    if (!marker || !container) return;
 
     const targetId = highlightTarget;
     if (!targetId) {
-      gsap.to(indicator, { opacity: 0, duration: 0.25, ease: "power2.out" });
+      gsap.to(marker, { opacity: 0, duration: 0.25, ease: "power2.out" });
       return;
     }
 
@@ -124,8 +124,8 @@ export default function Nav() {
     const activeColor = "rgba(240, 240, 240, 0.9)";
     const hoverColor = "rgba(208, 208, 208, 0.1)";
 
-    gsap.killTweensOf(indicator);
-    gsap.to(indicator, {
+    gsap.killTweensOf(marker);
+    gsap.to(marker, {
       x,
       width,
       opacity: 1,
@@ -135,14 +135,14 @@ export default function Nav() {
     });
   }, [highlightTarget, activeTab]);
 
-  const animateNavIndicator = useCallback(() => {
-    const indicator = navIndicatorRef.current;
+  const animateNavMarker = useCallback(() => {
+    const marker = navMarkerRef.current;
     const container = navContainerRef.current;
-    if (!indicator || !container) return;
+    if (!marker || !container) return;
 
     const targetId = highlightNavTarget;
     if (!targetId) {
-      gsap.to(indicator, { opacity: 0, duration: 0.25, ease: "power2.out" });
+      gsap.to(marker, { opacity: 0, duration: 0.25, ease: "power2.out" });
       return;
     }
 
@@ -158,8 +158,8 @@ export default function Nav() {
     const activeColor = "rgba(240, 240, 240, 0.9)";
     const hoverColor = "rgba(208, 208, 208, 0.1)";
 
-    gsap.killTweensOf(indicator);
-    gsap.to(indicator, {
+    gsap.killTweensOf(marker);
+    gsap.to(marker, {
       x,
       width,
       opacity: 1,
@@ -170,23 +170,23 @@ export default function Nav() {
   }, [highlightNavTarget, activeNavTab]);
 
   useLayoutEffect(() => {
-    animateIndicator();
-  }, [animateIndicator]);
+    animateMarker();
+  }, [animateMarker]);
 
   useLayoutEffect(() => {
-    animateNavIndicator();
-  }, [animateNavIndicator]);
+    animateNavMarker();
+  }, [animateNavMarker]);
 
   useLayoutEffect(() => {
     const handleResize = () => {
-      animateIndicator();
-      animateNavIndicator();
+      animateMarker();
+      animateNavMarker();
     };
     window.addEventListener("resize", handleResize);
     return () => {
       window.removeEventListener("resize", handleResize);
     };
-  }, [animateIndicator, animateNavIndicator]);
+  }, [animateMarker, animateNavMarker]);
 
   return (
     <main>
@@ -243,10 +243,10 @@ export default function Nav() {
             aria-label="Pivot actions"
             ref={containerRef}
           >
-            <div className="Tab_Switcher__indicator-mask">
+            <div className="Tab_Switcher-marker-mask">
               <span
-                className="Tab_Switcher__indicator"
-                ref={indicatorRef}
+                className="Tab_Switcher-marker"
+                ref={markerRef}
                 aria-hidden="true"
               />
             </div>
@@ -309,8 +309,8 @@ export default function Nav() {
               onClick={handleToggle}
             ></div>
             <div className="nav" ref={navContainerRef}>
-              <div className="nav__indicator-mask">
-                <span className="nav__indicator" ref={navIndicatorRef} />
+              <div className="nav-marker-mask">
+                <span className="nav-marker" ref={navMarkerRef} />
               </div>
               {NAV_ITEMS.map((item) => {
                 if (item.type === "separator") {
