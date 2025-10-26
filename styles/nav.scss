@@ -1,22 +1,25 @@
 @font-face {
-    font-family: 'Pretendard';
-    src: url('https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Thin.woff') format('woff');
-    font-weight: 100;
-    font-display: swap;
+  font-family: "Pretendard";
+  src: url("https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Thin.woff")
+    format("woff");
+  font-weight: 100;
+  font-display: swap;
 }
 
 @font-face {
-    font-family: 'Pretendard';
-    src: url('https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-ExtraLight.woff') format('woff');
-    font-weight: 200;
-    font-display: swap;
+  font-family: "Pretendard";
+  src: url("https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-ExtraLight.woff")
+    format("woff");
+  font-weight: 200;
+  font-display: swap;
 }
 
 @font-face {
-    font-family: 'Pretendard';
-    src: url('https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Light.woff') format('woff');
-    font-weight: 300;
-    font-display: swap;
+  font-family: "Pretendard";
+  src: url("https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Light.woff")
+    format("woff");
+  font-weight: 300;
+  font-display: swap;
 }
 
 @font-face {
@@ -45,190 +48,366 @@
 }
 
 @font-face {
-    font-family: 'Pretendard';
-    src: url('https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-ExtraBold.woff') format('woff');
-    font-weight: 800;
-    font-display: swap;
+  font-family: "Pretendard";
+  src: url("https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-ExtraBold.woff")
+    format("woff");
+  font-weight: 800;
+  font-display: swap;
 }
 
 @font-face {
-    font-family: 'Pretendard';
-    src: url('https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Black.woff') format('woff');
-    font-weight: 900;
-    font-display: swap;
+  font-family: "Pretendard";
+  src: url("https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Black.woff")
+    format("woff");
+  font-weight: 900;
+  font-display: swap;
 }
 
+$font-main: "Pretendard", sans-serif;
+$font-weight-medium: 500;
 
+// typography.scss (compact version)
 
-$color-blue : #0051FF;
-$color-lightGray:#E1E1E1;
+$font-main: "Pretendard", sans-serif;
+$font-weight-medium: 500;
 
+// TITLE
+// 약 33.5px max
+@mixin title {
+  font-family: $font-main;
+  font-weight: $font-weight-medium;
+  font-size: clamp(
+    1.4rem,
+    // ~22.4px
+    1.8vw,
+    // 유동
+    2.09rem // ~33.5px
+  );
+}
+
+// H1
+// 약 26px max
+@mixin h1 {
+  font-family: $font-main;
+  font-weight: $font-weight-medium;
+  font-size: clamp(
+    1.2rem,
+    // ~19.2px
+    1.4vw,
+    // 유동
+    1.63rem // ~26px
+  );
+}
+
+// H2
+// 약 23px max
+@mixin h2 {
+  font-family: $font-main;
+  font-weight: $font-weight-medium;
+  font-size: clamp(
+    1.05rem,
+    // ~16.8px
+    1.2vw,
+    // 유동
+    1.44rem // ~23px
+  );
+}
+
+// 본문
+// 약 20px max
+@mixin body {
+  font-family: $font-main;
+  font-weight: $font-weight-medium;
+  font-size: clamp(
+    0.9rem,
+    // ~14.4px
+    1vw,
+    // 유동
+    1.25rem // ~20px
+  );
+}
+
+// SUB
+// 약 17px max
+@mixin sub {
+  font-family: $font-main;
+  font-weight: $font-weight-medium;
+  font-size: clamp(
+    0.8rem,
+    // ~12.8px
+    0.9vw,
+    // 유동
+    1.06rem // ~17px
+  );
+}
 
 @mixin bodyText {
-    font-size: clamp(14px, 1.04vw, 22px);
-    font-family: 'Pretendard';
-    
+  font-size: clamp(0.875rem, 1.04vw, 1.375rem);
+  font-family: "Pretendard";
 }
 
 @mixin navText {
-    font-size: clamp(13px, 0.99vw, 22px);
-    font-family: 'Pretendard';
-    font-weight: 500;
-    color: #fff;
-    letter-spacing: -0.02em;
-    line-height: 1; 
-
+  font-size: clamp(0.8125rem, 0.99vw, 1.375rem);
+  font-family: "Pretendard";
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.85);
+  letter-spacing: -0.02em;
+  line-height: 1;
 }
 
-$nav-color : rgba(60, 60, 60, 0.5);
+@mixin navTap-btn {
+  @include navText;
+  position: relative;
+  padding: 0.2vw 1.2vw;
+  border-radius: 1.4vw;
+  border: none;
+  background-color: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+  color: rgba(255, 255, 255, 0.7);
+  cursor: pointer;
+  user-select: none;
+  z-index: 2;
+  transition: color 0.25s ease, opacity 0.25s ease;
+}
 
+$nav-color: rgba(60, 60, 60, 0.5);
+$color-blue: #0051ff;
+$color-lightGray: #e1e1e1;
 
 // .p{
 //     @include bodyText;
 //     color: $color-blue;
 // }
 
-.korean-text {
-    position: absolute;
-    color: #fff;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    @include navText;
-    letter-spacing: 0;
-    line-height: 160%;
-}
-
-
 body {
-    width: 100vw;
-    height: auto;
-    margin: 0;
-    top: 0;
-    left: 0;
-    background-color: #000;
+  position: relative;
+  width: 100vw;
+  height: auto;
+  margin: 0;
+  top: 0;
+  left: 0;
+  background-color: #000;
+  overflow-x: hidden;
 }
 
 .webImage {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: auto;
-    opacity: 0.3;
-    z-index: 0;
-    display: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: auto;
+  opacity: 0.3;
+  z-index: 0;
+  display: none;
 }
 
 nav {
-    position: fixed;
-    width: 100%;
-    display: flex;
-    align-items: center;
-    z-index: 10;
-    margin: 1.35vw 3.15vw;
-    gap: 19.8vw;
-    transition: all 0.6s ease-in-out;
-    z-index: 5;
+  position: fixed;
+  width: 93.85vw;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 2.1vw 3.15vw;
+  box-sizing: border-box;
+  transition: all 0.6s ease-in-out;
+  z-index: 999;
 }
 
 .logo {
-    width: clamp(6.25vw, 10.67vw, 16.67vw);  /* 화면 크기에 따라 120~320px 사이로 유연하게 크기 조절 */
-    height: auto;
-    display: block;
-}
-
-nav ul {
-    display: flex;
+  width: clamp(
+    6.25vw,
+    10.67vw,
+    16.67vw
+  ); /* 화면 크기에 따라 120~320px 사이로 유연하게 크기 조절 */
+  height: auto;
+  display: block;
 }
 
 .Tab_Switcher {
-    display: flex;                      
-    align-items: center;               
-    justify-content: space-between;  
-    width: auto;
-    background-color: $nav-color;
-    backdrop-filter: blur(7.5px);
-    gap: 1.4vw;
-    margin-left: 8.9vw;
-    border-radius: 1.56vw;
-    padding: 0.5vw 1.4vw;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  background-color: $nav-color;
+  backdrop-filter: blur(7.5px);
+  gap: 0.3vw;
+  margin-left: 9.5vw;
+  border-radius: 1.56vw;
+  padding: 0.5vw 0.3vw;
 
-    & li {
-        display: flex;
-        @include navText;
-        align-items: center;
-        justify-content: center;
-        white-space: nowrap; 
-        z-index: 2;
-    }
-
-}
-
-.active-bg {
+  .Tab_Switcher__indicator-mask {
     position: absolute;
-    left: 0.2vw;   
-    width: 7vw;                  
-    height: 1.7vw;               
-    background-color: rgba(208, 208, 208, 0.1); 
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    pointer-events: none;
+    border-radius: 1.56vw;
+  }
+
+  .tab_btn {
+    @include navTap-btn;
+  }
+
+  .tab_btn.is-hovered:not(.is-active) {
+    color: #fff;
+  }
+
+  .tab_btn.is-active {
+    color: #000;
+  }
+
+  .tab_btn.is-dimmed {
+    color: rgba(255, 255, 255, 0.35);
+  }
+
+  .tab_btn:focus-visible {
+    outline: 0.12vw solid rgba(255, 255, 255, 0.85);
+    outline-offset: 0.08vw;
+  }
+
+  .line {
+    pointer-events: none;
+    display: flex;
+    z-index: 2;
+  }
+
+  .Tab_Switcher__indicator {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    height: calc(100% - 0.4vw);
+    background: rgba(208, 208, 208, 0.1);
     backdrop-filter: blur(7.5px);
-    border-radius: 2vw;          
-    transition: left 0.4s ease;
+    border-radius: 2vw;
+    transform: translateY(-50%);
+    opacity: 0;
     z-index: 1;
-    display: none;
+    pointer-events: none;
+  }
 }
-
-
 
 .toggle-nav {
-    display: flex;               
-    align-items: center;        
-    justify-content: center; 
-    gap: 1vw;                    
-    position: relative;         
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.15vw;
 }
 
 .toggle_btn {
-    position: relative;
-    width: 4.10vw;
-    height: 2.29vw;
-    background-color: $nav-color;
-    box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.15) inset;
-    backdrop-filter: blur(6.5226569175720215px);
-    border-radius: 1.36vw;
-    cursor: pointer;
+  position: relative;
+  width: 4.1vw;
+  height: 2.29vw;
+  background-color: $nav-color;
+  box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.15) inset;
+  backdrop-filter: blur(6.5226569175720215px);
+  border-radius: 1.36vw;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+
+  &.is-active {
+    background-color: $color-blue;
+  }
 }
 
 .toggle_btn::before {
-    position: absolute;
-    width: 1.5vw;
-    height: 1.5vw;
-    content: "";
-    background-color: #ebebeb;
-    border: 0.05vw solid #c9c9c9;
-    border-radius: 50%;
-    top: 0.325vw;
-    left: 0.36vw;
+  position: absolute;
+  width: 1.5vw;
+  height: 1.5vw;
+  content: "";
+  background-color: #ebebeb;
+  border: 0.05vw solid #c9c9c9;
+  border-radius: 50%;
+  top: 0.36vw;
+  left: 0.36vw;
+  transition: transform 0.3s ease;
+}
+
+.toggle_btn.is-active::before {
+  transform: translateX(1.88vw);
 }
 
 .nav {
-    display: flex;               
-    align-items: center;         
-    justify-content: center;   
-    width: auto;                              
-    background-color: $nav-color; 
-    box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.15) inset;
-    backdrop-filter: blur(6.52px);
-    gap: 1.3vw;             
-    border-radius: 14.6vw;     
-    padding: 0.45vw 0.6vw 0.45vw 1.69vw; 
-    margin-left: 0;              
-    position: relative;  
-}
-
-.nav li {
   display: flex;
-  @include navText;
   align-items: center;
   justify-content: center;
+  position: relative;
+  background-color: $nav-color;
+  backdrop-filter: blur(7.5px);
+  gap: 0.25vw;
+  border-radius: 1.56vw;
+  padding: 0.3vw 0.3vw;
+
+  .nav__indicator-mask {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    pointer-events: none;
+    border-radius: 1.56vw;
+  }
+
+  .nav_btn {
+    @include navTap-btn;
+  }
+
+  .nav_btn--icon {
+    padding: 0.2vw;
+
+    path {
+      stroke: white; // 기본 아이콘 색상
+      transition: stroke 0.25s ease;
+    }
+  }
+
+  .nav_btn.is-hovered:not(.is-active) {
+    color: #fff;
+
+    path {
+      stroke: #fff;
+    }
+  }
+
+  .nav_btn.is-active {
+    color: #000;
+
+    path {
+      stroke: #000; // 활성화 시 아이콘 색상
+    }
+  }
+
+  .nav_btn.is-dimmed {
+    color: rgba(255, 255, 255, 0.35);
+
+    path {
+      stroke: rgba(255, 255, 255, 0.35);
+    }
+  }
+
+  .line {
+    pointer-events: none;
+    display: flex;
+    align-items: center;
+    z-index: 2;
+  }
+
+  .nav__indicator {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    height: calc(100% - 0.4vw);
+    background: rgba(208, 208, 208, 0.1);
+    border-radius: 2vw;
+    transform: translateY(-50%);
+    opacity: 0;
+    z-index: 1;
+    pointer-events: none;
+  }
 }
