@@ -1,0 +1,109 @@
+.concept {
+  height: $height;
+}
+
+.concept .graphic {
+  position: relative;
+}
+
+.concept .graphic > * {
+  position: absolute;
+}
+
+.concept .graphic svg {
+  width: 100.1vw;
+
+  height: auto;
+
+  top: -7.2vw;
+
+  left: -3.2vw;
+}
+
+.concept .logo svg {
+  width: 26.2vw;
+
+  height: auto;
+}
+
+.concept .txt {
+  display: flex;
+
+  align-items: center;
+
+  gap: 1vw;
+
+  top: 13.8vw;
+
+  left: 7.7vw;
+
+  transform: rotate(-8deg);
+}
+
+.concept .txt div {
+  width: 0.7vw;
+
+  height: 0.7vw;
+
+  background-color: #fff;
+
+  border-radius: 50%;
+
+  margin: 0;
+}
+
+.concept .txt p {
+  margin: 0;
+
+  @include sub;
+
+  margin-left: -0.5vw;
+}
+
+.concept .txt-wrap {
+  display: flex;
+
+  width: 87.38vw;
+
+  margin: 0 auto;
+
+  justify-content: space-between;
+
+  align-items: center;
+
+  padding-top: 31.7vw;
+}
+
+.concept .txt-wrap .logo {
+  padding-top: 4.5vw;
+}
+
+.concept .description .title {
+  display: flex;
+}
+
+.concept .description p {
+  @include body;
+
+  padding-top: 0.5vw;
+
+  line-height: 1.6;
+}
+
+.description .title div {
+  @include title2;
+}
+
+.description .title p {
+  @include h2;
+
+  margin: 0;
+
+  padding-top: 0.8vw;
+
+  padding-left: 0.8vw;
+
+  opacity: 0.8;
+
+  letter-spacing: -0.04rem;
+}

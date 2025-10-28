@@ -1,0 +1,83 @@
+.keywords {
+  width: 87.38vw;
+
+  height: $height;
+
+  margin: 0 auto;
+
+  margin-top: 11.3vw;
+}
+
+.delight {
+  @include h2;
+
+  letter-spacing: -0.04rem;
+
+  line-height: 1.2;
+}
+
+.keywords .logo svg {
+  width: 13.33vw;
+
+  height: auto;
+}
+
+.keywords .graphics {
+  position: relative;
+
+  margin: 5.5vw;
+
+  padding-bottom: 25vw;
+}
+
+.keywords .graphics > * {
+  position: absolute;
+
+  flex-shrink: 0;
+}
+
+.keywords .circle {
+  width: 20.1vw;
+
+  height: auto;
+
+  left: -3.1vw;
+}
+
+.keywords .line {
+  width: 48.28vw;
+
+  height: auto;
+
+  top: 1.6vw;
+
+  left: 49.3%;
+
+  transform: translateX(-50%);
+}
+
+.keywords .rectangle {
+  width: 18.28vw;
+
+  height: auto;
+
+  top: 8.4vw;
+
+  right: 0.4vw;
+}
+
+.keywords .txt {
+  display: flex;
+
+  justify-content: space-between;
+}
+
+.keywords p {
+  @include body;
+
+  margin-top: 0;
+
+  padding-right: 0.2vw;
+
+  line-height: 1.6;
+}

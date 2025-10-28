@@ -1,0 +1,61 @@
+.hero {
+  height: $height;
+}
+
+.hero-text {
+  padding-top: 34vw;
+}
+
+.hero-text > div {
+  display: flex;
+
+  justify-content: space-between;
+}
+
+.gf svg {
+  width: 15.88vw;
+
+  height: auto;
+}
+
+.gp svg {
+  width: 12.76vw;
+
+  height: auto;
+}
+
+.main-logo {
+  margin-top: 2.2vw;
+}
+
+.pivot {
+  width: 35vw;
+
+  height: auto;
+}
+
+.time {
+  width: 28.65vw;
+
+  height: auto;
+}
+
+.infoBox {
+  display: flex;
+
+  @include infoText;
+
+  margin-top: 2.2vw;
+}
+
+.infoBox .left {
+  display: flex;
+}
+
+.infoBox .link {
+  padding-left: 4.5vw;
+}
+
+.infoBox .location {
+  text-align: right;
+}

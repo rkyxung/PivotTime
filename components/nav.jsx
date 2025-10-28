@@ -189,12 +189,6 @@ export default function Nav() {
   }, [animateMarker, animateNavMarker]);
 
   return (
-    <main>
-      <img
-        src="/images/curriculum.png"
-        alt="curriculum"
-        className="webImage"
-      ></img>
       <nav>
         <div>
           <svg
@@ -356,6 +350,5 @@ export default function Nav() {
             </div>
           </div>
       </nav>
-    </main>
   );
 }

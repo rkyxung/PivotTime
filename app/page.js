@@ -1,10 +1,10 @@
-// import Main from '../../pages/main';
+// import Hero from '../pages/hero';
 
 // export default function Home() {
-//   return <Main />;
+//   return <Hero />;
 // }
 
-// import ThreeScene from "../../components/ThreeScene";
+// import ThreeScene from "../components/ThreeScene";
 
 // export default function Home() {
 //   return (
@@ -15,9 +15,28 @@
 // }
 
 
-import Nav from '../components/nav';
+// import Nav from '../components/nav';
 
+
+// export default function Home() {
+//   return <Nav />;
+// }
+
+// import Main from '../pages/main';
+
+// export default function Home() {
+//   return <Main />;
+// }
+
+import Nav from '../components/nav';
+import ThreeScene from "../components/ThreeScene";
 
 export default function Home() {
-  return <Nav />;
+  return (
+    <main>
+      <Nav />
+      <ThreeScene />
+    </main>
+  );
 }
+
