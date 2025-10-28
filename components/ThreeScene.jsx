@@ -56,7 +56,7 @@ export default function ThreeScene() {
     const material = new THREE.LineBasicMaterial({
       color: 0xffffff, // 선 색상 파란색 지정
       transparent: true, // 투명도 설정 가능하도록 활성화
-      opacity: 0.3, // 선의 투명도 설정
+      opacity: 0.7, // 선의 투명도 설정
     });
 
     // ===== 단일 원(프로필 형태) 정의 =====
