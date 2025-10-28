@@ -54,7 +54,7 @@ export default function ThreeScene() {
     const lineCount = 34; // 궤적을 구성할 선의 개수 (값이 많을수록 촘촘하게 표현됨)
 
     const material = new THREE.LineBasicMaterial({
-      color: 0x004aff, // 선 색상 파란색 지정
+      color: 0xffffff, // 선 색상 파란색 지정
       transparent: true, // 투명도 설정 가능하도록 활성화
       opacity: 0.3, // 선의 투명도 설정
     });
