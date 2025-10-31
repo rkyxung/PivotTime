@@ -201,6 +201,12 @@ nav {
   box-sizing: border-box;
   transition: all 0.6s ease-in-out;
   z-index: 999;
+
+  &.zoom_out {
+    transform: translateY(-150%);
+    opacity: 0;
+    pointer-events: none;
+  }
 }
 
 .logo {

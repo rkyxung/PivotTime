@@ -1,8 +1,99 @@
-import { GETFEVER, GOPIVOT } from "../svgCode";
+// components/mainSections/HeroSection.jsx
 
+"use client";
+
+import { GETFEVER, GOPIVOT } from "../svgCode";
+import "../../styles/mainSections/_hero.scss";
+// 1. 훅들(useEffect, useRef)을 import 합니다.
+import { useState, useCallback, useEffect, useRef } from "react";
+import Line3D from "./3dKeyVisual/line3D";
+import Circle3D from "./3dKeyVisual/circle3D";
+import Square3D from "./3dKeyVisual/square3D";
+
+// 2. props로 isZoomed를 받지 않습니다.
 export default function HeroSection() {
+  // 그리드 셀 배열
+  const rows = 14;
+  const cols = 14;
+
+  const gridCells = Array.from({ length: rows * cols }, (_, i) => (
+    <div key={i} className="grid-cell" />
+  ));
+
+  // 클릭 순서와 객체 목록을 미리 정의합니다.
+  const objectOrder = ["line", "circle", "square"];
+
+  // 현재 객체를 저장할 state.
+  const [currentObject, setCurrentObject] = useState(() => {
+    const randomIndex = Math.floor(Math.random() * objectOrder.length);
+    return objectOrder[randomIndex];
+  });
+
+  // 클릭 시 객체를 순환시키는 핸들러 함수
+  const handleClick = useCallback(() => {
+    setCurrentObject((prevObject) => {
+      const currentIndex = objectOrder.indexOf(prevObject);
+      const nextIndex = (currentIndex + 1) % objectOrder.length;
+      return objectOrder[nextIndex];
+    });
+  }, []);
+
+  // 3. 줌 상태와 스크롤 로직을 HeroSection이 직접 가집니다.
+  const [isZoomed, setIsZoomed] = useState(false);
+  const isZoomedRef = useRef(isZoomed);
+  isZoomedRef.current = isZoomed;
+
+  // 4. 스크롤 이벤트 로직 (가장 중요)
+  useEffect(() => {
+    // Nav 컴포넌트의 <nav> 태그를 DOM에서 직접 찾습니다.
+    const navElement = document.querySelector('nav');
+    
+    // nav 태그가 없으면(오류 방지) 아무것도 하지 않습니다.
+    if (!navElement) return;
+
+    const handleWheel = (e) => {
+      if (e.deltaY < 0 && window.scrollY === 0) {
+        // 스크롤 위로 + 최상단
+        e.preventDefault();
+        setIsZoomed(true);
+        // Nav에 zoom_out 클래스 추가
+        navElement.classList.add('zoom_out'); 
+      } else if (e.deltaY > 0 && isZoomedRef.current) {
+        // 스크롤 아래로 + 줌아웃 상태
+        e.preventDefault();
+        setIsZoomed(false);
+        // Nav에서 zoom_out 클래스 제거
+        navElement.classList.remove('zoom_out'); 
+      }
+    };
+
+    // HeroSection이 보일 때만 휠 이벤트를 window에 추가
+    window.addEventListener("wheel", handleWheel, { passive: false });
+
+    // 5. 클린업 함수
+    return () => {
+      // 이 컴포넌트가 사라지면(다른 페이지 이동 시) 이벤트 리스너 제거
+      window.removeEventListener("wheel", handleWheel);
+      // 페이지를 떠날 때 Nav가 숨겨진 상태로 남지 않도록 클래스 제거
+      navElement.classList.remove('zoom_out');
+    };
+  }, []); // 빈 배열: 이 컴포넌트가 마운트될 때 1번만 실행
+
   return (
-    <div className="hero">
+    // 6. HeroSection 자신에게도 isZoomed 상태에 따라 클래스 적용
+    <div className={`hero ${isZoomed ? "zoom_out" : ""}`.trim()}>
+      <div className="grid-container">
+        <div className="grid">{gridCells}</div>
+      </div>
+      <div
+        className="main-object"
+        onClick={handleClick}
+        style={{ cursor: "pointer" }}
+      >
+        {currentObject === "line" && <Line3D isZoomed={isZoomed} />}
+        {currentObject === "circle" && <Circle3D isZoomed={isZoomed} />}
+        {currentObject === "square" && <Square3D isZoomed={isZoomed} />}
+      </div>
       <div className="hero-text">
         <div className="gF-gP">
           <div className="gf">

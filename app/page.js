@@ -29,14 +29,26 @@
 // }
 
 import Nav from '../components/nav';
-import ThreeScene from "../components/ThreeScene";
+import HeroSection from "../components/mainSections/HeroSection";
 
 export default function Home() {
   return (
     <main>
       <Nav />
-      <ThreeScene />
+      <HeroSection />
     </main>
   );
 }
 
+
+// import Nav from '../components/nav';
+// import Circle3D from "../components/mainSections/3dKeyVisual/circle3D";
+
+// export default function Home() {
+//   return (
+//     <main>
+//       <Nav />
+//       <Circle3D />
+//     </main>
+//   );
+// }
