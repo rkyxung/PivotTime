@@ -40,7 +40,7 @@ export default function VideoSection() {
         playPromise.catch(() => {
           /* ignore autoplay block */
         });
-      }
+      };
     }
   }, [isVisible]);
 
