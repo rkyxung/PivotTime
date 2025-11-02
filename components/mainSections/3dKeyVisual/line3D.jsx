@@ -6,15 +6,36 @@ import * as THREE from "three";
 import { gsap } from "gsap";
 import seedrandom from "seedrandom";
 
-export default function StarburstScene({ isZoomed }) {
+export default function line3D({ isZoomed = false, interactive = true } = {}) {
   const containerRef = useRef(null);
   const cameraRef = useRef(null);
+  const interactiveRef = useRef(interactive);
   
   // 1. 카메라의 '목표 거리'를 저장할 Ref를 생성합니다. (초기값 300)
-  const targetCameraDistanceRef = useRef(300);
+  const targetCameraDistanceRef = useRef(null);
+  interactiveRef.current = interactive;
 
   // 3. Three.js 씬 초기 설정을 위한 useEffect (최초 1회 실행)
   useEffect(() => {
+    const currentContainer = containerRef.current;
+    if (!currentContainer) {
+      return undefined;
+    }
+
+    const getContainerSize = () => {
+      const width =
+        currentContainer.clientWidth ||
+        currentContainer.offsetWidth ||
+        window.innerWidth ||
+        1;
+      const height =
+        currentContainer.clientHeight ||
+        currentContainer.offsetHeight ||
+        window.innerHeight ||
+        1;
+      return { width, height };
+    };
+
     // 클린업(정리) 함수에서 접근할 수 있도록 변수 선언
     let renderer, baseMaterial;
     let geometries = []; // 생성된 지오메트리를 담을 배열
@@ -23,24 +44,22 @@ export default function StarburstScene({ isZoomed }) {
     const scene = new THREE.Scene();
 
     // ... (카메라, 렌더러 설정) ...
-    const canvasWidth = window.innerWidth;
-    const canvasHeight = window.innerHeight;
+    const { width: canvasWidth, height: canvasHeight } = getContainerSize();
     const camera = new THREE.PerspectiveCamera(75, canvasWidth / canvasHeight, 0.1, 3000);
-    camera.position.set(0, 0, 300);
+    camera.position.set(0, 0, 400);
     cameraRef.current = camera; // ref에 현재 카메라 인스턴스 저장
+
+    const baseCameraDistance = camera.position.length();
+    targetCameraDistanceRef.current = baseCameraDistance;
+
 
     renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true }); // 변수에 할당
     renderer.setSize(canvasWidth, canvasHeight);
+    renderer.setPixelRatio(window.devicePixelRatio || 1);
     renderer.setClearColor(0x000000, 0);
     
     // DOM에 추가 (클린업을 위해 ref.current를 변수에 저장)
-    const currentContainer = containerRef.current;
-    if (currentContainer) {
-      currentContainer.appendChild(renderer.domElement);
-    } else {
-      console.error("Container ref is not set.");
-      return;
-    }
+    currentContainer.appendChild(renderer.domElement);
 
     // ===== 3D 오브젝트 그룹 생성 =====
     const objectGroup = new THREE.Group();
@@ -145,6 +164,9 @@ export default function StarburstScene({ isZoomed }) {
 
     // ... (handleMouseMove, animate, handleResize, cleanup 로직은 동일) ...
     const handleMouseMove = (e) => {
+      if (!interactiveRef.current) {
+        return;
+      }
       const x = (e.clientX / window.innerWidth) * 2 - 1; 
       const y = (e.clientY / window.innerHeight) * 2 - 1; 
       targetY = initialRotationY + (x * sensitivity); // 감도 변수 적용
@@ -188,9 +210,10 @@ export default function StarburstScene({ isZoomed }) {
           );
         }
     };
-    window.addEventListener("mousemove", handleMouseMove); 
-
     const handleMouseDown = (e) => {
+      if (!interactiveRef.current) {
+        return;
+      }
       if (e.button === 2) {
         isRightDragging = true;
         rightDragStartX = e.clientX;
@@ -206,6 +229,9 @@ export default function StarburstScene({ isZoomed }) {
     };
 
     const handleMouseUp = (e) => {
+      if (!interactiveRef.current) {
+        return;
+      }
       if (isRightDragging && e.button === 2) {
         isRightDragging = false;
       }
@@ -223,17 +249,34 @@ export default function StarburstScene({ isZoomed }) {
     };
 
     const handleContextMenu = (e) => {
+      if (!interactiveRef.current) {
+        return;
+      }
       if (containerRef.current && containerRef.current.contains(e.target)) {
         e.preventDefault();
       }
     };
-    window.addEventListener("mousedown", handleMouseDown);
-    window.addEventListener("mouseup", handleMouseUp);
-    window.addEventListener("contextmenu", handleContextMenu);
+    const bindPointerEvents = interactiveRef.current;
+
+    if (bindPointerEvents) {
+      window.addEventListener("mousemove", handleMouseMove);
+      window.addEventListener("mousedown", handleMouseDown);
+      window.addEventListener("mouseup", handleMouseUp);
+      window.addEventListener("contextmenu", handleContextMenu);
+    }
     camera.lookAt(0, 0, 0);
 
     const animate = () => {
       requestAnimationFrame(animate); 
+
+      if (!interactiveRef.current) {
+        targetX += (initialRotationX - targetX) * 0.08;
+        targetY += (initialRotationY - targetY) * 0.08;
+        targetZ += (initialRotationZ - targetZ) * 0.08;
+        targetLineCount += (BASE_LINES - targetLineCount) * 0.1;
+        targetCameraDistanceRef.current += (baseCameraDistance - targetCameraDistanceRef.current) * 0.1;
+      }
+
       currentLineCount += (targetLineCount - currentLineCount) * 0.15;
       const roundedCount = Math.round(currentLineCount);
       if (roundedCount !== lastAppliedLineCount) {
@@ -258,17 +301,20 @@ export default function StarburstScene({ isZoomed }) {
     animate();
 
     const handleResize = () => {
-      cameraRef.current.aspect = window.innerWidth / window.innerHeight; 
+      const { width, height } = getContainerSize();
+      cameraRef.current.aspect = width / height; 
       cameraRef.current.updateProjectionMatrix(); 
-      renderer.setSize(window.innerWidth, window.innerHeight); 
+      renderer.setSize(width, height); 
     };
     window.addEventListener("resize", handleResize); 
 
     return () => {
-      window.removeEventListener("mousemove", handleMouseMove); 
-      window.removeEventListener("mousedown", handleMouseDown);
-      window.removeEventListener("mouseup", handleMouseUp);
-      window.removeEventListener("contextmenu", handleContextMenu);
+      if (bindPointerEvents) {
+        window.removeEventListener("mousemove", handleMouseMove);
+        window.removeEventListener("mousedown", handleMouseDown);
+        window.removeEventListener("mouseup", handleMouseUp);
+        window.removeEventListener("contextmenu", handleContextMenu);
+      }
       window.removeEventListener("resize", handleResize); 
       if (currentContainer && renderer.domElement) {
         currentContainer.removeChild(renderer.domElement); 
@@ -298,5 +344,14 @@ export default function StarburstScene({ isZoomed }) {
   }, [isZoomed]); // isZoomed prop이 변경될 때만 실행됩니다.
 
 
-  return <div ref={containerRef} style={{ width: "100vw", height: "100vh" }} />;
+  return (
+    <div
+      ref={containerRef}
+      style={{
+        width: "100%",
+        height: "100%",
+        pointerEvents: interactive ? "auto" : "none",
+      }}
+    />
+  );
 }

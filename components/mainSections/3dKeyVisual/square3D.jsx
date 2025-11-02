@@ -11,22 +11,42 @@ import * as THREE from "three";
 import { gsap } from "gsap";
 
 // ThreeScene 컴포넌트를 정의 (3D 장면을 생성하고 렌더링하는 역할)
-export default function Square3D() {
+export default function Square3D({ interactive = true } = {}) {
   // three.js가 생성한 캔버스를 붙일 HTML 요소를 가리키는 참조 생성
   const containerRef = useRef(null);
+  const interactiveRef = useRef(interactive);
+  interactiveRef.current = interactive;
 
   // 컴포넌트가 처음 렌더링될 때 한 번만 실행되는 부분
   useEffect(() => {
+    const currentContainer = containerRef.current;
+    if (!currentContainer) {
+      return undefined;
+    }
+
+    const getContainerSize = () => {
+      const width =
+        currentContainer.clientWidth ||
+        currentContainer.offsetWidth ||
+        window.innerWidth ||
+        1;
+      const height =
+        currentContainer.clientHeight ||
+        currentContainer.offsetHeight ||
+        window.innerHeight ||
+        1;
+      return { width, height };
+    };
+
     // 클린업을 위해 변수 선언
     let renderer, geometry, baseMaterial;
-    let animationFrameId; // ⭐️ 애니메이션 프레임 ID 저장을 위해 추가
+    let animationFrameId; // 애니메이션 프레임 ID 저장을 위해 추가
 
     // ===== Scene(3D 무대 역할) 생성 =====
     const scene = new THREE.Scene(); // 장면을 생성하여 모든 3D 객체를 담을 공간 생성
 
     // ===== 현재 화면 크기 가져오기 =====
-    const canvasWidth = window.innerWidth; // 브라우저 창 너비
-    const canvasHeight = window.innerHeight; // 브라우저 창 높이
+    const { width: canvasWidth, height: canvasHeight } = getContainerSize();
 
     // ===== 원근 카메라 설정 =====
     const camera = new THREE.PerspectiveCamera(
@@ -44,16 +64,11 @@ export default function Square3D() {
     });
 
     renderer.setSize(canvasWidth, canvasHeight); // 렌더러의 출력 크기를 현재 화면 크기에 맞게 설정
+    renderer.setPixelRatio(window.devicePixelRatio || 1);
     renderer.setClearColor(0x000000, 0); // 배경색을 투명으로 설정
 
     // ===== 렌더러 DOM에 추가 =====
-    const currentContainer = containerRef.current; // 클린업을 위해 변수에 저장
-    if (currentContainer) {
-      currentContainer.appendChild(renderer.domElement); // 렌더러가 생성한 캔버스를 HTML에 추가
-    } else {
-      console.error("Container ref is not set.");
-      return;
-    }
+    currentContainer.appendChild(renderer.domElement); // 렌더러가 생성한 캔버스를 HTML에 추가
 
     // ===== 3D 오브젝트 그룹 생성 (마우스 인터랙션으로 이 그룹이 회전함) =====
     const objectGroup = new THREE.Group(); // 여러 오브젝트를 하나로 묶기 위한 그룹 생성
@@ -116,18 +131,18 @@ export default function Square3D() {
     // ▲▲▲▲▲▲▲▲▲▲▲▲▲ [로직 종료] ▲▲▲▲▲▲▲▲▲▲▲▲▲
     // ==================================================================
 
-    // ===== ⭐️ 1. 마우스 인터랙션 로직 수정 =====
+    // ===== 1. 마우스 인터랙션 로직 수정 =====
     
-    // ⭐️ 1-1. Raycaster와 마우스 좌표 변수 생성
+    // 1-1. Raycaster와 마우스 좌표 변수 생성
     const raycaster = new THREE.Raycaster();
     raycaster.params.Line.threshold = 12; // 선과의 거리 여유 폭을 늘려 호버 감지 허용
     const mouse = new THREE.Vector2(-100, -100); // (초기값은 화면 밖)
     
-    // ⭐️ 1-2. 현재 회전 중인 객체와 이탈 프레임 수를 추적
+    // 1-2. 현재 회전 중인 객체와 이탈 프레임 수를 추적
     const activeRotations = new Map();
     const EXIT_FRAME_THRESHOLD = 6; // 교차가 끊긴 프레임 허용치
 
-    // ⭐️ 1-3. 초기 각도 설정 (이건 그대로 유지)
+    // 1-3. 초기 각도 설정 (이건 그대로 유지)
     // "측면으로 보여주는 거"
     const initialRotationX = THREE.MathUtils.degToRad(10);
     const initialRotationY = THREE.MathUtils.degToRad(-90);
@@ -215,13 +230,14 @@ export default function Square3D() {
 
     // ===== 마우스 움직임 감지 함수 정의 =====
     const handleMouseMove = (e) => {
-      // ⭐️ 1-5. 마우스 위치를 -1에서 1 사이의 3D 좌표로 변환
+      if (!interactiveRef.current) {
+        return;
+      }
+      // 1-5. 마우스 위치를 -1에서 1 사이의 3D 좌표로 변환
       mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
-      mouse.y = -(e.clientY / window.innerHeight) * 2 + 1; // ⭐️ Y좌표 방향 뒤집기 (Three.js는 위쪽이 +)
-      
-      // ❌ 1-6. 그룹 전체를 회전시키는 로직 삭제
-      // targetY = ...
-      // targetX = ...
+      mouse.y = -(e.clientY / window.innerHeight) * 2 + 1; // Y좌표 방향 뒤집기 (Three.js는 위쪽이 +)
+
+
       if (isRightDragging) {
         const deltaX = e.clientX - rightDragStartX;
         const ratio = THREE.MathUtils.clamp(
@@ -257,9 +273,10 @@ export default function Square3D() {
         );
       }
     };
-    window.addEventListener("mousemove", handleMouseMove); // 마우스 이동 이벤트 등록
-
     const handleMouseDown = (e) => {
+      if (!interactiveRef.current) {
+        return;
+      }
       if (e.button === 2) {
         isRightDragging = true;
         rightDragStartX = e.clientX;
@@ -274,6 +291,9 @@ export default function Square3D() {
     };
 
     const handleMouseUp = (e) => {
+      if (!interactiveRef.current) {
+        return;
+      }
       if (isRightDragging && e.button === 2) {
         isRightDragging = false;
       }
@@ -292,16 +312,30 @@ export default function Square3D() {
     };
 
     const handleContextMenu = (e) => {
+      if (!interactiveRef.current) {
+        return;
+      }
       if (containerRef.current && containerRef.current.contains(e.target)) {
         e.preventDefault();
       }
     };
-    window.addEventListener("mousedown", handleMouseDown);
-    window.addEventListener("mouseup", handleMouseUp);
-    window.addEventListener("contextmenu", handleContextMenu);
+    const bindPointerEvents = interactiveRef.current;
+
+    if (bindPointerEvents) {
+      window.addEventListener("mousemove", handleMouseMove);
+      window.addEventListener("mousedown", handleMouseDown);
+      window.addEventListener("mouseup", handleMouseUp);
+      window.addEventListener("contextmenu", handleContextMenu);
+    }
 
     const animate = () => {
       animationFrameId = requestAnimationFrame(animate); // 애니메이션 프레임 ID 저장
+
+      if (!interactiveRef.current) {
+        mouse.set(-100, -100);
+        targetLineCount += (BASE_LINES - targetLineCount) * 0.12;
+        targetScale += (BASE_SCALE - targetScale) * 0.12;
+      }
 
       raycaster.setFromCamera(mouse, camera); // Raycaster 업데이트
 
@@ -344,24 +378,27 @@ export default function Square3D() {
     // ===== 창 크기 변경 시 반응형 처리 =====
     // ... (handleResize 로직은 동일) ...
     const handleResize = () => {
-      camera.aspect = window.innerWidth / window.innerHeight; 
-      camera.updateProjectionMatrix(); 
-      renderer.setSize(window.innerWidth, window.innerHeight); 
-    };
-    window.addEventListener("resize", handleResize); 
+      const { width, height } = getContainerSize();
+      camera.aspect = width / height; 
+      camera.updateProjectionMatrix(); 
+      renderer.setSize(width, height); 
+    };
+    window.addEventListener("resize", handleResize); 
 
     // ===== 컴포넌트가 사라질 때 실행되는 정리 코드 =====
     // ... (return () => { ... } 로직은 동일) ...
     return () => {
-      cancelAnimationFrame(animationFrameId); 
-      window.removeEventListener("mousemove", handleMouseMove); 
-      window.removeEventListener("mousedown", handleMouseDown); 
-      window.removeEventListener("mouseup", handleMouseUp); 
-      window.removeEventListener("contextmenu", handleContextMenu); 
-      window.removeEventListener("resize", handleResize); 
-      if (currentContainer && renderer.domElement) {
-        currentContainer.removeChild(renderer.domElement); 
-      }
+      cancelAnimationFrame(animationFrameId); 
+      if (bindPointerEvents) {
+        window.removeEventListener("mousemove", handleMouseMove);
+        window.removeEventListener("mousedown", handleMouseDown);
+        window.removeEventListener("mouseup", handleMouseUp);
+        window.removeEventListener("contextmenu", handleContextMenu);
+      }
+      window.removeEventListener("resize", handleResize); 
+      if (currentContainer && renderer.domElement) {
+        currentContainer.removeChild(renderer.domElement); 
+      }
       geometry.dispose(); 
       baseMaterial.dispose(); 
       activeRotations.forEach((_, obj) => stopHoverRotation(obj));
@@ -375,10 +412,19 @@ export default function Square3D() {
         if (child.material) child.material.dispose();
       });
 
-      renderer.dispose(); 
-    };
+      renderer.dispose(); 
+    };
   }, []); // useEffect는 처음 렌더링될 때 한 번만 실행
 
   // ===== three.js 캔버스를 표시할 HTML 요소 반환 =====
-  return <div ref={containerRef} style={{ width: "100vw", height: "100vh" }} />;
+  return (
+    <div
+      ref={containerRef}
+      style={{
+        width: "100%",
+        height: "100%",
+        pointerEvents: interactive ? "auto" : "none",
+      }}
+    />
+  );
 }

@@ -1,1 +1,208 @@
-// Typography section styles placeholder
+@font-face {
+  font-family: "Pretendard";
+  src: url("https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Thin.woff")
+    format("woff");
+  font-weight: 100;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Pretendard";
+  src: url("https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-ExtraLight.woff")
+    format("woff");
+  font-weight: 200;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Pretendard";
+  src: url("https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Light.woff")
+    format("woff");
+  font-weight: 300;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Pretendard";
+  src: url("https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff")
+    format("woff");
+  font-weight: 400;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Pretendard";
+  src: url("https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Medium.woff")
+    format("woff");
+  font-weight: 500;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Pretendard";
+  src: url("https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-SemiBold.woff")
+    format("woff");
+  font-weight: 600;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Pretendard";
+  src: url("https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Bold.woff")
+    format("woff");
+  font-weight: 700;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Pretendard";
+  src: url("https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-ExtraBold.woff")
+    format("woff");
+  font-weight: 800;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Pretendard";
+  src: url("https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Black.woff")
+    format("woff");
+  font-weight: 900;
+  font-display: swap;
+}
+
+$font-main: "Pretendard", sans-serif;
+$font-weight-medium: 500;
+
+// typography.scss (compact version)
+
+$font-main: "Pretendard", sans-serif;
+$font-weight-medium: 500;
+
+// TITLE
+// 약 33.5px max
+@mixin title {
+  font-family: $font-main;
+  font-weight: $font-weight-medium;
+  font-size: clamp(
+    1.4rem,
+    // ~22.4px
+    1.8vw,
+    // 유동
+    2.09rem // ~33.5px
+  );
+}
+
+@mixin title2 {
+  font-family: $font-main;
+  font-weight: $font-weight-medium;
+  font-size: clamp(1.125rem, 1.979vw, 3rem);
+}
+
+// H1
+// 약 26px max
+@mixin h1 {
+  font-family: $font-main;
+  font-weight: $font-weight-medium;
+  font-size: clamp(
+    1.2rem,
+    // ~19.2px
+    1.4vw,
+    // 유동
+    1.63rem // ~26px
+  );
+}
+
+// H2
+// 약 23px max
+@mixin h2 {
+  font-family: $font-main;
+  font-weight: $font-weight-medium;
+  font-size: clamp(
+    1.05rem,
+    // ~16.8px
+    1.2vw,
+    // 유동
+    1.44rem // ~23px
+  );
+}
+
+// 본문
+// 약 20px max
+@mixin body {
+  font-family: $font-main;
+  font-weight: $font-weight-medium;
+  font-size: clamp(
+    0.9rem,
+    // ~14.4px
+    1vw,
+    // 유동
+    1.25rem // ~20px
+  );
+}
+
+// SUB
+// 약 17px max
+@mixin sub {
+  font-family: $font-main;
+  font-weight: $font-weight-medium;
+  font-size: clamp(
+    0.8rem,
+    // ~12.8px
+    0.9vw,
+    // 유동
+    1.06rem // ~17px
+  );
+}
+
+@mixin bodyText {
+  font-size: clamp(0.875rem, 1.04vw, 1.375rem);
+  font-family: "Pretendard";
+}
+
+@mixin infoText {
+  font-size: clamp(0.6em, 0.73vw, 1.2rem);
+  font-weight: 500;
+  color: #fff;
+  letter-spacing: -0.03rem;
+  line-height: 1.35;
+}
+
+$blue: hsl(221, 100%, 50%);
+$height: 56.25vw;
+$section-height: 100dvh;
+
+.typography {
+  width: 100vw;
+  height: $section-height;
+  color: #fff;
+  padding-top: 5.7vw;
+  box-sizing: border-box;
+
+  .typo-video {
+    background-color: rgba(0, 81, 255, 0.5);
+    width: 100vw;
+    height: 37.5vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 5vw;
+  }
+
+  .txt-wrap {
+    display: flex;
+    justify-content: space-between;
+    margin: 0 6vw;
+    padding-top: 2.6vw;
+    line-height: 1.6;
+
+    .title {
+      @include title;
+      letter-spacing: -0.03rem;
+    }
+
+    .description {
+      @include body;
+      margin-top: 0.8vw;
+    }
+  }
+}

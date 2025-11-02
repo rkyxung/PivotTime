@@ -171,12 +171,83 @@ $blue: #0051ff;
 $height: 56.25vw;
 $section-height: 100dvh; // 1. 풀페이지 스크롤 스냅을 위한 기본 섹션 높이 변수 (dvh: 모바일 대응)
 
-// 2. GSAP 로드 실패 시를 대비한 CSS 네이티브 스크롤 스냅 (Fallback)
 html,
 body {
-  /* scroll-snap-type: y mandatory; */ /* 👈 주석 처리하거나 */
-  scroll-snap-type: y proximity; /* 👈 proximity로 변경 */
+  height: 100%;
+  margin: 0;
+  background: #000;
+  /* overflow: hidden; // 스크롤을 막는 주범이므로 삭제 */
+}
+
+main {
+  position: relative;
+  height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  background: #000;
+  color: #fff;
+  box-sizing: border-box;
+  /* overflow: hidden; // 스크롤을 막는 주범이므로 삭제 */
+}
+
+.snap-container {
+  position: relative;
+  flex: 1 1 auto;
+  height: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scroll-snap-type: y mandatory;
   scroll-behavior: smooth;
+  overscroll-behavior-y: contain;
+  // 네비게이션 바 높이만큼 스크롤 패딩을 주어 콘텐츠가 가려지지 않게 합니다.
+  // 기존의 padding-top과 padding: 0 충돌을 해결합니다.
+  // scroll-padding-top: var(--nav-offset); // scroll-margin-top으로 대체
+}
+
+
+.snap-container::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+}
+
+.snap-container.scrolling-locked {
+  overflow-y: hidden;
+}
+
+// 첫 번째 섹션(HeroSection)을 제외한 모든 스냅 섹션에 네비게이션 바 높이만큼의 스크롤 마진을 적용합니다.
+// 이는 실제 공간을 만들지 않고 스냅 위치만 조정하여 네비게이션 바 아래에 정확히 스냅되도록 합니다.
+.snap-section:not(:first-child) {
+  scroll-margin-top: 0.05vw;
+}
+
+.snap-section {
+  position: relative;
+  // 모든 섹션의 높이를 화면 전체 높이(100dvh)로 통일하여 스냅을 일관성 있게 만듭니다.
+  height: 100dvh;
+  flex: 0 0 100dvh;
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+  width: 100%;
+  scroll-snap-align: start; // 섹션의 시작 부분이 스냅 지점에 맞도록 설정
+  scroll-snap-stop: always;
+}
+
+
+
+/* hero-section에 대한 별도 높이 지정이 더 이상 필요 없으므로 삭제합니다. */
+/*
+.snap-section.hero-section {
+  min-height: 100dvh;
+  flex: 0 0 100dvh;
+}
+*/
+
+.snap-section--auto {
+  // footer 등 내용에 따라 높이가 유동적인 섹션
+  height: auto;
+  flex: 0 0 auto;
+  scroll-snap-align: none; // 이 섹션에서는 스냅을 적용하지 않음
 }
 
 .webImage {
@@ -188,285 +259,4 @@ body {
   opacity: 0.5;
   z-index: 0;
   display: none;
-}
-
-main {
-  width: 93.85vw;
-  height: auto;
-  margin: 0 auto;
-//   opacity: 0.5;
-  color: #fff;
-}
-
-// 3. main의 모든 직계 자식 섹션에 대한 공통 스타일 (스냅 아이템)
-main > div {
-  height: $section-height; // 4. 모든 섹션의 높이를 100dvh로 통일
-  width: 100%;
-  position: relative;
-  scroll-snap-align: start; // 5. CSS 스냅을 위해 'start' 정렬
-  scroll-snap-stop: always; // 6. CSS 스냅 시 항상 멈추도록 함
-  display: flex; // 7. 내부 컨텐츠 정렬을 위해 flex 사용 (임시)
-  flex-direction: column; // 8. (임시)
-  justify-content: center; // 9. (임시)
-}
-
-.hero {
-  height: $section-height; // 10. hero 섹션 높이를 100dvh로 설정
-  justify-content: flex-start; // 11. hero 섹션은 상단 정렬을 유지하도록 재정의
-}
-
-.hero-text {
-  padding-top: 34vw;
-}
-
-.hero-text > div {
-  display: flex;
-  justify-content: space-between;
-}
-
-.gf svg {
-  width: 15.88vw;
-  height: auto;
-}
-
-.gp svg {
-  width: 12.76vw;
-  height: auto;
-}
-
-.main-logo {
-  margin-top: 2.2vw;
-}
-
-.pivot {
-  width: 35vw;
-  height: auto;
-}
-
-.time {
-  width: 28.65vw;
-  height: auto;
-}
-
-.infoBox {
-  display: flex;
-  @include infoText;
-  margin-top: 2.2vw;
-}
-
-.infoBox .left {
-  display: flex;
-}
-
-.infoBox .link {
-  padding-left: 4.5vw;
-}
-
-.infoBox .location {
-  text-align: right;
-}
-
-.keywords {
-  width: 87.38vw;
-  height: $section-height; // 12. keywords 섹션 높이를 100dvh로 설정
-  margin: 0 auto;
-  margin-top: 0; // 13. ❌ 스냅 계산을 위해 섹션 간 margin-top 제거
-}
-
-.delight {
-  @include h2;
-  letter-spacing: -0.04rem;
-  line-height: 1.2;
-}
-
-.keywords .logo svg {
-  width: 13.33vw;
-  height: auto;
-}
-
-.keywords .graphics {
-  position: relative;
-  margin: 5.5vw;
-  padding-bottom: 25vw;
-}
-
-.keywords .graphics > * {
-  position: absolute;
-  flex-shrink: 0;
-}
-
-.keywords .circle {
-  width: 20.1vw;
-  height: auto;
-  left: -3.1vw;
-}
-
-.keywords .line {
-  width: 48.28vw;
-  height: auto;
-  top: 1.6vw;
-  left: 49.3%;
-  transform: translateX(-50%);
-}
-
-.keywords .rectangle {
-  width: 18.28vw;
-  height: auto;
-  top: 8.4vw;
-  right: 0.4vw;
-}
-
-.keywords .txt {
-  display: flex;
-  justify-content: space-between;
-}
-
-.keywords p {
-  @include body;
-  margin-top: 0;
-  padding-right: 0.2vw;
-  line-height: 1.6;
-}
-
-// 14. ❌ 기존 .video 주석 처리된 스타일을 활성화하고 수정합니다.
-.video {
-  // margin-bottom: 103vh; // 15. ❌ 스냅 계산을 위해 margin-bottom 제거
-  height: $section-height; // 16. video 섹션 높이를 100dvh로 설정
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  left: 50%;
-  margin-left: -50vw;
-  width: 100vw;
-  background-color: $blue;
-}
-
-.video p {
-  font-size: 5vw;
-}
-
-.concept {
-  height: 300dvh;
-  justify-content: flex-start;
-  display: block; // block 유지
-}
-
-.concept .graphic {
-  position: relative;
-  height: 100%;
-}
-
-.concept .graphic > * {
-  position: absolute;
-}
-
-.concept .graphic svg {
-  width: 100.1vw;
-  height: auto;
-  top: -7.2vw;
-  left: -3.2vw;
-
-}
-
-.concept .txt {
-  display: flex;
-  align-items: center;
-  gap: 1vw;
-  top: 13.8vw;
-  left: 7.7vw;
-  transform: rotate(-8deg);
-
-}
-
-.concept .txt-wrap {
-  // position: sticky; // 5. ⭐️ sticky 제거
-  // top: 0;           // 6. ⭐️ sticky 제거
-  height: 100dvh;   // 7. ⭐️ 높이는 100dvh 유지 (pin 대상 크기)
-  z-index: 10;
-  // --- 기존 스타일 유지 ---
-  display: flex;
-  width: 87.38vw;
-  margin: 0 auto;
-  justify-content: space-between;
-  align-items: center;
-  padding-top: 0;
-}
-
-.concept .txt-wrap .logo {
-  padding-top: 4.5vw;
-}
-
-.concept .description .title {
-  display: flex;
-}
-
-.concept .description p {
-  @include body;
-  padding-top: 0.5vw;
-  line-height: 1.6;
-}
-
-.description .title div {
-  @include title2;
-}
-
-.description .title p {
-  @include h2;
-  margin: 0;
-  padding-top: 0.8vw;
-  padding-left: 0.8vw;
-  opacity: 0.8;
-  letter-spacing: -0.04rem;
-}
-
-// 30. ⭐️ .concept 내부 스크롤 시 나타날 새 그래픽 스타일 (임시)
-.new-graphic {
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-  color: white;
-  font-size: 2vw;
-  font-weight: bold;
-  opacity: 0; // 31. GSAP이 조작할 수 있도록 기본 투명도 0
-  z-index: 5; // 32. 텍스트 영역(10)보다 뒤에, 배경 SVG보다 앞에 위치
-  background: rgba(100, 100, 100, 0.5);
-  padding: 1rem;
-  border-radius: 10px;
-}
-
-// 33. ⭐️ 각 그래픽 요소의 스크롤 위치 (300dvh 기준)
-.new-graphic.line {
-  top: 120vh;
-}
-.new-graphic.circle {
-  top: 180vh;
-}
-.new-graphic.square {
-  top: 240vh;
-}
-
-.visual,
-.typography,
-.highlight,
-.main-footer {
-  height: $section-height; // 34. ⭐️ 나머지 섹션들도 모두 100dvh 높이 적용
-  // 35. ⭐️ 스냅 테스트를 위한 임시 스타일
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 3vw;
-  border-top: 1px solid #555;
-  background-color: #222;
-}
-
-// 36. ⭐️ 스냅 테스트를 위한 임시 배경색
-.typography {
-  background-color: #333;
-}
-.highlight {
-  background-color: #444;
-}
-.main-footer {
-  background-color: #111;
 }

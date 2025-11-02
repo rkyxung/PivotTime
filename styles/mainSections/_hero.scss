@@ -172,13 +172,13 @@ $height: 56.25vw;
 $section-height: 100dvh;
 
 .hero {
-  width: 93.85vw;
-  height: $height;
-  margin: 0 auto;
-  // position: relative;
-  // overflow: hidden;
-
-  // --- ⬇️ 여기부터 수정/추가된 부분 ⬇️ ---
+  position: relative;
+  width: 100vw;
+  min-height: $section-height;
+  margin: 0;
+  padding: 0 clamp(4rem, 6vw, 7rem);
+  overflow: hidden;
+  box-sizing: border-box;
 
   // 1. 애니메이션 대상 요소들에 transition 추가
   .main-object,
@@ -202,104 +202,105 @@ $section-height: 100dvh;
       // .main-object가 이미 flex/center로 중앙 정렬되어 있으므로 scale만 적용
     }
   }
-  // --- ⬆️ 여기까지 수정/추가된 부분 ⬆️ ---
-}
 
-.grid-container {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vw;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: rgba(230, 230, 230, 0.1);
-  pointer-events: none;
-  z-index: -2;
-}
+  .grid-container {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(230, 230, 230, 0.1);
+    pointer-events: none;
+    z-index: -2;
+  }
 
-.grid {
-  display: grid;
-  grid-template-columns: repeat(14, 1fr);
-  grid-template-rows: repeat(14, 1fr);
-  gap: 0.1vw;
-  width: 100%;
-  height: 100%;
-}
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(14, 1fr);
+    grid-template-rows: repeat(14, 1fr);
+    gap: 0.1vw;
+    width: 100%;
+    height: 100%;
+  }
 
-.grid-cell {
-  border-radius: 0.47vw;
-  background-color: #000;
-}
+  .grid-cell {
+    border-radius: 0.47vw;
+    background-color: #000;
+  }
 
-.main-object {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 1;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
+  .main-object {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    display: grid;
+    place-items: center;
+  }
 
-.hero-text {
-  padding-top: 34vw;
-  pointer-events: none;
-}
+  .main-object > * {
+    width: min(100%, 72vw);
+    height: min(100%, 72vw);
+  }
 
-.hero-text > div {
-  display: flex;
+  .hero-text {
+    padding-top: 34vw;
+    pointer-events: none;
+  }
 
-  justify-content: space-between;
-}
+  .hero-text > div {
+    display: flex;
 
-.gf svg {
-  width: 15.88vw;
+    justify-content: space-between;
+  }
 
-  height: auto;
-}
+  .gf svg {
+    width: 15.88vw;
 
-.gp svg {
-  width: 12.76vw;
+    height: auto;
+  }
 
-  height: auto;
-}
+  .gp svg {
+    width: 12.76vw;
 
-.main-logo {
-  margin-top: 2.2vw;
-}
+    height: auto;
+  }
 
-.pivot {
-  width: 35vw;
+  .main-logo {
+    margin-top: 2.2vw;
+  }
 
-  height: auto;
-}
+  .pivot {
+    width: 35vw;
 
-.time {
-  width: 28.65vw;
+    height: auto;
+  }
 
-  height: auto;
-}
+  .time {
+    width: 28.65vw;
 
-.infoBox {
-  display: flex;
+    height: auto;
+  }
 
-  @include infoText;
+  .infoBox {
+    display: flex;
 
-  margin-top: 2.2vw;
-}
+    @include infoText;
 
-.infoBox .left {
-  display: flex;
-}
+    margin-top: 2.2vw;
+  }
 
-.infoBox .link {
-  padding-left: 4.5vw;
-}
+  .infoBox .left {
+    display: flex;
+  }
 
-.infoBox .location {
-  text-align: right;
+  .infoBox .link {
+    padding-left: 4.5vw;
+  }
+
+  .infoBox .location {
+    text-align: right;
+  }
 }

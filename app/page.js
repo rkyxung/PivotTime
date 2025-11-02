@@ -14,32 +14,33 @@
 //   );
 // }
 
-
-// import Nav from '../components/nav';
-
+// import Nav from "../components/nav";
 
 // export default function Home() {
 //   return <Nav />;
 // }
 
-// import Main from '../pages/main';
-
-// export default function Home() {
-//   return <Main />;
-// }
-
-import Nav from '../components/nav';
-import HeroSection from "../components/mainSections/HeroSection";
+import Main from "../pages/main";
 
 export default function Home() {
   return (
     <main>
-      <Nav />
-      <HeroSection />
+      <Main />
     </main>
   );
 }
 
+// import Nav from '../components/nav';
+// import SloganSection from "../components/mainSections/sloganSection";
+
+// export default function Home() {
+//   return (
+//     <main>
+//       <Nav />
+//       <SloganSection/>
+//     </main>
+//   );
+// }
 
 // import Nav from '../components/nav';
 // import Circle3D from "../components/mainSections/3dKeyVisual/circle3D";

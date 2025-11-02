@@ -29,6 +29,11 @@ export default function HeroSection() {
     return objectOrder[randomIndex];
   });
 
+  const heroRef = useRef(null);
+  const scrollContainerRef = useRef(null);
+  const navZoomAppliedRef = useRef(false);
+  const [isHeroActive, setIsHeroActive] = useState(true);
+
   // 클릭 시 객체를 순환시키는 핸들러 함수
   const handleClick = useCallback(() => {
     setCurrentObject((prevObject) => {
@@ -43,45 +48,130 @@ export default function HeroSection() {
   const isZoomedRef = useRef(isZoomed);
   isZoomedRef.current = isZoomed;
 
+  // New useEffect to manage scroll lock based on isZoomed state
+  useEffect(() => {
+    const scrollContainer = scrollContainerRef.current;
+    if (!scrollContainer) return;
+
+    if (isZoomed) {
+      scrollContainer.classList.add('scrolling-locked');
+    } else {
+      // It's zooming out. Wait for the animation to finish before unlocking.
+      const timer = setTimeout(() => {
+        scrollContainer.classList.remove('scrolling-locked');
+      }, 600); // Matches the 0.6s transition in hero.scss
+
+      return () => clearTimeout(timer); // Cleanup the timer
+    }
+  }, [isZoomed]);
+
+  useEffect(() => {
+    const heroEl = heroRef.current;
+    if (!heroEl) {
+      return undefined;
+    }
+
+    const sectionEl = heroEl.closest(".snap-section") ?? heroEl;
+    const scrollContainer =
+      sectionEl.closest(".snap-container") ?? null;
+
+    if (scrollContainer instanceof HTMLElement) {
+      scrollContainerRef.current = scrollContainer;
+    } else {
+      scrollContainerRef.current = null;
+    }
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        const active =
+          entry.isIntersecting && entry.intersectionRatio >= 0.6;
+        setIsHeroActive(active);
+
+        if (!active && isZoomedRef.current) {
+          setIsZoomed(false); // This will trigger the new useEffect to handle the lock
+          if (navZoomAppliedRef.current) {
+            document
+              .querySelector("nav")
+              ?.classList.remove("zoom_out");
+            navZoomAppliedRef.current = false;
+          }
+        }
+      },
+      {
+        threshold: [0.6],
+        root:
+          scrollContainer instanceof HTMLElement ? scrollContainer : null,
+      }
+    );
+
+    observer.observe(sectionEl);
+
+    return () => observer.disconnect();
+  }, []);
+
   // 4. 스크롤 이벤트 로직 (가장 중요)
   useEffect(() => {
-    // Nav 컴포넌트의 <nav> 태그를 DOM에서 직접 찾습니다.
+    if (!isHeroActive) {
+      return undefined;
+    }
+
     const navElement = document.querySelector('nav');
-    
-    // nav 태그가 없으면(오류 방지) 아무것도 하지 않습니다.
     if (!navElement) return;
 
+    const scrollContainer = scrollContainerRef.current;
+    if (!scrollContainer) return;
+
+    const scrollTarget = scrollContainer;
+
+    const getScrollTop = () => {
+      return scrollContainer.scrollTop;
+    };
+
     const handleWheel = (e) => {
-      if (e.deltaY < 0 && window.scrollY === 0) {
-        // 스크롤 위로 + 최상단
-        e.preventDefault();
+      const scrollTop = getScrollTop();
+      const atTop = scrollTop <= 0;
+
+      const shouldZoomIn =
+        e.deltaY < 0 && atTop && !isZoomedRef.current;
+      const shouldZoomOut = e.deltaY > 0 && isZoomedRef.current;
+
+      if (!shouldZoomIn && !shouldZoomOut) {
+        return;
+      }
+
+      e.preventDefault();
+
+      if (shouldZoomIn) {
         setIsZoomed(true);
-        // Nav에 zoom_out 클래스 추가
-        navElement.classList.add('zoom_out'); 
-      } else if (e.deltaY > 0 && isZoomedRef.current) {
-        // 스크롤 아래로 + 줌아웃 상태
-        e.preventDefault();
+        navElement.classList.add("zoom_out");
+        navZoomAppliedRef.current = true;
+      } else if (shouldZoomOut) {
         setIsZoomed(false);
-        // Nav에서 zoom_out 클래스 제거
-        navElement.classList.remove('zoom_out'); 
+        navElement.classList.remove("zoom_out");
+        navZoomAppliedRef.current = false;
       }
     };
 
-    // HeroSection이 보일 때만 휠 이벤트를 window에 추가
-    window.addEventListener("wheel", handleWheel, { passive: false });
+    scrollTarget.addEventListener("wheel", handleWheel, { passive: false });
 
     // 5. 클린업 함수
     return () => {
-      // 이 컴포넌트가 사라지면(다른 페이지 이동 시) 이벤트 리스너 제거
-      window.removeEventListener("wheel", handleWheel);
-      // 페이지를 떠날 때 Nav가 숨겨진 상태로 남지 않도록 클래스 제거
-      navElement.classList.remove('zoom_out');
+      scrollTarget.removeEventListener("wheel", handleWheel);
+      // Ensure lock is removed on cleanup, just in case
+      scrollContainer.classList.remove('scrolling-locked');
+      if (navZoomAppliedRef.current) {
+        navElement.classList.remove("zoom_out");
+        navZoomAppliedRef.current = false;
+      }
     };
-  }, []); // 빈 배열: 이 컴포넌트가 마운트될 때 1번만 실행
+  }, [isHeroActive]);
 
   return (
     // 6. HeroSection 자신에게도 isZoomed 상태에 따라 클래스 적용
-    <div className={`hero ${isZoomed ? "zoom_out" : ""}`.trim()}>
+    <div
+      ref={heroRef}
+      className={`hero ${isZoomed ? "zoom_out" : ""}`.trim()}
+    >
       <div className="grid-container">
         <div className="grid">{gridCells}</div>
       </div>
@@ -307,7 +397,7 @@ export default function HeroSection() {
           <div className="location">
             Kaywon Design Hall 5F
             <br />
-            Nov. 22. FRI - Nov. 24. SUN
+            Nov. 21. FRI - Nov. 23. SUN
           </div>
         </div>
       </div>

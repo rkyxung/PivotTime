@@ -11,7 +11,7 @@ import * as THREE from "three";
 import { gsap } from "gsap";
 
 // 1. isZoomed prop을 받도록 수정
-export default function Circle3D({ isZoomed }) {
+export default function Circle3D({ isZoomed = false, interactive = true } = {}) {
   // three.js가 생성한 캔버스를 붙일 HTML 요소를 가리키는 참조 생성
   const containerRef = useRef(null);
   
@@ -20,18 +20,38 @@ export default function Circle3D({ isZoomed }) {
   
   // 3. 카메라 객체 자체를 저장할 Ref 생성
   const cameraRef = useRef(null);
+  const interactiveRef = useRef(interactive);
+  interactiveRef.current = interactive;
 
   // 컴포넌트가 처음 렌더링될 때 한 번만 실행되는 부분
   useEffect(() => {
+    const currentContainer = containerRef.current;
+    if (!currentContainer) {
+      return undefined;
+    }
+
+    const getContainerSize = () => {
+      const width =
+        currentContainer.clientWidth ||
+        currentContainer.offsetWidth ||
+        window.innerWidth ||
+        1;
+      const height =
+        currentContainer.clientHeight ||
+        currentContainer.offsetHeight ||
+        window.innerHeight ||
+        1;
+      return { width, height };
+    };
+
     // 클린업(정리) 함수에서 접근할 수 있도록 변수 선언
     let renderer, geometry, material;
 
     // ===== Scene(3D 무대 역할) 생성 =====
     const scene = new THREE.Scene(); // 장면을 생성하여 모든 3D 객체를 담을 공간 생성
 
-    // ===== 현재 화면 크기 가져오기 =====
-    const canvasWidth = window.innerWidth; // 브라우저 창 너비
-    const canvasHeight = window.innerHeight; // 브라우저 창 높이
+    // ===== 현재 컨테이너 크기 가져오기 =====
+    const { width: canvasWidth, height: canvasHeight } = getContainerSize();
 
     // ===== 원근 카메라 설정 =====
     const camera = new THREE.PerspectiveCamera(
@@ -50,16 +70,11 @@ export default function Circle3D({ isZoomed }) {
     });
 
     renderer.setSize(canvasWidth, canvasHeight); // 렌더러의 출력 크기를 현재 화면 크기에 맞게 설정
+    renderer.setPixelRatio(window.devicePixelRatio || 1);
     renderer.setClearColor(0x000000, 0); // 배경색을 투명으로 설정
     
     // DOM에 추가 (클린업을 위해 ref.current를 변수에 저장)
-    const currentContainer = containerRef.current;
-    if (currentContainer) {
-        currentContainer.appendChild(renderer.domElement); // 렌더러가 생성한 캔버스를 HTML에 추가
-    } else {
-        console.error("Container ref is not set.");
-        return;
-    }
+    currentContainer.appendChild(renderer.domElement); // 렌더러가 생성한 캔버스를 HTML에 추가
 
     // ===== 3D 오브젝트 그룹 생성 =====
     const objectGroup = new THREE.Group(); // 여러 오브젝트를 하나로 묶기 위한 그룹 생성
@@ -162,6 +177,9 @@ export default function Circle3D({ isZoomed }) {
 
     // ===== 마우스 움직임 감지 함수 정의 =====
     const handleMouseMove = (e) => {
+      if (!interactiveRef.current) {
+        return;
+      }
       const x = (e.clientX / window.innerWidth) * 2 - 1; // 마우스의 X좌표를 -1~1 범위로 정규화
       const y = (e.clientY / window.innerHeight) * 2 - 1; // 마우스의 Y좌표를 -1~1 범위로 정규화
       targetY = initialRotationY + (x * sensitivity); // 마우스 좌우 움직임으로 Y축 회전값 설정
@@ -207,9 +225,10 @@ export default function Circle3D({ isZoomed }) {
         );
       }
     };
-    window.addEventListener("mousemove", handleMouseMove); // 마우스 이동 이벤트 등록
-
     const handleMouseDown = (e) => {
+      if (!interactiveRef.current) {
+        return;
+      }
       if (e.button === 2) {
         isRightDragging = true;
         dragStartX = e.clientX;
@@ -225,6 +244,9 @@ export default function Circle3D({ isZoomed }) {
     };
 
     const handleMouseUp = (e) => {
+      if (!interactiveRef.current) {
+        return;
+      }
       if (isRightDragging && e.button === 2) {
         isRightDragging = false;
       }
@@ -243,18 +265,34 @@ export default function Circle3D({ isZoomed }) {
     };
 
     const handleContextMenu = (e) => {
+      if (!interactiveRef.current) {
+        return;
+      }
       if (containerRef.current && containerRef.current.contains(e.target)) {
         e.preventDefault();
       }
     };
+    const bindPointerEvents = interactiveRef.current;
 
-    window.addEventListener("mousedown", handleMouseDown);
-    window.addEventListener("mouseup", handleMouseUp);
-    window.addEventListener("contextmenu", handleContextMenu);
+    if (bindPointerEvents) {
+      window.addEventListener("mousemove", handleMouseMove);
+      window.addEventListener("mousedown", handleMouseDown);
+      window.addEventListener("mouseup", handleMouseUp);
+      window.addEventListener("contextmenu", handleContextMenu);
+    }
 
     // ===== 애니메이션 함수 정의 =====
     const animate = () => {
       requestAnimationFrame(animate); // 매 프레임마다 animate 함수 반복 실행
+
+      if (!interactiveRef.current) {
+        targetX += (initialRotationX - targetX) * 0.08;
+        targetY += (initialRotationY - targetY) * 0.08;
+        targetZ += (initialRotationZ - targetZ) * 0.08;
+        targetLineCount += (BASE_LINES - targetLineCount) * 0.1;
+        targetCameraZRef.current += (BASE_CAMERA_Z - targetCameraZRef.current) * 0.1;
+      }
+
       currentLineCount += (targetLineCount - currentLineCount) * 0.1;
       const rounded = Math.round(currentLineCount);
       if (rounded !== lastAppliedLineCount) {
@@ -282,19 +320,21 @@ export default function Circle3D({ isZoomed }) {
 
     // ===== 창 크기 변경 시 반응형 처리 =====
     const handleResize = () => {
-      // 13. Ref의 카메라를 사용합니다.
-      cameraRef.current.aspect = window.innerWidth / window.innerHeight; // 카메라의 종횡비를 새 창 크기에 맞게 조정
-      cameraRef.current.updateProjectionMatrix(); // 카메라 투영 행렬 업데이트
-      renderer.setSize(window.innerWidth, window.innerHeight); // 렌더러 크기도 새 창 크기에 맞게 조정
+      const { width, height } = getContainerSize();
+      cameraRef.current.aspect = width / height;
+      cameraRef.current.updateProjectionMatrix();
+      renderer.setSize(width, height);
     };
     window.addEventListener("resize", handleResize); // 창 크기 변경 이벤트 등록
 
     // ===== 컴포넌트가 사라질 때 실행되는 정리 코드 =====
     return () => {
-      window.removeEventListener("mousemove", handleMouseMove); // 마우스 이벤트 제거
-      window.removeEventListener("mousedown", handleMouseDown);
-      window.removeEventListener("mouseup", handleMouseUp);
-      window.removeEventListener("contextmenu", handleContextMenu);
+      if (bindPointerEvents) {
+        window.removeEventListener("mousemove", handleMouseMove);
+        window.removeEventListener("mousedown", handleMouseDown);
+        window.removeEventListener("mouseup", handleMouseUp);
+        window.removeEventListener("contextmenu", handleContextMenu);
+      }
       window.removeEventListener("resize", handleResize); // 리사이즈 이벤트 제거
       
       // DOM 요소 안전하게 제거
@@ -322,5 +362,14 @@ export default function Circle3D({ isZoomed }) {
 
 
   // ===== three.js 캔버스를 표시할 HTML 요소 반환 =====
-  return <div ref={containerRef} style={{ width: "100vw", height: "100vh" }} />;
+  return (
+    <div
+      ref={containerRef}
+      style={{
+        width: "100%",
+        height: "100%",
+        pointerEvents: interactive ? "auto" : "none",
+      }}
+    />
+  );
 }

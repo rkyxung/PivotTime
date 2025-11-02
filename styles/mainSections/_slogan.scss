@@ -1,0 +1,618 @@
+@font-face {
+  font-family: "Pretendard";
+  src: url("https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Thin.woff")
+    format("woff");
+  font-weight: 100;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Pretendard";
+  src: url("https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-ExtraLight.woff")
+    format("woff");
+  font-weight: 200;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Pretendard";
+  src: url("https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Light.woff")
+    format("woff");
+  font-weight: 300;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Pretendard";
+  src: url("https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff")
+    format("woff");
+  font-weight: 400;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Pretendard";
+  src: url("https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Medium.woff")
+    format("woff");
+  font-weight: 500;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Pretendard";
+  src: url("https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-SemiBold.woff")
+    format("woff");
+  font-weight: 600;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Pretendard";
+  src: url("https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Bold.woff")
+    format("woff");
+  font-weight: 700;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Pretendard";
+  src: url("https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-ExtraBold.woff")
+    format("woff");
+  font-weight: 800;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Pretendard";
+  src: url("https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Black.woff")
+    format("woff");
+  font-weight: 900;
+  font-display: swap;
+}
+
+$font-main: "Pretendard", sans-serif;
+$font-weight-medium: 500;
+
+// typography.scss (compact version)
+
+$font-main: "Pretendard", sans-serif;
+$font-weight-medium: 500;
+
+// TITLE
+// 약 33.5px max
+@mixin title {
+  font-family: $font-main;
+  font-weight: $font-weight-medium;
+  font-size: clamp(
+    1.4rem,
+    // ~22.4px
+    1.8vw,
+    // 유동
+    2.09rem // ~33.5px
+  );
+}
+
+@mixin title2 {
+  font-family: $font-main;
+  font-weight: $font-weight-medium;
+  font-size: clamp(1.125rem, 1.979vw, 3rem);
+}
+
+// H1
+// 약 26px max
+@mixin h1 {
+  font-family: $font-main;
+  font-weight: $font-weight-medium;
+  font-size: clamp(
+    1.2rem,
+    // ~19.2px
+    1.4vw,
+    // 유동
+    1.63rem // ~26px
+  );
+}
+
+// H2
+// 약 23px max
+@mixin h2 {
+  font-family: $font-main;
+  font-weight: $font-weight-medium;
+  font-size: clamp(
+    1.05rem,
+    // ~16.8px
+    1.2vw,
+    // 유동
+    1.44rem // ~23px
+  );
+}
+
+// 본문
+// 약 20px max
+@mixin body {
+  font-family: $font-main;
+  font-weight: $font-weight-medium;
+  font-size: clamp(
+    0.9rem,
+    // ~14.4px
+    1vw,
+    // 유동
+    1.25rem // ~20px
+  );
+}
+
+// SUB
+// 약 17px max
+@mixin sub {
+  font-family: $font-main;
+  font-weight: $font-weight-medium;
+  font-size: clamp(
+    0.8rem,
+    // ~12.8px
+    0.9vw,
+    // 유동
+    1.06rem // ~17px
+  );
+}
+
+@mixin bodyText {
+  font-size: clamp(0.875rem, 1.04vw, 1.375rem);
+  font-family: "Pretendard";
+}
+
+@mixin infoText {
+  font-size: clamp(0.6em, 0.73vw, 1.2rem);
+  font-weight: 500;
+  color: #fff;
+  letter-spacing: -0.03rem;
+  line-height: 1.35;
+}
+
+$blue: hsl(221, 100%, 50%);
+$height: 56.25vw;
+$section-height: 100dvh;
+
+.slogan {
+  position: relative;
+  width: 100vw;
+  height: $section-height;
+  padding-top: 7.7vw;
+  box-sizing: border-box;
+  overflow: hidden;
+
+  .webImage {
+    position: absolute;
+    width: 100vw;
+    height: auto;
+    top: 0;
+    left: 0;
+    opacity: 0.5;
+    z-index: -1;
+    // display: none;
+  }
+
+  .slogan-container {
+    position: relative;
+    width: 93.75vw;
+    height: 44.53vw;
+    background-color: $blue;
+    margin: 0 auto;
+    border-radius: 0.73vw;
+    // opacity: 0.5;
+    overflow: hidden;
+
+    > div {
+      position: absolute;
+    }
+  }
+
+  .main-graphic {
+    top: -8.5vw;
+    left: 16.5vw;
+    svg {
+      width: 61vw;
+    }
+  }
+
+  .sub-graphic {
+    top: -52vw;
+    left: -23vw;
+    svg {
+      width: 87.55vw;
+    }
+  }
+
+  .GF {
+    top: 20vw;
+    right: 7.5vw;
+
+    svg {
+      width: 36.21vw;
+      path {
+        fill: #000;
+      }
+
+      rect {
+        fill: #000;
+      }
+    }
+  }
+
+  .PT {
+    top: 24.5vw;
+    left: 42.7vw;
+    svg {
+      width: 28.72vw;
+      path {
+        fill: #000;
+      }
+
+      rect {
+        fill: #000;
+      }
+    }
+    opacity: 0;
+  }
+
+  .txt-wrap {
+    position: absolute;
+    color: #000;
+    right: 4.7vw;
+    bottom: 3.3vw;
+
+    .title {
+      font-family: "Pretendard";
+      font-weight: 800;
+      font-size: clamp(0.8rem, 0.94vw, 1.4rem);
+      line-height: 1.2;
+      letter-spacing: -0.04rem;
+    }
+
+    .description {
+      padding-top: 1.3vw;
+
+      span {
+        @include body;
+        line-height: 1.6;
+        letter-spacing: -0.01rem;
+        display: block;
+      }
+    }
+  }
+
+  // 1. 애니메이션 대상 요소들의 초기 (숨겨진) 상태
+  // 팝업 효과를 위해 약간 아래 + 투명하게 설정
+  /* ===========================================
+   Slogan 섹션 인터랙션 (Keyframes로 수정)
+   =========================================== */
+
+  // 1. GF 로고를 위한 2단계 애니메이션 정의
+  @keyframes getFeverAnimation {
+    // --- 1단계: 팝업 (0% ~ 50%) ---
+    0% {
+      opacity: 0;
+      transform: translateY(20px) translateX(0); // 시작 (숨김)
+      animation-timing-function: ease-out;
+    }
+    20% {
+      opacity: 0.1;
+      transform: translateY(0) translateX(0); // 1단계 완료 (등장)
+      animation-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1.05);
+    }
+    // --- 2단계: X축 이동 (50% ~ 100%) ---
+    100% {
+      opacity: 1;
+      transform: translateY(0) translateX(-21vw); // 2단계 완료 (X축 50px 이동)
+    }
+  }
+
+  @keyframes goPivotAnimation {
+    0% {
+      opacity: 0;
+      transform: translateY(20px);
+      animation-timing-function: ease-out;
+    }
+
+    20% {
+      opacity: 0.2;
+      transform: translateY(0) translateX(0);
+      animation-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1.05);
+    }
+
+    100% {
+      opacity: 1;
+      transform: translateY(0) translateX(-25.4vw); // 2단계 완료 (X축 50px 이동)
+    }
+  }
+
+  @keyframes getFeverAnimation2 {
+    0% {
+      transform: translateY(0) translateX(-21vw);
+      animation-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1.05);
+    }
+
+    20% {
+      transform: translateY(-2.2vw) translateX(-21vw);
+      animation-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1.05);
+    }
+
+    100% {
+      transform: translateY(-2.2vw) translateX(-46.6vw);
+    }
+  }
+
+  // // 👇 [추가] 3. GF(GET FEVER)가 두 번째로 움직이는 애니메이션
+  // // (예: 살짝 아래로 이동하며 PT와 자리를 맞춤)
+  // @keyframes getFeverMove2 {
+  //   from {
+  //     // 1번 애니메이션의 최종 상태 (translateX(-21vw))
+  //     transform: translateY(0) translateX(-21vw);
+  //   }
+  //   to {
+  //     // 2번 애니메이션의 최종 상태 (예: 2vw만큼 아래로)
+  //     transform: translateY(2vw) translateX(-21vw);
+  //   }
+  // }
+
+  // 2. 애니메이션 대상 요소들의 초기 (숨겨진) 상태
+  // 팝업 효과를 위해 약간 아래 + 투명하게 설정
+
+  // (GF를 이 그룹에서 제외시킴)
+  .txt-wrap > .title,
+  .description > span {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.1),
+      transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.1);
+  }
+
+  // GF의 초기상태를 별도로 정의 (transition 없음)
+  .GF {
+    opacity: 0;
+    transform: translateY(20px) translateX(0);
+  }
+
+  // [필수] SVG 선들의 "초기 숨김" 상태
+  .main-graphic svg g path {
+    opacity: 0;
+    fill: none;
+    stroke: #000;
+  }
+
+  @keyframes pathFadeIn {
+    from {
+      opacity: 0;
+      animation-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1.05);
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  @keyframes subGraphicAni {
+    from {
+      transform: translate(0, 0);
+      animation-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1.05);
+    }
+    to {
+      transform: translate(-0.5vw, 20vw);
+    }
+  }
+
+  // 3. .is-visible 클래스가 추가되었을 때 (보이는) 상태
+  /* ===========================================
+   Slogan 섹션 인터랙션 (수정된 코드)
+   =========================================== */
+
+  .slogan-container.is-visible {
+    // GETFEVER 로고 (Keyframes 애니메이션 적용)
+    .GF {
+      animation: getFeverAnimation 1.25s ease-out 0.2s forwards,
+        getFeverAnimation2 1.25s ease-out 2.4s forwards;
+    }
+
+    .PT {
+      animation: goPivotAnimation 1.25s ease-out 2.4s forwards;
+    }
+
+    .sub-graphic {
+      animation: subGraphicAni 1.25s ease-out 2.7s forwards;
+    }
+
+    // 텍스트 제목 (두 번째)
+    .txt-wrap > .title {
+      opacity: 1;
+      transform: translateY(0);
+      transition-delay: 0.4s;
+    }
+
+    // 텍스트 본문 (순차적으로)
+    .description > span {
+      opacity: 1;
+      transform: translateY(0);
+
+      &:nth-child(1) {
+        transition-delay: 0.6s;
+      }
+      &:nth-child(2) {
+        transition-delay: 0.75s;
+      }
+      &:nth-child(3) {
+        transition-delay: 0.9s;
+      }
+    }
+
+    /* --- Graphic Lines 애니메이션 실행 (하드코딩) --- */
+    .main-graphic svg g {
+      $base-delay: 1.25s;
+      $stagger-amount: 0.025s;
+
+      path:nth-child(1) {
+        animation: pathFadeIn 0.2s ease-out forwards;
+        animation-delay: #{$base-delay + (0 * $stagger-amount)};
+      }
+      path:nth-child(2) {
+        animation: pathFadeIn 0.2s ease-out forwards;
+        animation-delay: #{$base-delay + (1 * $stagger-amount)};
+      }
+      path:nth-child(3) {
+        animation: pathFadeIn 0.2s ease-out forwards;
+        animation-delay: #{$base-delay + (2 * $stagger-amount)};
+      }
+      path:nth-child(4) {
+        animation: pathFadeIn 0.2s ease-out forwards;
+        animation-delay: #{$base-delay + (3 * $stagger-amount)};
+      }
+      path:nth-child(5) {
+        animation: pathFadeIn 0.2s ease-out forwards;
+        animation-delay: #{$base-delay + (4 * $stagger-amount)};
+      }
+      path:nth-child(6) {
+        animation: pathFadeIn 0.2s ease-out forwards;
+        animation-delay: #{$base-delay + (5 * $stagger-amount)};
+      }
+      path:nth-child(7) {
+        animation: pathFadeIn 0.2s ease-out forwards;
+        animation-delay: #{$base-delay + (6 * $stagger-amount)};
+      }
+      path:nth-child(8) {
+        animation: pathFadeIn 0.2s ease-out forwards;
+        animation-delay: #{$base-delay + (7 * $stagger-amount)};
+      }
+      path:nth-child(9) {
+        animation: pathFadeIn 0.2s ease-out forwards;
+        animation-delay: #{$base-delay + (8 * $stagger-amount)};
+      }
+      path:nth-child(10) {
+        animation: pathFadeIn 0.2s ease-out forwards;
+        animation-delay: #{$base-delay + (9 * $stagger-amount)};
+      }
+      path:nth-child(11) {
+        animation: pathFadeIn 0.2s ease-out forwards;
+        animation-delay: #{$base-delay + (10 * $stagger-amount)};
+      }
+      path:nth-child(12) {
+        animation: pathFadeIn 0.2s ease-out forwards;
+        animation-delay: #{$base-delay + (11 * $stagger-amount)};
+      }
+      path:nth-child(13) {
+        animation: pathFadeIn 0.2s ease-out forwards;
+        animation-delay: #{$base-delay + (12 * $stagger-amount)};
+      }
+      path:nth-child(14) {
+        animation: pathFadeIn 0.2s ease-out forwards;
+        animation-delay: #{$base-delay + (13 * $stagger-amount)};
+      }
+      path:nth-child(15) {
+        animation: pathFadeIn 0.2s ease-out forwards;
+        animation-delay: #{$base-delay + (14 * $stagger-amount)};
+      }
+      path:nth-child(16) {
+        animation: pathFadeIn 0.2s ease-out forwards;
+        animation-delay: #{$base-delay + (15 * $stagger-amount)};
+      }
+      path:nth-child(17) {
+        animation: pathFadeIn 0.2s ease-out forwards;
+        animation-delay: #{$base-delay + (16 * $stagger-amount)};
+      }
+      path:nth-child(18) {
+        animation: pathFadeIn 0.2s ease-out forwards;
+        animation-delay: #{$base-delay + (17 * $stagger-amount)};
+      }
+      path:nth-child(19) {
+        animation: pathFadeIn 0.2s ease-out forwards;
+        animation-delay: #{$base-delay + (18 * $stagger-amount)};
+      }
+      path:nth-child(20) {
+        animation: pathFadeIn 0.2s ease-out forwards;
+        animation-delay: #{$base-delay + (19 * $stagger-amount)};
+      }
+      path:nth-child(21) {
+        animation: pathFadeIn 0.2s ease-out forwards;
+        animation-delay: #{$base-delay + (20 * $stagger-amount)};
+      }
+      path:nth-child(22) {
+        animation: pathFadeIn 0.2s ease-out forwards;
+        animation-delay: #{$base-delay + (21 * $stagger-amount)};
+      }
+      path:nth-child(23) {
+        animation: pathFadeIn 0.2s ease-out forwards;
+        animation-delay: #{$base-delay + (22 * $stagger-amount)};
+      }
+      path:nth-child(24) {
+        animation: pathFadeIn 0.2s ease-out forwards;
+        animation-delay: #{$base-delay + (23 * $stagger-amount)};
+      }
+      path:nth-child(25) {
+        animation: pathFadeIn 0.2s ease-out forwards;
+        animation-delay: #{$base-delay + (24 * $stagger-amount)};
+      }
+      path:nth-child(26) {
+        animation: pathFadeIn 0.2s ease-out forwards;
+        animation-delay: #{$base-delay + (25 * $stagger-amount)};
+      }
+      path:nth-child(27) {
+        animation: pathFadeIn 0.2s ease-out forwards;
+        animation-delay: #{$base-delay + (26 * $stagger-amount)};
+      }
+      path:nth-child(28) {
+        animation: pathFadeIn 0.2s ease-out forwards;
+        animation-delay: #{$base-delay + (27 * $stagger-amount)};
+      }
+      path:nth-child(29) {
+        animation: pathFadeIn 0.2s ease-out forwards;
+        animation-delay: #{$base-delay + (28 * $stagger-amount)};
+      }
+      path:nth-child(30) {
+        animation: pathFadeIn 0.2s ease-out forwards;
+        animation-delay: #{$base-delay + (29 * $stagger-amount)};
+      }
+      path:nth-child(31) {
+        animation: pathFadeIn 0.2s ease-out forwards;
+        animation-delay: #{$base-delay + (30 * $stagger-amount)};
+      }
+      path:nth-child(32) {
+        animation: pathFadeIn 0.2s ease-out forwards;
+        animation-delay: #{$base-delay + (31 * $stagger-amount)};
+      }
+      path:nth-child(33) {
+        animation: pathFadeIn 0.2s ease-out forwards;
+        animation-delay: #{$base-delay + (32 * $stagger-amount)};
+      }
+      path:nth-child(34) {
+        animation: pathFadeIn 0.2s ease-out forwards;
+        animation-delay: #{$base-delay + (33 * $stagger-amount)};
+      }
+      path:nth-child(35) {
+        animation: pathFadeIn 0.2s ease-out forwards;
+        animation-delay: #{$base-delay + (34 * $stagger-amount)};
+      }
+      path:nth-child(36) {
+        animation: pathFadeIn 0.2s ease-out forwards;
+        animation-delay: #{$base-delay + (35 * $stagger-amount)};
+      }
+      path:nth-child(37) {
+        animation: pathFadeIn 0.2s ease-out forwards;
+        animation-delay: #{$base-delay + (36 * $stagger-amount)};
+      }
+      path:nth-child(38) {
+        animation: pathFadeIn 0.2s ease-out forwards;
+        animation-delay: #{$base-delay + (37 * $stagger-amount)};
+      }
+      path:nth-child(39) {
+        animation: pathFadeIn 0.2s ease-out forwards;
+        animation-delay: #{$base-delay + (38 * $stagger-amount)};
+      }
+      path:nth-child(40) {
+        animation: pathFadeIn 0.2s ease-out forwards;
+        animation-delay: #{$base-delay + (39 * $stagger-amount)};
+      }
+      path:nth-child(41) {
+        animation: pathFadeIn 0.2s ease-out forwards;
+        animation-delay: #{$base-delay + (40 * $stagger-amount)};
+      }
+    }
+
+    $path-end-time: 1.3s; // (0.1s + (40 * 0.025s) + 0.3s)
+    $logo-start-delay: $path-end-time + 0.2s; // 1.6s
+  }
+}

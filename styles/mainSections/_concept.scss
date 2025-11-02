@@ -171,108 +171,110 @@ $blue: #0051ff;
 $height: 56.25vw;
 $section-height: 100dvh;
 
+
 .concept {
+  position: relative;
   height: $section-height;
   color: #fff;
-}
+  box-sizing: border-box;
 
-.webImage {
-  position: absolute;
-  width: 100vw;
-  height: auto;
-  top: 0;
-  left: 0;
-  opacity: 0.5;
-  z-index: -1;
-  // display: none;
-}
-
-.concept .graphic {
-  position: absolute;
-  width: 100vw;
-  height: $height;
-  z-index: 0;
-  pointer-events: none;
-
-  svg {
-    width: 120%;
-    height: 120%;
+  .webImage {
     position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-  }
-}
-
-// .concept .graphic > * {
-//   position: absolute;
-// }
-
-.concept .txt {
-  display: flex;
-  align-items: center;
-  gap: 1vw;
-  top: 13.8vw;
-  left: 7.7vw;
-  transform: rotate(-8deg);
-
-  div {
-    width: 0.7vw;
-    height: 0.7vw;
-    background-color: #fff;
-    border-radius: 50%;
-    margin: 0;
+    width: 100vw;
+    height: auto;
+    top: 0;
+    left: 0;
+    opacity: 0.5;
+    z-index: -1;
+    display: none;
   }
 
-  p {
-    margin: 0;
-    @include sub;
-    margin-left: -0.5vw;
-  }
-}
-
-.concept .txt-wrap {
-  display: flex;
-  width: 87.38vw;
-  margin: 0 auto;
-  justify-content: space-between;
-  align-items: center;
-  padding-top: 41.2vw;
-  position: relative;
-  z-index: 1;
-  pointer-events: auto;
-
-  .logo {
-    padding-top: 7.8vw;
+  .graphic {
+    position: absolute;
+    width: 100vw;
+    height: $height;
+    z-index: 0;
+    pointer-events: none;
 
     svg {
-      width: 36.41vw;
-      height: auto;
+      width: 120%;
+      height: 120%;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
     }
   }
-}
 
-.concept .description {
-  .title {
+  // .concept .graphic > * {
+  //   position: absolute;
+  // }
+
+  .txt {
     display: flex;
+    align-items: center;
+    gap: 1vw;
+    top: 13.8vw;
+    left: 7.7vw;
+    transform: rotate(-8deg);
 
     div {
-      @include title2;
+      width: 0.7vw;
+      height: 0.7vw;
+      background-color: #fff;
+      border-radius: 50%;
+      margin: 0;
     }
 
     p {
-      @include h2;
       margin: 0;
-      padding-top: 0.8vw;
-      padding-left: 0.8vw;
-      opacity: 0.8;
-      letter-spacing: -0.04rem;
+      @include sub;
+      margin-left: -0.5vw;
     }
   }
 
-  p {
-    @include body;
-    padding-top: 0.5vw;
-    line-height: 1.6;
+  .txt-wrap {
+    position: relative;
+    display: flex;
+    width: 87.38vw;
+    margin: 0 auto;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 42.8vw;
+    z-index: 999;
+
+    .logo {
+      padding-top: 5.8vw;
+
+      svg {
+        width: 21.6vw;
+        height: auto;
+      }
+    }
+  }
+
+  .description {
+    .title {
+      display: flex;
+
+      div {
+        @include title2;
+      }
+
+      p {
+        @include h2;
+        margin: 0;
+        padding-top: 0.5vw;
+        padding-left: 0.8vw;
+        opacity: 0.8;
+        letter-spacing: -0.04rem;
+      }
+    }
+
+    p {
+      @include body;
+      padding-top: 0.4vw;
+      line-height: 1.6;
+    }
   }
 }
