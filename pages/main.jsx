@@ -2,15 +2,15 @@
 
 import "../styles/main.scss";
 
-import Nav from "../components/nav";
-import HeroSection from "../components/mainSections/HeroSection";
-import VideoSection from "../components/mainSections/VideoSection";
-import KeywordsSection from "../components/mainSections/KeywordsSection";
-import ConceptSection from "../components/mainSections/ConceptSection";
-import VisualSection from "../components/mainSections/VisualSection";
-import TypographySection from "../components/mainSections/TypographySection";
-import SloganSection from "../components/mainSections/SloganSection";
-import MainFooterSection from "../components/mainSections/MainFooterSection";
+import Nav from "../../components/nav";
+import HeroSection from "../../components/mainSections/heroSection";
+import VideoSection from "../../components/mainSections/videoSection";
+import KeywordsSection from "../../components/mainSections/keywordsSection";
+import ConceptSection from "../../components/mainSections/conceptSection";
+import VisualSection from "../../components/mainSections/visualSection";
+import TypographySection from "../../components/mainSections/typographySection";
+import SloganSection from "../../components/mainSections/sloganSection";
+import MainFooterSection from "../../components/mainSections/mainFooterSection";
 
 export default function Main() {
   return (
