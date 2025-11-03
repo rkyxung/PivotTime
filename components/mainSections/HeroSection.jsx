@@ -180,9 +180,10 @@ export default function HeroSection() {
         onClick={handleClick}
         style={{ cursor: "pointer" }}
       >
-        {currentObject === "line" && <Line3D isZoomed={isZoomed} />}
-        {currentObject === "circle" && <Circle3D isZoomed={isZoomed} />}
-        {currentObject === "square" && <Square3D isZoomed={isZoomed} />}
+        {/* ⚠️ [수정] ⭐️ interactive={false} prop을 3개 컴포넌트에 모두 전달 */}
+        {currentObject === "line" && <Line3D isZoomed={isZoomed} interactive={false} />}
+        {currentObject === "circle" && <Circle3D isZoomed={isZoomed} interactive={false} />}
+        {currentObject === "square" && <Square3D isZoomed={isZoomed} interactive={false} />}
       </div>
       <div className="hero-text">
         <div className="gF-gP">

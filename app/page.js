@@ -14,30 +14,42 @@
 //   );
 // }
 
-// import Nav from "../components/nav";
+// import Footer from "../components/footer";
 
 // export default function Home() {
-//   return <Nav />;
+//   return <Footer />;
 // }
 
-import Main from "../pages/main";
+// import Main from "../pages/main";
+
+// export default function Home() {
+//   return (
+//     <main>
+//       <Main />
+//     </main>
+//   );
+// }
+
+import Nav from '../components/nav';
+import ConceptSection from "../components/mainSections/conceptSection";
 
 export default function Home() {
   return (
     <main>
-      <Main />
+      <Nav />
+      <ConceptSection/>
     </main>
   );
 }
 
 // import Nav from '../components/nav';
-// import SloganSection from "../components/mainSections/sloganSection";
+// import VisualSection from "../components/mainSections/VisualSection";
 
 // export default function Home() {
 //   return (
 //     <main>
 //       <Nav />
-//       <SloganSection/>
+//       <VisualSection/>
 //     </main>
 //   );
 // }

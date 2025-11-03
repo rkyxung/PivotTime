@@ -172,7 +172,6 @@ $blue: #0051ff;
 $height: 56.25vw;
 $section-height: 100dvh;
 
-
 .visual {
   position: relative;
   height: $section-height;
@@ -195,102 +194,104 @@ $section-height: 100dvh;
     z-index: -1;
     // display: none;
   }
+}
 
-  .logo svg {
-    width: 17.44vw;
+.logo svg {
+  width: 17.44vw;
 
-    path {
-      fill: $blue;
-    }
-
-    rect {
-      fill: $blue;
-    }
+  path {
+    fill: $blue;
   }
 
-  .txt-wrap {
-    position: fixed;
-    margin-top: -9.5vw;
-    z-index: 5;
-    padding-left: 0.45vw;
-
-    p {
-      @include body;
-      line-height: 1.6;
-      letter-spacing: -0.01rem;
-      padding-top: 0.6vw;
-    }
+  rect {
+    fill: $blue;
   }
+}
 
-  .graphic {
-    position: absolute;
-    right: 6vw;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 60vw;
-    height: 100vh;
-    display: grid;
-    place-items: center;
-    overflow: visible;
+.txt-wrap {
+  position: fixed;
+  padding: 4.5vw 0 0.4vw 0;
+  z-index: 5;
+
+  p {
+    @include body;
+    line-height: 1.6;
+    padding-top: 0.8vw;
   }
+}
 
-  .graphic-objects {
-    position: absolute;
-    display: grid;
-    place-items: center;
-    transform-origin: center;
-    will-change: transform;
+.graphic {
+  position: absolute;
+  right: 6vw;
+  top: 65%;
+  transform: translateY(-50%);
+  width: 60vw;
+  height: 100vh;
+  display: grid;
+  place-items: center;
+  overflow: visible;
+}
+
+.graphic-objects {
+  position: absolute;
+  display: grid;
+  place-items: center;
+  transform-origin: center;
+  will-change: transform;
+}
+
+.graphic-slot {
+  position: absolute;
+  top: -34vw;
+  left: -44vw;
+  width: 10%;
+  height: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform-origin: 200% center;
+  cursor: pointer;
+
+  canvas {
+    width: 100%;
+    height: 100%;
   }
+}
 
-  .graphic-slot {
-    position: absolute;
-    top: -34vw;
-    left: -44vw;
-    width: 10%;
-    height: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transform-origin: 200% center;
-    cursor: pointer;
+.line canvas {
+  transform: scale(1);
+}
 
-    canvas {
-      width: 100%;
-      height: 100%;
-    }
-  }
+.circle {
+  top: -26vw;
+  left: -36vw;
+  transform: scale(0.8);
+}
 
-  .line canvas {
-    transform: scale(1);
-  }
+.square {
+  transform: scaleY(-1) rotate(-25deg);
+  top: -2vw;
+  left: -48vw;
+}
 
-  .circle {
-    transform: scale(0.5);
-  }
+.label {
+  @include sub;
+  position: absolute;
+  padding: 0.16vw 1.04vw;
+  border-radius: 1.56vw;
+  border: 1px solid #e1e1e1;
+  background: #000;
+  line-height: 1.32;
+  letter-spacing: -0.03rem;
+  white-space: nowrap;
+}
 
-  .square {
-    transform: scale(0.5);
-  }
+.kor {
+  top: 29.8vw;
+  left: 17vw;
+}
 
-  .label {
-    @include sub;
-    position: absolute;
-    padding: 0.16vw 1.04vw;
-    border-radius: 1.56vw;
-    border: 1px solid #e1e1e1;
-    background: #000;
-    line-height: 1.32;
-    letter-spacing: -0.03rem;
-    white-space: nowrap;
-  }
-
-  .kor {
-    top: 31.2vw;
-    left: 17vw;
-  }
-
-  .en {
-    top: 16.6vw;
-    right: 1.8vw;
-  }
+.en {
+  top: 15.4vw;
+  right: 1.8vw;
 }

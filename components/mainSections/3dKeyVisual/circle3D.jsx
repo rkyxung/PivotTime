@@ -11,13 +11,16 @@ import * as THREE from "three";
 import { gsap } from "gsap";
 
 // 1. isZoomed prop을 받도록 수정
-export default function Circle3D({ isZoomed = false, interactive = true } = {}) {
+export default function Circle3D({
+  isZoomed = false,
+  interactive = true,
+} = {}) {
   // three.js가 생성한 캔버스를 붙일 HTML 요소를 가리키는 참조 생성
   const containerRef = useRef(null);
-  
+
   // 2. 카메라의 '목표 Z거리'를 저장할 Ref를 생성합니다. (초기값 420)
-  const targetCameraZRef = useRef(420);
-  
+  const targetCameraZRef = useRef(null);
+
   // 3. 카메라 객체 자체를 저장할 Ref 생성
   const cameraRef = useRef(null);
   const interactiveRef = useRef(interactive);
@@ -46,6 +49,7 @@ export default function Circle3D({ isZoomed = false, interactive = true } = {}) 
 
     // 클린업(정리) 함수에서 접근할 수 있도록 변수 선언
     let renderer, geometry, material;
+    let animationFrameId; // ⚠️ 애니메이션 프레임 ID 추가
 
     // ===== Scene(3D 무대 역할) 생성 =====
     const scene = new THREE.Scene(); // 장면을 생성하여 모든 3D 객체를 담을 공간 생성
@@ -63,8 +67,13 @@ export default function Circle3D({ isZoomed = false, interactive = true } = {}) 
     camera.position.set(0, -20, 420); // 카메라를 Z축 방향으로 뒤로 이동시켜 장면 전체를 볼 수 있게 설정
     cameraRef.current = camera; // 4. ref에 현재 카메라 인스턴스 저장
 
+    // ⚠️ [수정]
+    // targetCameraZRef의 초기값을 카메라의 실제 위치(420)로 설정
+    targetCameraZRef.current = camera.position.z;
+
     // ===== 렌더러(WebGLRenderer) 설정 =====
-    renderer = new THREE.WebGLRenderer({ // 변수에 할당
+    renderer = new THREE.WebGLRenderer({
+      // 변수에 할당
       antialias: true, // 가장자리를 부드럽게 처리
       alpha: true, // 배경을 투명하게 설정
     });
@@ -72,7 +81,7 @@ export default function Circle3D({ isZoomed = false, interactive = true } = {}) 
     renderer.setSize(canvasWidth, canvasHeight); // 렌더러의 출력 크기를 현재 화면 크기에 맞게 설정
     renderer.setPixelRatio(window.devicePixelRatio || 1);
     renderer.setClearColor(0x000000, 0); // 배경색을 투명으로 설정
-    
+
     // DOM에 추가 (클린업을 위해 ref.current를 변수에 저장)
     currentContainer.appendChild(renderer.domElement); // 렌더러가 생성한 캔버스를 HTML에 추가
 
@@ -88,7 +97,8 @@ export default function Circle3D({ isZoomed = false, interactive = true } = {}) 
     const BASE_LINES = 34;
     const MAX_LINES = 100;
 
-    material = new THREE.LineBasicMaterial({ // 변수에 할당
+    material = new THREE.LineBasicMaterial({
+      // 변수에 할당
       color: 0xffffff, // 선 색상 흰색 지정
       transparent: true, // 투명도 설정 가능하도록 활성화
       opacity: 0.7, // 선의 투명도 설정
@@ -152,10 +162,10 @@ export default function Circle3D({ isZoomed = false, interactive = true } = {}) 
     let targetY = initialRotationY;
     let targetZ = initialRotationZ;
 
-    const sensitivity = Math.PI / 2.5; 
+    const sensitivity = Math.PI / 2.5;
     const sensitivityZ = Math.PI / 5; // Z축 회전을 위한 별도 감도 (Y축 감도의 절반)
     const DRAG_SENSITIVITY = 0.35; // 우클릭 드래그 시 라인 밀도 변화 감도
-    
+
     // 5. MIN, BASE, MAX Z값을 정의합니다.
     const MIN_CAMERA_Z = 260;
     const BASE_CAMERA_Z = camera.position.z; // 420
@@ -167,7 +177,7 @@ export default function Circle3D({ isZoomed = false, interactive = true } = {}) 
     let dragStartCount = BASE_LINES;
     let isLeftDragging = false;
     let leftDragStartY = 0;
-    
+
     // 6. 드래그 시작 시점의 Z값을 Ref에서 가져옵니다.
     let leftDragStartCameraZ = targetCameraZRef.current;
     let leftDragMoved = false;
@@ -177,58 +187,63 @@ export default function Circle3D({ isZoomed = false, interactive = true } = {}) 
 
     // ===== 마우스 움직임 감지 함수 정의 =====
     const handleMouseMove = (e) => {
-      if (!interactiveRef.current) {
-        return;
-      }
+      // ⚠️ [수정 1/4] ⭐️
+      // 호버(회전) 로직은 interactive 값과 상관없이 *항상* 실행합니다.
+      // (HeroSection과 VisualSection 모두 호버 회전이 필요)
       const x = (e.clientX / window.innerWidth) * 2 - 1; // 마우스의 X좌표를 -1~1 범위로 정규화
       const y = (e.clientY / window.innerHeight) * 2 - 1; // 마우스의 Y좌표를 -1~1 범위로 정규화
-      targetY = initialRotationY + (x * sensitivity); // 마우스 좌우 움직임으로 Y축 회전값 설정
-      targetX = initialRotationX + (y * sensitivity * -1); // 마우스 상하 움직임으로 X축 회전값 설정
-      
-      // 1. 마우스 좌우(x) 움직임이 Z축(롤링)에도 영향을 주도록 추가
-      targetZ = initialRotationZ + (x * sensitivityZ); 
+      targetY = initialRotationY + x * sensitivity; // 마우스 좌우 움직임으로 Y축 회전값 설정
+      targetX = initialRotationX + y * sensitivity * -1; // 마우스 상하 움직임으로 X축 회전값 설정
+      targetZ = initialRotationZ + x * sensitivityZ; // 마우스 좌우 움직임으로 Z축 회전값 설정
 
-      if (isRightDragging) {
-        const delta = e.clientX - dragStartX;
-        const ratio = THREE.MathUtils.clamp(
-          delta / (window.innerWidth * DRAG_SENSITIVITY),
-          -1,
-          1
-        );
-        const desired =
-          dragStartCount + ratio * (MAX_LINES - MIN_LINES);
-        targetLineCount = THREE.MathUtils.clamp(
-          desired,
-          MIN_LINES,
-          MAX_LINES
-        );
-      }
-
-      if (isLeftDragging) {
-        const deltaY = e.clientY - leftDragStartY;
-        if (!leftDragMoved && Math.abs(deltaY) > 3) {
-          leftDragMoved = true;
+      // ⚠️ [수정 2/4] ⭐️
+      // 드래그(줌/라인 수 변경) 로직은 interactive가 false일 때만 (HeroSection) 실행합니다.
+      if (!interactiveRef.current) {
+        if (isRightDragging) {
+          const delta = e.clientX - dragStartX;
+          const ratio = THREE.MathUtils.clamp(
+            delta / (window.innerWidth * DRAG_SENSITIVITY),
+            -1,
+            1
+          );
+          const desired = dragStartCount + ratio * (MAX_LINES - MIN_LINES);
+          targetLineCount = THREE.MathUtils.clamp(
+            desired,
+            MIN_LINES,
+            MAX_LINES
+          );
         }
-        const ratio = THREE.MathUtils.clamp(
-          deltaY / (window.innerHeight * CAMERA_DRAG_SENSITIVITY),
-          -1,
-          1
-        );
-        const desiredCamera =
-          leftDragStartCameraZ + ratio * (MAX_CAMERA_Z - MIN_CAMERA_Z);
-        
-        // 8. 마우스 드래그 시, Ref의 값을 업데이트합니다.
-        targetCameraZRef.current = THREE.MathUtils.clamp(
-          desiredCamera,
-          MIN_CAMERA_Z,
-          MAX_CAMERA_Z
-        );
+
+        if (isLeftDragging) {
+          const deltaY = e.clientY - leftDragStartY;
+          if (!leftDragMoved && Math.abs(deltaY) > 3) {
+            leftDragMoved = true;
+          }
+          const ratio = THREE.MathUtils.clamp(
+            deltaY / (window.innerHeight * CAMERA_DRAG_SENSITIVITY),
+            -1,
+            1
+          );
+          const desiredCamera =
+            leftDragStartCameraZ + ratio * (MAX_CAMERA_Z - MIN_CAMERA_Z);
+
+          // 8. 마우스 드래그 시, Ref의 값을 업데이트합니다.
+          targetCameraZRef.current = THREE.MathUtils.clamp(
+            desiredCamera,
+            MIN_CAMERA_Z,
+            MAX_CAMERA_Z
+          );
+        }
       }
     };
     const handleMouseDown = (e) => {
-      if (!interactiveRef.current) {
+      // ⚠️ [수정 3/4] ⭐️
+      // interactive가 true일 때 (VisualSection)는 드래그를 막습니다.
+      if (interactiveRef.current) {
         return;
       }
+
+      // interactive가 false일 때만 (HeroSection) 드래그 로직이 실행됩니다.
       if (e.button === 2) {
         isRightDragging = true;
         dragStartX = e.clientX;
@@ -244,9 +259,13 @@ export default function Circle3D({ isZoomed = false, interactive = true } = {}) 
     };
 
     const handleMouseUp = (e) => {
-      if (!interactiveRef.current) {
+      // ⚠️ [수정 4/4] ⭐️
+      // interactive가 true일 때 (VisualSection)는 드래그를 막습니다.
+      if (interactiveRef.current) {
         return;
       }
+
+      // interactive가 false일 때만 (HeroSection) 드래그 로직이 실행됩니다.
       if (isRightDragging && e.button === 2) {
         isRightDragging = false;
       }
@@ -265,32 +284,35 @@ export default function Circle3D({ isZoomed = false, interactive = true } = {}) 
     };
 
     const handleContextMenu = (e) => {
-      if (!interactiveRef.current) {
-        return;
-      }
+      // (기존 로직 유지)
       if (containerRef.current && containerRef.current.contains(e.target)) {
         e.preventDefault();
       }
     };
-    const bindPointerEvents = interactiveRef.current;
 
-    if (bindPointerEvents) {
-      window.addEventListener("mousemove", handleMouseMove);
-      window.addEventListener("mousedown", handleMouseDown);
-      window.addEventListener("mouseup", handleMouseUp);
-      window.addEventListener("contextmenu", handleContextMenu);
-    }
+    // ⚠️ [수정]
+    // 이벤트 리스너를 항상 바인딩합니다.
+    window.addEventListener("mousemove", handleMouseMove);
+    window.addEventListener("mousedown", handleMouseDown);
+    window.addEventListener("mouseup", handleMouseUp);
+    window.addEventListener("contextmenu", handleContextMenu);
 
     // ===== 애니메이션 함수 정의 =====
     const animate = () => {
-      requestAnimationFrame(animate); // 매 프레임마다 animate 함수 반복 실행
+      animationFrameId = requestAnimationFrame(animate); // ⚠️ ID 저장
 
-      if (!interactiveRef.current) {
+      // ⚠️ [수정]
+      // interactive가 false일 때 (HeroSection) + 드래그 중이 아닐 때만 중앙으로 복귀
+      if (!interactiveRef.current && !isLeftDragging && !isRightDragging) {
         targetX += (initialRotationX - targetX) * 0.08;
         targetY += (initialRotationY - targetY) * 0.08;
         targetZ += (initialRotationZ - targetZ) * 0.08;
         targetLineCount += (BASE_LINES - targetLineCount) * 0.1;
-        targetCameraZRef.current += (BASE_CAMERA_Z - targetCameraZRef.current) * 0.1;
+        // (isZoomed가 false일 때 BASE_CAMERA_Z로 돌아감)
+        if (!isZoomed) {
+          targetCameraZRef.current +=
+            (BASE_CAMERA_Z - targetCameraZRef.current) * 0.1;
+        }
       }
 
       currentLineCount += (targetLineCount - currentLineCount) * 0.1;
@@ -301,9 +323,11 @@ export default function Circle3D({ isZoomed = false, interactive = true } = {}) 
 
       // 10. animate 루프가 Ref의 '목표' 값을 향해 '현재' 값을 갱신합니다.
       currentCameraZ += (targetCameraZRef.current - currentCameraZ) * 0.1;
-      
+
       // 11. 갱신된 '현재' 값으로 카메라 위치를 설정합니다. (Ref 사용)
-      cameraRef.current.position.z = currentCameraZ;
+      if (cameraRef.current) {
+        cameraRef.current.position.z = currentCameraZ;
+      }
 
       gsap.to(objectGroup.rotation, {
         x: targetX, // 목표 X축 회전값으로 애니메이션
@@ -313,13 +337,16 @@ export default function Circle3D({ isZoomed = false, interactive = true } = {}) 
         ease: "power2.out", // 감속 애니메이션 적용
       });
       // 12. Ref의 카메라로 렌더링합니다.
-      renderer.render(scene, cameraRef.current); // 현재 장면을 카메라 시점에서 렌더링
+      if (renderer && cameraRef.current) {
+        renderer.render(scene, cameraRef.current); // 현재 장면을 카메라 시점에서 렌더링
+      }
     };
 
     animate(); // 애니메이션 실행 시작
 
     // ===== 창 크기 변경 시 반응형 처리 =====
     const handleResize = () => {
+      if (!cameraRef.current || !renderer) return;
       const { width, height } = getContainerSize();
       cameraRef.current.aspect = width / height;
       cameraRef.current.updateProjectionMatrix();
@@ -329,37 +356,50 @@ export default function Circle3D({ isZoomed = false, interactive = true } = {}) 
 
     // ===== 컴포넌트가 사라질 때 실행되는 정리 코드 =====
     return () => {
-      if (bindPointerEvents) {
-        window.removeEventListener("mousemove", handleMouseMove);
-        window.removeEventListener("mousedown", handleMouseDown);
-        window.removeEventListener("mouseup", handleMouseUp);
-        window.removeEventListener("contextmenu", handleContextMenu);
-      }
+      cancelAnimationFrame(animationFrameId); // ⚠️ 프레임 취소
+
+      // ⚠️ [수정]
+      // 리스너를 항상 제거하도록 변경
+      window.removeEventListener("mousemove", handleMouseMove);
+      window.removeEventListener("mousedown", handleMouseDown);
+      window.removeEventListener("mouseup", handleMouseUp);
+      window.removeEventListener("contextmenu", handleContextMenu);
+
       window.removeEventListener("resize", handleResize); // 리사이즈 이벤트 제거
-      
+
       // DOM 요소 안전하게 제거
       if (currentContainer && renderer.domElement) {
         currentContainer.removeChild(renderer.domElement); // DOM에서 렌더러 제거
       }
-      
+
       // Three.js 자원 해제
-      geometry.dispose();
-      material.dispose();
-      renderer.dispose();
+      if (geometry) geometry.dispose();
+      if (material) material.dispose();
+      if (renderer) renderer.dispose();
     };
   }, []); // useEffect는 처음 렌더링될 때 한 번만 실행
 
   // 14. 줌(스크롤)을 위한 별도의 useEffect (컴포넌트 최상위 레벨)
   useEffect(() => {
-    // 15. 이 훅은 Ref의 값만 변경합니다.
-    // 줌 아웃(true)시 500, 줌 인(false)시 300으로 설정
-    if (isZoomed) { // 줌 아웃 (true)
-      targetCameraZRef.current = 500; 
-    } else { // 줌 인 (false)
-      targetCameraZRef.current = 420;
+    // ⚠️ [수정] ⭐️
+    // 1. interactive가 true일 때 (VisualSection)
+    // 짤리지 않도록 고정된 Z값을 설정합니다 (550).
+    if (interactive) {
+      // prop을 직접 사용
+      targetCameraZRef.current = 550; // (이 값을 조절해서 짤리지 않게 하세요)
     }
-  }, [isZoomed]); // isZoomed prop이 변경될 때만 실행됩니다.
-
+    // 2. interactive가 false일 때 (HeroSection)
+    // 기존 isZoomed 로직을 따릅니다.
+    else {
+      if (isZoomed) {
+        // 줌 아웃 (true)
+        targetCameraZRef.current = 500;
+      } else {
+        // 줌 인 (false)
+        targetCameraZRef.current = 420; // 줌 인 (기본값)
+      }
+    }
+  }, [isZoomed, interactive]); // ref 대신 prop을 의존성 배열에 사용
 
   // ===== three.js 캔버스를 표시할 HTML 요소 반환 =====
   return (
@@ -368,7 +408,7 @@ export default function Circle3D({ isZoomed = false, interactive = true } = {}) 
       style={{
         width: "100%",
         height: "100%",
-        pointerEvents: interactive ? "auto" : "none",
+        pointerEvents: "auto", // JS가 제어하므로 항상 'auto'
       }}
     />
   );

@@ -11,7 +11,7 @@ import * as THREE from "three";
 import { gsap } from "gsap";
 
 // ThreeScene 컴포넌트를 정의 (3D 장면을 생성하고 렌더링하는 역할)
-export default function Square3D({ interactive = true } = {}) {
+export default function Square3D({ isZoomed = false, interactive = true } = {}) { // ⚠️ isZoomed prop 추가
   // three.js가 생성한 캔버스를 붙일 HTML 요소를 가리키는 참조 생성
   const containerRef = useRef(null);
   const interactiveRef = useRef(interactive);
@@ -142,8 +142,7 @@ export default function Square3D({ interactive = true } = {}) {
     const activeRotations = new Map();
     const EXIT_FRAME_THRESHOLD = 6; // 교차가 끊긴 프레임 허용치
 
-    // 1-3. 초기 각도 설정 (이건 그대로 유지)
-    // "측면으로 보여주는 거"
+    // 1-3. ⚠️ [수정] ⭐️ 호버 회전을 위한 초기값/목표값 추가 (Line3D.jsx 참고)
     const initialRotationX = THREE.MathUtils.degToRad(10);
     const initialRotationY = THREE.MathUtils.degToRad(-90);
     const initialRotationZ = THREE.MathUtils.degToRad(0);
@@ -151,9 +150,16 @@ export default function Square3D({ interactive = true } = {}) {
     objectGroup.rotation.x = initialRotationX;
     objectGroup.rotation.y = initialRotationY;
     objectGroup.rotation.z = initialRotationZ;
-
-    const wrapAngle = gsap.utils.wrap(0, Math.PI * 2);
+    
+    let targetX = initialRotationX;
+    let targetY = initialRotationY;
+    let targetZ = initialRotationZ;
+    
+    const sensitivity = Math.PI / 4;
+    const sensitivityZ = Math.PI / 8;
+    // (드래그 감도)
     const DRAG_SENSITIVITY = 0.35;
+
 
     const MIN_SCALE = 0.6;
     const BASE_SCALE = 1;
@@ -222,65 +228,78 @@ export default function Square3D({ interactive = true } = {}) {
 
     let isRightDragging = false;
     let rightDragStartX = 0;
-    let rightDragStartCount = BASE_LINES;
+    // ⚠️ [수정] ⭐️ X축 회전(Right-drag)을 위한 변수 추가
+    let rightDragStartY = 0; 
+    let dragStartGroupRotationX = objectGroup.rotation.x; 
+    let targetGroupRotationX = objectGroup.rotation.x;
+    let currentGroupRotationX = objectGroup.rotation.x;
+
     let isLeftDragging = false;
     let leftDragStartY = 0;
     let leftDragStartScale = BASE_SCALE;
     let leftDragMoved = false;
+    
+    // (GSAP의 wrap 유틸리티 함수)
+    const wrapAngle = gsap.utils.wrap(0, Math.PI * 2);
 
     // ===== 마우스 움직임 감지 함수 정의 =====
     const handleMouseMove = (e) => {
+      
+      // ⚠️ [수정 1/4] ⭐️
+      // 호버(회전) 로직은 interactive 값과 상관없이 *항상* 실행합니다.
+      const x = (e.clientX / window.innerWidth) * 2 - 1;
+      const y = (e.clientY / window.innerHeight) * 2 - 1;
+      // Raycaster용 마우스 좌표 (Y축 반전)
+      mouse.x = x;
+      mouse.y = -y; 
+      // 호버 회전값
+      targetY = initialRotationY + x * sensitivity;
+      targetX = initialRotationX + y * sensitivity * -1;
+      targetZ = initialRotationZ + x * sensitivityZ;
+
+      // ⚠️ [수정 2/4] ⭐️
+      // 드래그(줌/라인 수 변경) 로직은 interactive가 false일 때만 (HeroSection) 실행합니다.
       if (!interactiveRef.current) {
-        return;
-      }
-      // 1-5. 마우스 위치를 -1에서 1 사이의 3D 좌표로 변환
-      mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
-      mouse.y = -(e.clientY / window.innerHeight) * 2 + 1; // Y좌표 방향 뒤집기 (Three.js는 위쪽이 +)
-
-
-      if (isRightDragging) {
-        const deltaX = e.clientX - rightDragStartX;
-        const ratio = THREE.MathUtils.clamp(
-          deltaX / (window.innerWidth * DRAG_SENSITIVITY),
-          -1,
-          1
-        );
-        const desiredCount =
-          rightDragStartCount + ratio * (MAX_LINES - MIN_LINES);
-        targetLineCount = THREE.MathUtils.clamp(
-          desiredCount,
-          MIN_LINES,
-          MAX_LINES
-        );
-      }
-
-      if (isLeftDragging) {
-        const deltaY = e.clientY - leftDragStartY;
-        if (!leftDragMoved && Math.abs(deltaY) > 3) {
-          leftDragMoved = true;
+        // (기존 Square3D의 Right-drag 로직: X축 회전)
+        if (isRightDragging) {
+          const deltaY = e.clientY - rightDragStartY;
+          const rotationAmount = (deltaY / window.innerHeight) * Math.PI * 2;
+          targetGroupRotationX = dragStartGroupRotationX + rotationAmount;
         }
-        const ratio = THREE.MathUtils.clamp(
-          deltaY / (window.innerHeight * DRAG_SENSITIVITY),
-          -1,
-          1
-        );
-        const desiredScale =
-          leftDragStartScale + ratio * (MAX_SCALE - MIN_SCALE);
-        targetScale = THREE.MathUtils.clamp(
-          desiredScale,
-          MIN_SCALE,
-          MAX_SCALE
-        );
+
+        // (기존 Square3D의 Left-drag 로직: 스케일)
+        if (isLeftDragging) {
+          const deltaY = e.clientY - leftDragStartY;
+          if (!leftDragMoved && Math.abs(deltaY) > 3) {
+            leftDragMoved = true;
+          }
+          const ratio = THREE.MathUtils.clamp(
+            deltaY / (window.innerHeight * DRAG_SENSITIVITY),
+            -1,
+            1
+          );
+          const desiredScale =
+            leftDragStartScale + ratio * (MAX_SCALE - MIN_SCALE);
+          targetScale = THREE.MathUtils.clamp(
+            desiredScale,
+            MIN_SCALE,
+            MAX_SCALE
+          );
+        }
       }
     };
     const handleMouseDown = (e) => {
-      if (!interactiveRef.current) {
+      // ⚠️ [수정 3/4] ⭐️
+      // interactive가 true일 때 (VisualSection)는 드래그 시작을 막습니다.
+      if (interactiveRef.current) {
         return;
       }
+
+      // interactive가 false일 때 (HeroSection) 드래그 로직이 실행됩니다.
       if (e.button === 2) {
         isRightDragging = true;
-        rightDragStartX = e.clientX;
-        rightDragStartCount = targetLineCount;
+        rightDragStartY = e.clientY; // ⚠️ [수정] Y좌표 저장
+        dragStartGroupRotationX = currentGroupRotationX; // ⚠️ [수정] X회전 저장
       }
       if (e.button === 0) {
         isLeftDragging = true;
@@ -291,9 +310,13 @@ export default function Square3D({ interactive = true } = {}) {
     };
 
     const handleMouseUp = (e) => {
-      if (!interactiveRef.current) {
+      // ⚠️ [수정 4/4] ⭐️
+      // interactive가 true일 때 (VisualSection)는 드래그 종료를 막습니다.
+      if (interactiveRef.current) {
         return;
       }
+
+      // interactive가 false일 때 (HeroSection) 드래그 로직이 실행됩니다.
       if (isRightDragging && e.button === 2) {
         isRightDragging = false;
       }
@@ -312,29 +335,40 @@ export default function Square3D({ interactive = true } = {}) {
     };
 
     const handleContextMenu = (e) => {
-      if (!interactiveRef.current) {
-        return;
-      }
+      // (기존 로직 유지)
       if (containerRef.current && containerRef.current.contains(e.target)) {
         e.preventDefault();
       }
     };
-    const bindPointerEvents = interactiveRef.current;
-
-    if (bindPointerEvents) {
-      window.addEventListener("mousemove", handleMouseMove);
-      window.addEventListener("mousedown", handleMouseDown);
-      window.addEventListener("mouseup", handleMouseUp);
-      window.addEventListener("contextmenu", handleContextMenu);
-    }
+    
+    // 이벤트 리스너는 항상 바인딩합니다.
+    window.addEventListener("mousemove", handleMouseMove);
+    window.addEventListener("mousedown", handleMouseDown);
+    window.addEventListener("mouseup", handleMouseUp);
+    window.addEventListener("contextmenu", handleContextMenu);
 
     const animate = () => {
       animationFrameId = requestAnimationFrame(animate); // 애니메이션 프레임 ID 저장
 
-      if (!interactiveRef.current) {
-        mouse.set(-100, -100);
-        targetLineCount += (BASE_LINES - targetLineCount) * 0.12;
+      // ⚠️ [수정] ⭐️
+      // interactive가 false일 때 (HeroSection) + 드래그 중이 아닐 때만 중앙으로 복귀
+      if (!interactiveRef.current && !isLeftDragging && !isRightDragging) {
+        // (기존 로직)
         targetScale += (BASE_SCALE - targetScale) * 0.12;
+        targetGroupRotationX = initialRotationX;
+        
+        // ⚠️ [수정] ⭐️ (HeroSection일 때 호버 회전값도 복귀)
+        targetX += (initialRotationX - targetX) * 0.08;
+        targetY += (initialRotationY - targetY) * 0.08;
+        targetZ += (initialRotationZ - targetZ) * 0.08;
+      }
+      
+      // ⚠️ [수정] ⭐️
+      // (HeroSection이 아닐 때, 즉 VisualSection일 때도 호버 회전을 적용해야 함)
+      // (GSAP.to가 이 역할을 대신하므로 이 부분은 HeroSection 전용 로직으로 둠)
+      if (!interactiveRef.current) {
+         currentGroupRotationX += (targetGroupRotationX - currentGroupRotationX) * 0.12;
+         objectGroup.rotation.x = currentGroupRotationX;
       }
 
       raycaster.setFromCamera(mouse, camera); // Raycaster 업데이트
@@ -361,6 +395,7 @@ export default function Square3D({ interactive = true } = {}) {
         }
       });
 
+      // (Line/Scale 값 업데이트는 항상 실행)
       currentLineCount += (targetLineCount - currentLineCount) * 0.12;
       const roundedCount = Math.round(currentLineCount);
       if (roundedCount !== lastAppliedLineCount) {
@@ -370,6 +405,17 @@ export default function Square3D({ interactive = true } = {}) {
       currentScale += (targetScale - currentScale) * 0.12;
       objectGroup.scale.set(currentScale, currentScale, currentScale);
 
+      // ⚠️ [수정] ⭐️ (호버 회전 애니메이션 추가)
+      // VisualSection(interactive)일 땐 마우스 위치(targetX/Y/Z)를,
+      // HeroSection(!interactive)일 땐 드래그(currentGroupRotationX) + 복귀(targetY/Z)를 따름
+      gsap.to(objectGroup.rotation, {
+        x: interactiveRef.current ? targetX : currentGroupRotationX,
+        y: targetY,
+        z: targetZ,
+        duration: 1,
+        ease: "power2.out",
+      });
+
       renderer.render(scene, camera); // 현재 장면을 카메라 시점에서 렌더링
     };
 
@@ -378,6 +424,7 @@ export default function Square3D({ interactive = true } = {}) {
     // ===== 창 크기 변경 시 반응형 처리 =====
     // ... (handleResize 로직은 동일) ...
     const handleResize = () => {
+      if (!camera || !renderer) return;
       const { width, height } = getContainerSize();
       camera.aspect = width / height; 
       camera.updateProjectionMatrix(); 
@@ -389,18 +436,19 @@ export default function Square3D({ interactive = true } = {}) {
     // ... (return () => { ... } 로직은 동일) ...
     return () => {
       cancelAnimationFrame(animationFrameId); 
-      if (bindPointerEvents) {
-        window.removeEventListener("mousemove", handleMouseMove);
-        window.removeEventListener("mousedown", handleMouseDown);
-        window.removeEventListener("mouseup", handleMouseUp);
-        window.removeEventListener("contextmenu", handleContextMenu);
-      }
+      
+      // 이벤트 리스너 제거
+      window.removeEventListener("mousemove", handleMouseMove);
+      window.removeEventListener("mousedown", handleMouseDown);
+      window.removeEventListener("mouseup", handleMouseUp);
+      window.removeEventListener("contextmenu", handleContextMenu);
+      
       window.removeEventListener("resize", handleResize); 
       if (currentContainer && renderer.domElement) {
         currentContainer.removeChild(renderer.domElement); 
       }
-      geometry.dispose(); 
-      baseMaterial.dispose(); 
+      if(geometry) geometry.dispose(); 
+      if(baseMaterial) baseMaterial.dispose(); 
       activeRotations.forEach((_, obj) => stopHoverRotation(obj));
       activeRotations.clear();
 
@@ -412,9 +460,13 @@ export default function Square3D({ interactive = true } = {}) {
         if (child.material) child.material.dispose();
       });
 
-      renderer.dispose(); 
+      if(renderer) renderer.dispose(); 
     };
   }, []); // useEffect는 처음 렌더링될 때 한 번만 실행
+
+  // ⚠️ [수정] ⭐️
+  // (이 컴포넌트는 isZoomed prop을 사용하지 않으므로 관련 useEffect가 없습니다)
+  // (HeroSection의 isZoomed는 Line과 Circle의 카메라만 제어합니다)
 
   // ===== three.js 캔버스를 표시할 HTML 요소 반환 =====
   return (
@@ -423,8 +475,9 @@ export default function Square3D({ interactive = true } = {}) {
       style={{
         width: "100%",
         height: "100%",
-        pointerEvents: interactive ? "auto" : "none",
+        pointerEvents: "auto", // JS가 제어하므로 항상 'auto'
       }}
     />
   );
 }
+
