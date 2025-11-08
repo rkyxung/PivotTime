@@ -130,7 +130,7 @@ body {
 
   .delight {
     font-size: 3.09vw;
-    padding-top: 7vh;
+    padding-top: 6.5vh;
   }
 
   .logo {
@@ -141,7 +141,7 @@ body {
   }
 
   .object {
-    position: relative;
+    position: absolute;
     width: 100vw;
     max-width: none;
     top: 50%;
@@ -157,7 +157,7 @@ body {
     justify-content: center;
     font-size: 14.59vw;
     letter-spacing: 0.02em;
-    bottom: 6vh;
+    bottom: 7vh;
   }
 
   .countDown-colon {
@@ -175,15 +175,15 @@ body {
       margin: 0;
     }
     p:first-child {
-      top: 1.5vh;
-      left: 1vw;
+      top: 1vh;
+      left: 1.5vw;
     }
     p:last-child {
-      top: 1.5vh;
-      right: 1vw;
+      top: 1vh;
+      right: 1.5vw;
     }
     p:nth-child(2) {
-      bottom: 1.5vh;
+      bottom: 0vh;
       left: 50%;
       transform: translateX(-50%);
     }
