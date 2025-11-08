@@ -157,6 +157,7 @@ body {
     height: 92.36%;
     margin: auto 5.09vw;
     display: block;
+    color: rgba(225, 225, 225, 0.5);
     font-size: 2.04vw;
     line-height: 1.4;
     letter-spacing: 0;
@@ -174,7 +175,7 @@ body {
       right: 1.5vw;
     }
     p:nth-child(2) {
-      bottom: -1.5vh;
+      bottom: -0.5vh;
       left: 50%;
       transform: translateX(-50%);
     }
