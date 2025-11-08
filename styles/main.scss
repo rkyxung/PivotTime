@@ -1,3 +1,4 @@
+﻿@import "./footer.scss";
 @font-face {
   font-family: "Pretendard";
   src: url("https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Thin.woff")
@@ -169,7 +170,7 @@ $font-weight-medium: 500;
 
 $blue: #0051ff;
 $height: 56.25vw;
-$section-height: 100dvh; // 1. 풀페이지 스크롤 스냅을 위한 기본 섹션 높이 변수 (dvh: 모바일 대응)
+$section-height: 100dvh; // 섹션 높이 기본값
 
 html,
 body {
@@ -227,8 +228,6 @@ main {
   align-items: stretch;
   justify-content: center;
   width: 100%;
-  scroll-snap-align: start; // 섹션의 시작 부분이 스냅 지점에 맞도록 설정
-  scroll-snap-stop: always;
 }
 
 
@@ -245,7 +244,6 @@ main {
   // footer 등 내용에 따라 높이가 유동적인 섹션
   height: auto;
   flex: 0 0 auto;
-  scroll-snap-align: none; // 이 섹션에서는 스냅을 적용하지 않음
 }
 
 .webImage {

@@ -21,7 +21,7 @@ export default function KeywordsSection() {
         }
       },
       {
-        threshold: 0.1, // 섹션이 10% 보였을 때 실행
+        threshold: 0.7, // 섹션이 10% 보였을 때 실행
       }
     );
 
@@ -35,7 +35,6 @@ export default function KeywordsSection() {
   return (
     // 4. ref 연결
     <div className="keywords" ref={keywordsRef}>
-      <img className="webImage" src="/images/keywords.png" alt="keywords.png" />
 
       <div className="graphics">
         {/* === Circle SVG === */}

@@ -6,7 +6,11 @@ import * as THREE from "three";
 import { gsap } from "gsap";
 import seedrandom from "seedrandom";
 
-export default function line3D({ isZoomed = false, interactive = true } = {}) {
+export default function line3D({
+  isZoomed = false,
+  interactive = true,
+  cameraDistance = null,
+} = {}) {
   const containerRef = useRef(null);
   const cameraRef = useRef(null);
   const interactiveRef = useRef(interactive);
@@ -369,25 +373,22 @@ export default function line3D({ isZoomed = false, interactive = true } = {}) {
 
   // 8. 줌(스크롤)을 위한 별도의 useEffect (컴포넌트 최상위 레벨)
   useEffect(() => {
-    // ⚠️ [수정] ⭐️
-    // 1. interactive가 true일 때 (VisualSection)
-    // 짤리지 않도록 고정된 Z값을 설정합니다 (550).
+    const hasCustomDistance =
+      typeof cameraDistance === "number" && Number.isFinite(cameraDistance);
+
+    if (hasCustomDistance) {
+      targetCameraDistanceRef.current = cameraDistance;
+      return;
+    }
+
     if (interactiveRef.current) {
-      targetCameraDistanceRef.current = 550; // (이 값을 조절해서 짤리지 않게 하세요)
+      // interactive=true(VisualSection) 기본 거리
+      targetCameraDistanceRef.current = 550;
+    } else {
+      // interactive=false(HeroSection)에서는 기존 isZoomed 로직 유지
+      targetCameraDistanceRef.current = isZoomed ? 500 : 300;
     }
-    // 2. interactive가 false일 때 (HeroSection)
-    // 기존 isZoomed 로직을 따릅니다.
-    else {
-      if (isZoomed) {
-        // 줌 아웃 (true)
-        targetCameraDistanceRef.current = 500; // 줌 아웃 시 더 멀리
-      } else {
-        // 줌 인 (false)
-        targetCameraDistanceRef.current = 300; // 줌 인 시 더 가까이
-      }
-    }
-    // ⚠️ [수정] isZoomed뿐만 아니라 interactive 값에도 의존하도록 변경
-  }, [isZoomed, interactive]);
+  }, [isZoomed, interactive, cameraDistance]);
 
   return (
     <div

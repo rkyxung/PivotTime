@@ -1,0 +1,89 @@
+@import url("https://fonts.googleapis.com/css2?family=Stack+Sans+Notch:wght@200..700&display=swap");
+
+@font-face {
+  font-family: "Pretendard";
+  src: url("https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Medium.woff")
+    format("woff");
+  font-weight: 500;
+  font-display: swap;
+}
+body {
+  position: relative;
+  background-color: #000;
+  width: 100vw;
+  height: 100vh;
+  box-sizing: border-box;
+  overflow: hidden;
+  margin: 0;
+  padding: 7.04vh 3.125vw 4.62vh;
+  color: #e1e1e1;
+  line-height: 1.35;
+  letter-spacing: -0.03rem;
+}
+
+.d-day > div {
+  //   position: absolute;
+  display: flex;
+  width: 93.9%;
+  margin: 0 auto;
+}
+
+.delight {
+  font-size: clamp(1rem, 1.25vw, 1.5rem);
+  justify-content: center;
+}
+
+.logo {
+  justify-content: center;
+  padding-top: 2vh;
+  svg {
+    width: 34.45vw;
+    path {
+      fill: #e1e1e1;
+    }
+    rect {
+      fill: #e1e1e1;
+    }
+  }
+}
+
+.object {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  margin: 0 auto;
+  justify-content: center;
+  z-index: 0;
+}
+
+.info {
+  position: absolute;
+  color: rgba(225, 225, 225, 0.3);
+  font-size: clamp(0.85rem, 0.73vw, 1.1rem);
+  justify-content: space-between;
+  bottom: 4.72vh;
+  p {
+    margin: 0;
+  }
+}
+
+.countDown {
+  position: absolute;
+  font-family: "Stack Sans Notch", "Pretendard", sans-serif;
+  font-size: clamp(2rem, 8.31vw, 11rem);
+  font-weight: 300;
+  justify-content: center;
+  //   padding-top: 52vh;
+  bottom: 7vh;
+}
+
+.countDown-segment {
+  display: flex;
+  align-items: baseline;
+}
+
+.countDown-colon {
+  margin-left: 0.5vw;
+  color: inherit;
+}

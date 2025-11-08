@@ -790,6 +790,7 @@ export default function ConceptSection() {
            선들이 모여 스토리라인이 되고, 그 안에서 연결과 구조가 생겨납니다.<br/>
            플로우차트처럼 서로 이어지는 선 위에서, 기획은 전체를 조율하는 길을 그립니다.`,
           progress: 0.1, // 선 애니메이션 구간
+          offsetX: "0",
         },
         {
           name: "디자인",
@@ -798,6 +799,7 @@ export default function ConceptSection() {
            원의 순환처럼, 시선과 감정은 끊임없이 돌고 흐르며 감각의 리듬을 형성합니다.<br/>
            이 순환 속에서 디자인은 단순한 형태를 넘어 완성된 조화의 세계로 확장됩니다.`,
           progress: 0.25, // 원 구간
+          offsetX: "-0.9vw",
         },
         {
           name: "프로그래밍",
@@ -806,6 +808,7 @@ export default function ConceptSection() {
            틀 안의 모든 요소는 정해진 규칙에 따라 배치되어 사용자와의 소통을 연결합니다.<br/>
            이 체계 속에서 프로그래밍은 구조의 언어로 생동하는 질서를 완성합니다.`,
           progress: 0.8, // 네모 구간
+          offsetX: "0",
         },
       ];
 
@@ -829,6 +832,11 @@ export default function ConceptSection() {
               mainEl.textContent = current.name;
               subEl.textContent = current.sub;
               bodyEl.innerHTML = current.desc;
+              gsap.to(descEl, {
+                x: current.offsetX ?? "0vw",
+                duration: 0.8,
+                ease: "power2.out",
+              });
               gsap.to([mainEl, subEl, bodyEl], { opacity: 1, duration: 0.8 });
             },
           });
@@ -864,7 +872,6 @@ export default function ConceptSection() {
 
   return (
     <div className="concept" ref={sectionRef}>
-      <img className="webImage" src="/images/concept.png" alt="concept.png" />
       <div className="graphic">
         <svg
           viewBox="0 0 1922 743"

@@ -14,6 +14,7 @@ export default function VisualSection() {
   const objectsRef = useRef(null);
   const labelKorRef = useRef(null); // 1. 한글 라벨 Ref 추가
   const labelEngRef = useRef(null); // 2. 영문 라벨 Ref 추가
+  const finalLabelsRef = useRef(null); // 최종 고정 라벨 컨테이너
 
   useEffect(() => {
     const sectionEl = sectionRef.current;
@@ -26,8 +27,13 @@ export default function VisualSection() {
     const line = objectsEl.querySelector(".line");
     const circle = objectsEl.querySelector(".circle");
     const square = objectsEl.querySelector(".square");
+    // 각 오브젝트의 canvas 요소 (스케일 조정 전용)
+    const lineCanvas = line?.querySelector("canvas");
+    const circleCanvas = circle?.querySelector("canvas");
+    const squareCanvas = square?.querySelector("canvas");
     const labelKor = labelKorRef.current; // 4. 라벨 element 가져오기
     const labelEng = labelEngRef.current; // 4. 라벨 element 가져오기
+    const finalLabels = finalLabelsRef.current; // 최종 라벨 래퍼
 
     // --- 5. [수정] 초기 상태 설정 ---
     gsap.set(line, { autoAlpha: 1 });
@@ -35,6 +41,10 @@ export default function VisualSection() {
     gsap.set(square, { autoAlpha: 0 });
     // 라벨은 기본 텍스트("도전")로 보이게 설정
     gsap.set([labelKor, labelEng], { autoAlpha: 1 });
+    // 최종 라벨은 처음엔 숨김
+    if (finalLabels) {
+      gsap.set(finalLabels, { autoAlpha: 0 });
+    }
 
     const tl = gsap.timeline({
       scrollTrigger: {
@@ -131,6 +141,49 @@ export default function VisualSection() {
     // 5. "Square" + "균형" 상태로 1초간 머뭄
     tl.to({}, { duration: 1.0 });
 
+    // 6. 최종 단계: 사각형과 기존 라벨 먼저 페이드아웃 → 숨긴 상태에서 최종 위치/스케일 세팅 → 세 오브젝트 동시 페이드인
+    tl.addLabel("final");
+    tl.to(
+      [labelKor, labelEng, square],
+      { autoAlpha: 0, duration: fadeDuration },
+      "final"
+    );
+
+    // 최종 위치 고정(set) - 보이지 않는 상태에서 적용
+    tl.set(line, { x: "7vw", y: "-14vw" });
+    tl.set(circle, { x: "-16vw", y: "2.6vw" });
+    tl.set(square, { x: "7vw", y: "10.5vw" });
+
+    // 최종 스케일 즉시 세팅 (캔버스 기준) - 보이지 않는 상태에서 적용
+    if (lineCanvas || circleCanvas || squareCanvas) {
+      tl.set([lineCanvas, circleCanvas, squareCanvas].filter(Boolean), {
+        scale: (i) => [0.65, 0.45, 0.36][i] ?? 1,
+        transformOrigin: "50% 50%",
+      });
+    }
+
+    // 페이드인 전에 오브젝트 자체도 숨김 상태 보장
+    tl.set([line, circle, square], { autoAlpha: 0 });
+    // 세 오브젝트 동시 페이드인
+    tl.to([line, circle, square], { autoAlpha: 1, duration: fadeDuration });
+    // 최종 단계 진입 시 호버/포인터 상호작용 차단
+    tl.set(objectsEl, { pointerEvents: "none" }, "<");
+    tl.add(() => objectsEl.classList.add("no-interaction"), "<");
+    tl.to([labelKor, labelEng], { autoAlpha: 0, duration: fadeDuration }, "<");
+    if (finalLabels) {
+      tl.to(finalLabels, { autoAlpha: 1, duration: fadeDuration }, "<");
+    }
+
+    // 6-1. 최종 단계에서 각 오브젝트 스케일을 즉시 세팅 (애니메이션 없이)
+    if (lineCanvas || circleCanvas || squareCanvas) {
+      tl.set([lineCanvas, circleCanvas, squareCanvas].filter(Boolean), {
+        scale: (i) => [0.65, 0.45, 0.36][i] ?? 1,
+        transformOrigin: "50% 50%",
+      });
+    }
+
+    // 6-2. 이동 애니메이션 제거(이미 위에서 set으로 위치 고정 후 페이드인)
+
     return () => {
       if (tl.scrollTrigger) {
         tl.scrollTrigger.kill();
@@ -141,7 +194,6 @@ export default function VisualSection() {
 
   return (
     <div className="visual" ref={sectionRef}>
-      <img className="webImage" src="/images/visual.png" alt="visual.png" />
 
       <div className="txt-wrap">
         <div className="logo">
@@ -156,15 +208,12 @@ export default function VisualSection() {
       <div className="graphic">
         <div className="graphic-objects" ref={objectsRef}>
           <div className="graphic-slot line">
-            {/* Line3D는 interactive prop이 없으므로 기본값이 true라고 가정 */}
             <Line3D />
           </div>
           <div className="graphic-slot circle">
-            {/* ⚠️ 수정: interactive={false} -> interactive={true} */}
             <Circle3D interactive={true} isZoomed={false} />
           </div>
           <div className="graphic-slot square">
-            {/* ⚠️ 수정: interactive={false} -> interactive={true} */}
             <Square3D interactive={true} />
           </div>
         </div>
@@ -175,6 +224,112 @@ export default function VisualSection() {
         </div>
         <div className="label en" ref={labelEngRef}>
           CHALLENGE
+        </div>
+
+        {/* 최종 상태에서만 보이는 새 라벨 세트 */}
+        <div className="final-labels" ref={finalLabelsRef}>
+          <div className="final-label planning">
+            <div>기획</div>
+            <svg
+              viewBox="0 0 233 78"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <g opacity="0.9">
+                <circle
+                  cx="3.33333"
+                  cy="3.33333"
+                  r="3.33333"
+                  transform="matrix(1 0 0 -1 219.167 70.833)"
+                  fill="currentColor"
+                />
+                <circle
+                  cx="10"
+                  cy="10"
+                  r="9.5"
+                  transform="matrix(1 0 0 -1 212.5 77.5)"
+                  stroke="currentColor"
+                />
+                <path
+                  d="M222 67.5L155 0.500006L0 0.500183"
+                  stroke="currentColor"
+                  fill="transparent"
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </g>
+            </svg>
+            <p>PLANNING</p>
+          </div>
+          <div className="final-label design">
+            <div>디자인</div>
+            <svg
+              viewBox="0 0 233 78"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <g opacity="0.9">
+                <circle
+                  cx="3.33333"
+                  cy="3.33333"
+                  r="3.33333"
+                  transform="matrix(1 0 0 -1 219.167 70.833)"
+                  fill="currentColor"
+                />
+                <circle
+                  cx="10"
+                  cy="10"
+                  r="9.5"
+                  transform="matrix(1 0 0 -1 212.5 77.5)"
+                  stroke="currentColor"
+                />
+                <path
+                  d="M222 67.5L155 0.500006L0 0.500183"
+                  stroke="currentColor"
+                  fill="transparent"
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </g>
+            </svg>
+            <p>DESIGN</p>
+          </div>
+          <div className="final-label programming">
+            <div>프로그래밍</div>
+            <svg
+              viewBox="0 0 233 78"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <g opacity="0.9">
+                <circle
+                  cx="3.33333"
+                  cy="3.33333"
+                  r="3.33333"
+                  transform="matrix(1 0 0 -1 219.167 70.833)"
+                  fill="currentColor"
+                />
+                <circle
+                  cx="10"
+                  cy="10"
+                  r="9.5"
+                  transform="matrix(1 0 0 -1 212.5 77.5)"
+                  stroke="currentColor"
+                />
+                <path
+                  d="M222 67.5L155 0.500006L0 0.500183"
+                  stroke="currentColor"
+                  fill="transparent"
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </g>
+            </svg>
+            <p>PROGRAMMING</p>
+          </div>
         </div>
       </div>
     </div>

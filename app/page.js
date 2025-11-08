@@ -4,7 +4,7 @@
 //   return <Hero />;
 // }
 
-// import ThreeScene from "../components/ThreeScene";
+// import ThreeScene from \"../components/ThreeScene\";
 
 // export default function Home() {
 //   return (
@@ -14,7 +14,7 @@
 //   );
 // }
 
-// import Footer from "../components/footer";
+// import Footer from \"../components/footer\";
 
 // export default function Home() {
 //   return <Footer />;
@@ -30,32 +30,43 @@
 //   );
 // }
 
-import Nav from '../components/nav';
-import ConceptSection from "../components/mainSections/conceptSection";
+import CountDown from "../pages/countDown";
 
 export default function Home() {
   return (
     <main>
-      <Nav />
-      <ConceptSection/>
+      <CountDown />
     </main>
   );
 }
 
-// import Nav from '../components/nav';
-// import VisualSection from "../components/mainSections/VisualSection";
+// import Footer from '../components/footer';
+// import MainFooterSection from "../components/mainSections/MainFooterSection";
 
 // export default function Home() {
 //   return (
 //     <main>
-//       <Nav />
-//       <VisualSection/>
+//       <MainFooterSection/>
+//       <Footer />
 //     </main>
 //   );
 // }
 
 // import Nav from '../components/nav';
-// import Circle3D from "../components/mainSections/3dKeyVisual/circle3D";
+// import VisualSection from "../components/mainSections/VisualSection";
+// import TypographySection from '../components/mainSections/TypographySection';
+
+// export default function Home() {
+//   return (
+//     <main>
+//       <Nav />
+//       <TypographySection/>
+//     </main>
+//   );
+// }
+
+// import Nav from '../components/nav';
+// import Circle3D from \"../components/mainSections/3dKeyVisual/circle3D\";
 
 // export default function Home() {
 //   return (

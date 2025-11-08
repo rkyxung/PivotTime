@@ -4,21 +4,24 @@
 
 import { GETFEVER, GOPIVOT } from "../svgCode";
 import "../../styles/mainSections/_hero.scss";
-// 1. 훅들(useEffect, useRef)을 import 합니다.
-import { useState, useCallback, useEffect, useRef } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Line3D from "./3dKeyVisual/line3D";
 import Circle3D from "./3dKeyVisual/circle3D";
 import Square3D from "./3dKeyVisual/square3D";
+import InfoBox from "./InfoBox";
 
 // 2. props로 isZoomed를 받지 않습니다.
 export default function HeroSection() {
-  // 그리드 셀 배열
-  const rows = 14;
-  const cols = 14;
+  const GRID_ROWS = 8;
+  const GRID_COLS = 8;
 
-  const gridCells = Array.from({ length: rows * cols }, (_, i) => (
-    <div key={i} className="grid-cell" />
-  ));
+  const gridCells = useMemo(
+    () =>
+      Array.from({ length: GRID_ROWS * GRID_COLS }, (_, index) => (
+        <div key={`hero-grid-cell-${index}`} className="hero-bg-grid__cell" />
+      )),
+    []
+  );
 
   // 클릭 순서와 객체 목록을 미리 정의합니다.
   const objectOrder = ["line", "circle", "square"];
@@ -48,20 +51,17 @@ export default function HeroSection() {
   const isZoomedRef = useRef(isZoomed);
   isZoomedRef.current = isZoomed;
 
-  // New useEffect to manage scroll lock based on isZoomed state
   useEffect(() => {
     const scrollContainer = scrollContainerRef.current;
     if (!scrollContainer) return;
-
     if (isZoomed) {
-      scrollContainer.classList.add('scrolling-locked');
+      scrollContainer.classList.add("scrolling-locked");
     } else {
-      // It's zooming out. Wait for the animation to finish before unlocking.
       const timer = setTimeout(() => {
-        scrollContainer.classList.remove('scrolling-locked');
-      }, 600); // Matches the 0.6s transition in hero.scss
+        scrollContainer.classList.remove("scrolling-locked");
+      }, 600);
 
-      return () => clearTimeout(timer); // Cleanup the timer
+      return () => clearTimeout(timer);
     }
   }, [isZoomed]);
 
@@ -72,8 +72,7 @@ export default function HeroSection() {
     }
 
     const sectionEl = heroEl.closest(".snap-section") ?? heroEl;
-    const scrollContainer =
-      sectionEl.closest(".snap-container") ?? null;
+    const scrollContainer = sectionEl.closest(".snap-container") ?? null;
 
     if (scrollContainer instanceof HTMLElement) {
       scrollContainerRef.current = scrollContainer;
@@ -83,24 +82,20 @@ export default function HeroSection() {
 
     const observer = new IntersectionObserver(
       ([entry]) => {
-        const active =
-          entry.isIntersecting && entry.intersectionRatio >= 0.6;
+        const active = entry.isIntersecting && entry.intersectionRatio >= 0.6;
         setIsHeroActive(active);
 
         if (!active && isZoomedRef.current) {
           setIsZoomed(false); // This will trigger the new useEffect to handle the lock
           if (navZoomAppliedRef.current) {
-            document
-              .querySelector("nav")
-              ?.classList.remove("zoom_out");
+            document.querySelector("nav")?.classList.remove("zoom_out");
             navZoomAppliedRef.current = false;
           }
         }
       },
       {
         threshold: [0.6],
-        root:
-          scrollContainer instanceof HTMLElement ? scrollContainer : null,
+        root: scrollContainer instanceof HTMLElement ? scrollContainer : null,
       }
     );
 
@@ -115,7 +110,7 @@ export default function HeroSection() {
       return undefined;
     }
 
-    const navElement = document.querySelector('nav');
+    const navElement = document.querySelector("nav");
     if (!navElement) return;
 
     const scrollContainer = scrollContainerRef.current;
@@ -131,8 +126,7 @@ export default function HeroSection() {
       const scrollTop = getScrollTop();
       const atTop = scrollTop <= 0;
 
-      const shouldZoomIn =
-        e.deltaY < 0 && atTop && !isZoomedRef.current;
+      const shouldZoomIn = e.deltaY < 0 && atTop && !isZoomedRef.current;
       const shouldZoomOut = e.deltaY > 0 && isZoomedRef.current;
 
       if (!shouldZoomIn && !shouldZoomOut) {
@@ -158,7 +152,7 @@ export default function HeroSection() {
     return () => {
       scrollTarget.removeEventListener("wheel", handleWheel);
       // Ensure lock is removed on cleanup, just in case
-      scrollContainer.classList.remove('scrolling-locked');
+      scrollContainer.classList.remove("scrolling-locked");
       if (navZoomAppliedRef.current) {
         navElement.classList.remove("zoom_out");
         navZoomAppliedRef.current = false;
@@ -168,22 +162,275 @@ export default function HeroSection() {
 
   return (
     // 6. HeroSection 자신에게도 isZoomed 상태에 따라 클래스 적용
-    <div
-      ref={heroRef}
-      className={`hero ${isZoomed ? "zoom_out" : ""}`.trim()}
-    >
-      <div className="grid-container">
-        <div className="grid">{gridCells}</div>
+    <div ref={heroRef} className={`hero ${isZoomed ? "zoom_out" : ""}`.trim()}>
+      {/* <div className="hero-bg-grid">
+        <div className="hero-bg-grid__overlay">{gridCells}</div>
+      </div> */}
+      <div className="grid">
+        <svg
+          viewBox="0 0 1780 737"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <g opacity="0.3">
+            <path d="M5.49512 0L5.49512 11" stroke="white" strokeWidth="2" />
+            <path
+              d="M11 5.49512L5.96046e-08 5.49512"
+              stroke="white"
+              strokeWidth="2"
+            />
+            <path
+              d="M5.49512 242L5.49512 253"
+              stroke="white"
+              strokeWidth="2"
+            />
+            <path
+              d="M11 247.495L5.96046e-08 247.495"
+              stroke="white"
+              strokeWidth="2"
+            />
+            <path
+              d="M5.49512 483L5.49512 494"
+              stroke="white"
+              strokeWidth="2"
+            />
+            <path
+              d="M11 488.495L5.96046e-08 488.495"
+              stroke="white"
+              strokeWidth="2"
+            />
+            <path
+              d="M5.49512 725L5.49512 736"
+              stroke="white"
+              strokeWidth="2"
+            />
+            <path
+              d="M11 730.495L5.96046e-08 730.495"
+              stroke="white"
+              strokeWidth="2"
+            />
+            <path d="M258.495 0L258.495 11" stroke="white" strokeWidth="2" />
+            <path
+              d="M264 5.49512L253 5.49512"
+              stroke="white"
+              strokeWidth="2"
+            />
+            <path
+              d="M258.495 242L258.495 253"
+              stroke="white"
+              strokeWidth="2"
+            />
+            <path
+              d="M264 247.495L253 247.495"
+              stroke="white"
+              strokeWidth="2"
+            />
+            <path
+              d="M258.495 483L258.495 494"
+              stroke="white"
+              strokeWidth="2"
+            />
+            <path
+              d="M264 488.495L253 488.495"
+              stroke="white"
+              strokeWidth="2"
+            />
+            <path
+              d="M258.495 725L258.495 736"
+              stroke="white"
+              strokeWidth="2"
+            />
+            <path
+              d="M264 730.495L253 730.495"
+              stroke="white"
+              strokeWidth="2"
+            />
+            <path d="M510.495 0L510.495 11" stroke="white" strokeWidth="2" />
+            <path
+              d="M516 5.49512L505 5.49512"
+              stroke="white"
+              strokeWidth="2"
+            />
+            <path
+              d="M510.495 242L510.495 253"
+              stroke="white"
+              strokeWidth="2"
+            />
+            <path
+              d="M516 247.495L505 247.495"
+              stroke="white"
+              strokeWidth="2"
+            />
+            <path
+              d="M510.495 483L510.495 494"
+              stroke="white"
+              strokeWidth="2"
+            />
+            <path
+              d="M516 488.495L505 488.495"
+              stroke="white"
+              strokeWidth="2"
+            />
+            <path
+              d="M510.495 725L510.495 736"
+              stroke="white"
+              strokeWidth="2"
+            />
+            <path
+              d="M516 730.495L505 730.495"
+              stroke="white"
+              strokeWidth="2"
+            />
+            <path d="M763.495 0L763.495 11" stroke="white" strokeWidth="2" />
+            <path
+              d="M769 5.49512L758 5.49512"
+              stroke="white"
+              strokeWidth="2"
+            />
+            <path
+              d="M763.495 242L763.495 253"
+              stroke="white"
+              strokeWidth="2"
+            />
+            <path
+              d="M769 247.495L758 247.495"
+              stroke="white"
+              strokeWidth="2"
+            />
+            <path
+              d="M763.495 483L763.495 494"
+              stroke="white"
+              strokeWidth="2"
+            />
+            <path
+              d="M769 488.495L758 488.495"
+              stroke="white"
+              strokeWidth="2"
+            />
+            <path
+              d="M763.495 725L763.495 736"
+              stroke="white"
+              strokeWidth="2"
+            />
+            <path
+              d="M769 730.495L758 730.495"
+              stroke="white"
+              strokeWidth="2"
+            />
+            <path d="M1016.5 0L1016.5 11" stroke="white" strokeWidth="2" />
+            <path
+              d="M1022 5.49512L1011 5.49512"
+              stroke="white"
+              strokeWidth="2"
+            />
+            <path d="M1016.5 242L1016.5 253" stroke="white" strokeWidth="2" />
+            <path
+              d="M1022 247.495L1011 247.495"
+              stroke="white"
+              strokeWidth="2"
+            />
+            <path d="M1016.5 483L1016.5 494" stroke="white" strokeWidth="2" />
+            <path
+              d="M1022 488.495L1011 488.495"
+              stroke="white"
+              strokeWidth="2"
+            />
+            <path d="M1016.5 725L1016.5 736" stroke="white" strokeWidth="2" />
+            <path
+              d="M1022 730.495L1011 730.495"
+              stroke="white"
+              strokeWidth="2"
+            />
+            <path d="M1268.5 0L1268.5 11" stroke="white" strokeWidth="2" />
+            <path
+              d="M1274 5.49512L1263 5.49512"
+              stroke="white"
+              strokeWidth="2"
+            />
+            <path d="M1268.5 242L1268.5 253" stroke="white" strokeWidth="2" />
+            <path
+              d="M1274 247.495L1263 247.495"
+              stroke="white"
+              strokeWidth="2"
+            />
+            <path d="M1268.5 483L1268.5 494" stroke="white" strokeWidth="2" />
+            <path
+              d="M1274 488.495L1263 488.495"
+              stroke="white"
+              strokeWidth="2"
+            />
+            <path d="M1268.5 725L1268.5 736" stroke="white" strokeWidth="2" />
+            <path
+              d="M1274 730.495L1263 730.495"
+              stroke="white"
+              strokeWidth="2"
+            />
+            <path d="M1520.5 0L1520.5 11" stroke="white" strokeWidth="2" />
+            <path
+              d="M1526 5.49512L1515 5.49512"
+              stroke="white"
+              strokeWidth="2"
+            />
+            <path d="M1520.5 242L1520.5 253" stroke="white" strokeWidth="2" />
+            <path
+              d="M1526 247.495L1515 247.495"
+              stroke="white"
+              strokeWidth="2"
+            />
+            <path d="M1520.5 483L1520.5 494" stroke="white" strokeWidth="2" />
+            <path
+              d="M1526 488.495L1515 488.495"
+              stroke="white"
+              strokeWidth="2"
+            />
+            <path d="M1520.5 725L1520.5 736" stroke="white" strokeWidth="2" />
+            <path
+              d="M1526 730.495L1515 730.495"
+              stroke="white"
+              strokeWidth="2"
+            />
+            <path d="M1773.5 0L1773.5 11" stroke="white" strokeWidth="2" />
+            <path
+              d="M1779 5.49512L1768 5.49512"
+              stroke="white"
+              strokeWidth="2"
+            />
+            <path d="M1773.5 242L1773.5 253" stroke="white" strokeWidth="2" />
+            <path
+              d="M1779 247.495L1768 247.495"
+              stroke="white"
+              strokeWidth="2"
+            />
+            <path d="M1773.5 483L1773.5 494" stroke="white" strokeWidth="2" />
+            <path
+              d="M1779 488.495L1768 488.495"
+              stroke="white"
+              strokeWidth="2"
+            />
+            <path d="M1773.5 725L1773.5 736" stroke="white" strokeWidth="2" />
+            <path
+              d="M1779 730.495L1768 730.495"
+              stroke="white"
+              strokeWidth="2"
+            />
+          </g>
+        </svg>
       </div>
       <div
         className="main-object"
         onClick={handleClick}
         style={{ cursor: "pointer" }}
       >
-        {/* ⚠️ [수정] ⭐️ interactive={false} prop을 3개 컴포넌트에 모두 전달 */}
-        {currentObject === "line" && <Line3D isZoomed={isZoomed} interactive={false} />}
-        {currentObject === "circle" && <Circle3D isZoomed={isZoomed} interactive={false} />}
-        {currentObject === "square" && <Square3D isZoomed={isZoomed} interactive={false} />}
+        {/* interactive={false} prop을 3개 컴포넌트에 모두 전달 */}
+        {currentObject === "line" && (
+          <Line3D isZoomed={isZoomed} interactive={false} />
+        )}
+        {currentObject === "circle" && (
+          <Circle3D isZoomed={isZoomed} interactive={false} />
+        )}
+        {currentObject === "square" && (
+          <Square3D isZoomed={isZoomed} interactive={false} />
+        )}
       </div>
       <div className="hero-text">
         <div className="gF-gP">
@@ -380,27 +627,7 @@ export default function HeroSection() {
           </svg>
         </div>
 
-        <div className="infoBox">
-          <div className="left">
-            <div className="title">
-              Kaywon University of Arts & Design
-              <br />
-              32nd Delight Insight
-            </div>
-
-            <div className="link">
-              Digital-media.kr
-              <br />
-              degreeshow/2025
-            </div>
-          </div>
-
-          <div className="location">
-            Kaywon Design Hall 5F
-            <br />
-            Nov. 21. FRI - Nov. 23. SUN
-          </div>
-        </div>
+        <InfoBox />
       </div>
     </div>
   );
