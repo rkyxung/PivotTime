@@ -156,7 +156,6 @@ body {
     align-items: center;
     justify-content: center;
     font-size: 14.59vw;
-    letter-spacing: 0.02em;
     bottom: 7.5vh;
   }
 
@@ -170,6 +169,8 @@ body {
     margin: auto 5.09vw;
     display: block;
     font-size: 2.04vw;
+    line-height: 1.4;
+    letter-spacing: 0;
     p {
       position: absolute;
       margin: 0;

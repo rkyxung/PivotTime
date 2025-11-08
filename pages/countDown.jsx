@@ -8,6 +8,7 @@ import "../styles/countDown.scss";
 const EVENT_START = new Date("2025-11-21T10:00:00+09:00");
 const COUNTDOWN_CAMERA_DISTANCE = 520;
 const COUNTDOWN_CAMERA_DISTANCE_MOBILE = 450;
+const MOBILE_AUTO_ROTATE_SPEED = 0.01;
 const MS_IN_SECOND = 1000;
 const MS_IN_MINUTE = 60 * MS_IN_SECOND;
 const MS_IN_HOUR = 60 * MS_IN_MINUTE;
@@ -71,9 +72,7 @@ export default function CountDown() {
     formatSegment(timeLeft.seconds),
   ];
 
-  const cameraDistance = isMobile
-    ? 650
-    : 400;
+  const cameraDistance = isMobile ? 650 : 400;
 
   return (
     <div className="d-day">
@@ -83,7 +82,12 @@ export default function CountDown() {
         <PIVOTTIME />
       </div>
       <div className="object">
-        <Line3D cameraDistance={cameraDistance} />
+        <Line3D
+          cameraDistance={cameraDistance}
+          interactive={!isMobile}
+          autoRotate={isMobile}
+          autoRotateSpeed={MOBILE_AUTO_ROTATE_SPEED}
+        />
       </div>
       <div className="countDown" role="timer" aria-live="polite">
         {segments.map((value, index) => (

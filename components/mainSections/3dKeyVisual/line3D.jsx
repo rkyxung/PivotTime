@@ -10,14 +10,20 @@ export default function line3D({
   isZoomed = false,
   interactive = true,
   cameraDistance = null,
+  autoRotate = false,
+  autoRotateSpeed = 0.0045,
 } = {}) {
   const containerRef = useRef(null);
   const cameraRef = useRef(null);
   const interactiveRef = useRef(interactive);
+  const autoRotateRef = useRef(autoRotate);
+  const autoRotateSpeedRef = useRef(autoRotateSpeed);
 
   // 1. 카메라의 '목표 거리'를 저장할 Ref를 생성합니다.
   const targetCameraDistanceRef = useRef(null);
   interactiveRef.current = interactive;
+  autoRotateRef.current = autoRotate;
+  autoRotateSpeedRef.current = autoRotateSpeed;
 
   // 3. Three.js 씬 초기 설정을 위한 useEffect (최초 1회 실행)
   useEffect(() => {
@@ -305,6 +311,10 @@ export default function line3D({
       const roundedCount = Math.round(currentLineCount);
       if (roundedCount !== lastAppliedLineCount) {
         applyLineVisibility(roundedCount);
+      }
+
+      if (autoRotateRef.current && !isLeftDragging && !isRightDragging) {
+        targetY += autoRotateSpeedRef.current;
       }
 
       // 6. animate 루프가 Ref의 '목표' 값을 향해 '현재' 값을 갱신합니다.
