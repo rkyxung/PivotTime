@@ -12,18 +12,21 @@ export default function line3D({
   cameraDistance = null,
   autoRotate = false,
   autoRotateSpeed = 0.0045,
+  enableHover = true,
 } = {}) {
   const containerRef = useRef(null);
   const cameraRef = useRef(null);
   const interactiveRef = useRef(interactive);
   const autoRotateRef = useRef(autoRotate);
   const autoRotateSpeedRef = useRef(autoRotateSpeed);
+  const hoverEnabledRef = useRef(enableHover);
 
   // 1. 카메라의 '목표 거리'를 저장할 Ref를 생성합니다.
   const targetCameraDistanceRef = useRef(null);
   interactiveRef.current = interactive;
   autoRotateRef.current = autoRotate;
   autoRotateSpeedRef.current = autoRotateSpeed;
+  hoverEnabledRef.current = enableHover;
 
   // 3. Three.js 씬 초기 설정을 위한 useEffect (최초 1회 실행)
   useEffect(() => {
@@ -181,6 +184,9 @@ export default function line3D({
 
     // ... (handleMouseMove, animate, handleResize, cleanup 로직은 동일) ...
     const handleMouseMove = (e) => {
+      if (!hoverEnabledRef.current) {
+        return;
+      }
       // ⚠️ [수정 1/4] ⭐️
       // 마우스 좌표와 호버(회전) 로직은 항상 실행합니다.
       // (HeroSection과 VisualSection 모두 호버 회전이 필요)
@@ -295,8 +301,13 @@ export default function line3D({
     const animate = () => {
       animationFrameId = requestAnimationFrame(animate); // ⚠️ ID 저장
 
-      // interactive가 false일 때 (HeroSection) + 드래그 중이 아닐 때만 중앙으로 복귀
-      if (!interactiveRef.current && !isLeftDragging && !isRightDragging) {
+      // interactive=false(HeroSection) 기본 복귀 로직, 단 자동 회전 중에는 유지
+      if (
+        !interactiveRef.current &&
+        !autoRotateRef.current &&
+        !isLeftDragging &&
+        !isRightDragging
+      ) {
         targetX += (initialRotationX - targetX) * 0.08;
         targetY += (initialRotationY - targetY) * 0.08;
         targetZ += (initialRotationZ - targetZ) * 0.08;
@@ -315,6 +326,7 @@ export default function line3D({
 
       if (autoRotateRef.current && !isLeftDragging && !isRightDragging) {
         targetY += autoRotateSpeedRef.current;
+        targetZ += autoRotateSpeedRef.current * 0.15;
       }
 
       // 6. animate 루프가 Ref의 '목표' 값을 향해 '현재' 값을 갱신합니다.

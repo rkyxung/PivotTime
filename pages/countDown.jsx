@@ -6,9 +6,8 @@ import Line3D from "../components/mainSections/3dKeyVisual/line3D";
 import "../styles/countDown.scss";
 
 const EVENT_START = new Date("2025-11-21T10:00:00+09:00");
-const COUNTDOWN_CAMERA_DISTANCE = 520;
-const COUNTDOWN_CAMERA_DISTANCE_MOBILE = 450;
-const MOBILE_AUTO_ROTATE_SPEED = 0.01;
+
+const MOBILE_AUTO_ROTATE_SPEED = 0.003;
 const MS_IN_SECOND = 1000;
 const MS_IN_MINUTE = 60 * MS_IN_SECOND;
 const MS_IN_HOUR = 60 * MS_IN_MINUTE;
@@ -76,7 +75,6 @@ export default function CountDown() {
 
   return (
     <div className="d-day">
-      <img className="webImage" src="/images/mobile.png" alt="mobile.png" />
       <div className="delight">2025 DELIGHT INSIGHT</div>
       <div className="logo">
         <PIVOTTIME />
@@ -85,6 +83,7 @@ export default function CountDown() {
         <Line3D
           cameraDistance={cameraDistance}
           interactive={!isMobile}
+          enableHover={!isMobile}
           autoRotate={isMobile}
           autoRotateSpeed={MOBILE_AUTO_ROTATE_SPEED}
         />
