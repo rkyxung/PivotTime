@@ -21,6 +21,17 @@ body {
   letter-spacing: -0.03rem;
 }
 
+.webImage {
+  position: absolute;
+  width: 100vw;
+  height: auto;
+  top: 0;
+  left: 0;
+  opacity: 0.5;
+  z-index: -1;
+  // display: none;
+}
+
 .d-day > div {
   //   position: absolute;
   display: flex;
@@ -31,6 +42,7 @@ body {
 .delight {
   font-size: clamp(1rem, 1.25vw, 1.5rem);
   justify-content: center;
+  text-align: center;
 }
 
 .logo {
@@ -66,6 +78,16 @@ body {
   p {
     margin: 0;
   }
+
+  p:first-child {
+    text-align: left;
+  }
+  p:nth-child(2) {
+    text-align: center;
+  }
+  p:last-child {
+    text-align: right;
+  }
 }
 
 .countDown {
@@ -86,4 +108,79 @@ body {
 .countDown-colon {
   margin-left: 0.5vw;
   color: inherit;
+}
+
+@media (max-width: 640px) {
+  body {
+    padding: 3.82vh 5.09vw;
+  }
+
+  .d-day {
+    width: 89.82%;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .d-day > div {
+    justify-content: center;
+  }
+
+  .delight {
+    font-size: 3.09vw;
+    padding-top: 4vh;
+  }
+
+  .logo {
+    padding-top: 1.5vh;
+    svg {
+      width: 76.42vw;
+    }
+  }
+
+    .object {
+      width: 100%;
+      transform: translate(-50%, -60%);
+    }
+
+  .countDown {
+    position: absolute;
+    bottom: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14.59vw;
+    letter-spacing: 0.02em;
+    bottom: 26.5vh;
+  }
+
+  .countDown-colon {
+    margin-left: 1vw;
+  }
+
+  .info {
+    position: absolute;
+    height: 92.36%;
+    margin: auto 0;
+    display: block;
+    font-size: 2.04vw;
+    p {
+      position: absolute;
+      margin: 0;
+    }
+    p:first-child {
+      top: 0;
+      left: 0;
+    }
+    p:last-child {
+      top: 0;
+      right: 0;
+    }
+    p:nth-child(2) {
+      bottom: 18vh;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+  }
 }
