@@ -72,7 +72,7 @@ export default function CountDown() {
   ];
 
   const cameraDistance = isMobile
-    ? 680
+    ? 650
     : 400;
 
   return (
