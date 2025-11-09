@@ -1,0 +1,319 @@
+@font-face {
+  font-family: "Pretendard";
+  src: url("https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Thin.woff")
+    format("woff");
+  font-weight: 100;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Pretendard";
+  src: url("https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-ExtraLight.woff")
+    format("woff");
+  font-weight: 200;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Pretendard";
+  src: url("https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Light.woff")
+    format("woff");
+  font-weight: 300;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Pretendard";
+  src: url("https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff")
+    format("woff");
+  font-weight: 400;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Pretendard";
+  src: url("https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Medium.woff")
+    format("woff");
+  font-weight: 500;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Pretendard";
+  src: url("https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-SemiBold.woff")
+    format("woff");
+  font-weight: 600;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Pretendard";
+  src: url("https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Bold.woff")
+    format("woff");
+  font-weight: 700;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Pretendard";
+  src: url("https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-ExtraBold.woff")
+    format("woff");
+  font-weight: 800;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Pretendard";
+  src: url("https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Black.woff")
+    format("woff");
+  font-weight: 900;
+  font-display: swap;
+}
+
+$font-main: "Pretendard", sans-serif;
+$font-weight-medium: 500;
+
+// typography.scss (compact version)
+
+$font-main: "Pretendard", sans-serif;
+$font-weight-medium: 500;
+
+// TITLE
+// 약 33.5px max
+@mixin title {
+  font-family: $font-main;
+  font-weight: $font-weight-medium;
+  font-size: clamp(
+    1.4rem,
+    // ~22.4px
+    1.8vw,
+    // 유동
+    2.09rem // ~33.5px
+  );
+}
+
+@mixin title2 {
+  font-family: $font-main;
+  font-weight: $font-weight-medium;
+  font-size: clamp(1.125rem, 1.979vw, 3rem);
+}
+
+// H1
+// 약 26px max
+@mixin h1 {
+  font-family: $font-main;
+  font-weight: $font-weight-medium;
+  font-size: clamp(
+    1.2rem,
+    // ~19.2px
+    1.4vw,
+    // 유동
+    1.63rem // ~26px
+  );
+}
+
+// H2
+// 약 23px max
+@mixin h2 {
+  font-family: $font-main;
+  font-weight: $font-weight-medium;
+  font-size: clamp(
+    1.05rem,
+    // ~16.8px
+    1.2vw,
+    // 유동
+    1.44rem // ~23px
+  );
+}
+
+// 본문
+// 약 20px max
+@mixin body {
+  font-family: $font-main;
+  font-weight: $font-weight-medium;
+  font-size: clamp(
+    0.9rem,
+    // ~14.4px
+    1vw,
+    // 유동
+    1.25rem // ~20px
+  );
+}
+
+// SUB
+// 약 17px max
+@mixin sub {
+  font-family: $font-main;
+  font-weight: $font-weight-medium;
+  font-size: clamp(
+    0.8rem,
+    // ~12.8px
+    0.9vw,
+    // 유동
+    1.06rem // ~17px
+  );
+}
+
+@mixin bodyText {
+  font-size: clamp(0.875rem, 1.04vw, 1.375rem);
+  font-family: "Pretendard";
+}
+
+@mixin infoText {
+  font-size: clamp(0.6em, 0.73vw, 1.2rem);
+  font-weight: 500;
+  color: #fff;
+  letter-spacing: -0.03rem;
+  line-height: 1.35;
+}
+
+$blue: #0051ff;
+$height: 56.25vw;
+$section-height: 100dvh;
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  background: #000;
+  color: #fff;
+  font-family: "Pretendard", sans-serif;
+  overflow: hidden;
+}
+
+.getFever {
+  position: relative;
+  width: 100vw;
+  min-height: $section-height;
+  padding: clamp(2rem, 4vw, 4rem) clamp(2rem, 5vw, 6rem);
+  box-sizing: border-box;
+  color: #fff;
+  background: #000;
+  overflow: hidden;
+
+  .webImage {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.2;
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  .hero {
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    gap: clamp(2rem, 6vw, 8rem);
+    min-height: calc(100dvh - clamp(4rem, 8vw, 10rem));
+    z-index: 1;
+  }
+
+  .hero-txt {
+    flex: 0 0 40%;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .logo {
+    svg {
+      width: clamp(12rem, 24vw, 32rem);
+      height: auto;
+    }
+  }
+
+  .slogan {
+    font-size: clamp(1rem, 1.2vw, 1.4rem);
+    color: rgba(225, 225, 225, 0.72);
+    letter-spacing: 0.02em;
+  }
+
+  .object {
+    flex: 1;
+    position: relative;
+    min-height: 100%;
+  }
+
+  .object svg {
+    width: min(1200px, 90vw);
+    height: auto;
+    position: absolute;
+    top: 55%;
+    left: 60%;
+    transform: translate(-50%, -50%) rotate(-10deg);
+    opacity: 0.9;
+    animation: feverOrbit 36s linear infinite;
+  }
+
+  .object div {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-size: clamp(0.8rem, 1vw, 1.2rem);
+    color: rgba(225, 225, 225, 0.85);
+    letter-spacing: 0.05em;
+  }
+
+  .object div span {
+    width: 0.55rem;
+    height: 0.55rem;
+    border-radius: 999px;
+    background: #fff;
+    box-shadow: 0 0 12px rgba(255, 255, 255, 0.6);
+  }
+
+  .object [class="2023"] {
+    top: 48%;
+    left: 20%;
+  }
+
+  .object [class="2024"] {
+    top: 30%;
+    right: 18%;
+  }
+
+  .object [class="2025"] {
+    top: 12%;
+    right: 10%;
+  }
+
+  .infoBox {
+    position: absolute;
+    bottom: clamp(1.5rem, 3vh, 3rem);
+    left: clamp(2rem, 5vw, 6rem);
+    z-index: 2;
+  }
+}
+
+@keyframes feverOrbit {
+  from {
+    transform: translate(-50%, -50%) rotate(-10deg);
+  }
+  to {
+    transform: translate(-50%, -50%) rotate(350deg);
+  }
+}
+
+@media (max-width: 1024px) {
+  .getFever {
+    padding: 2.5rem 2rem;
+
+    .hero {
+      flex-direction: column;
+      min-height: auto;
+    }
+
+    .object {
+      min-height: 60vh;
+    }
+
+    .object svg {
+      left: 50%;
+      width: min(900px, 120vw);
+    }
+  }
+}

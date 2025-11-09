@@ -8,7 +8,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Line3D from "./3dKeyVisual/line3D";
 import Circle3D from "./3dKeyVisual/circle3D";
 import Square3D from "./3dKeyVisual/square3D";
-import InfoBox from "./InfoBox";
+import InfoBox from "../InfoBox";
 
 // 2. props로 isZoomed를 받지 않습니다.
 export default function HeroSection() {
