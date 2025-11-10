@@ -54,6 +54,7 @@ export default function GetFever() {
           "--hero-scale": 0.65,
           "--hero-rotation": "-140deg",
           ease: "none",
+          immediateRender: false,
         });
 
       gsap
@@ -101,10 +102,11 @@ export default function GetFever() {
         </div>
 
         <div className="object hero-object">
-          <div className="orbit-layer">
-            <div className="svg-container">
-              <svg
-                viewBox="0 0 1876 1876"
+          <div className="object-shell">
+            <div className="orbit-layer">
+              <div className="svg-container">
+                <svg
+                  viewBox="0 0 1876 1876"
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
               >
@@ -159,14 +161,15 @@ export default function GetFever() {
                   />
                 </g>
               </svg>
-            </div>
-
-            {TIMELINE_MARKS.map((mark) => (
-              <div className={`year-marker ${mark.className}`} key={mark.label}>
-                <span />
-                <p>{mark.label}</p>
               </div>
-            ))}
+
+              {TIMELINE_MARKS.map((mark) => (
+                <div className={`year-marker ${mark.className}`} key={mark.label}>
+                  <span />
+                  <p>{mark.label}</p>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
 
@@ -184,10 +187,11 @@ export default function GetFever() {
 
       <section className="archive-nav" ref={archiveRef}>
         <div className="archive-object">
-          <div className="orbit-layer">
-            <div className="svg-container">
-              <svg
-                viewBox="0 0 1876 1876"
+          <div className="object-shell">
+            <div className="orbit-layer">
+              <div className="svg-container">
+                <svg
+                  viewBox="0 0 1876 1876"
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
               >
@@ -213,11 +217,12 @@ export default function GetFever() {
                   />
                 </g>
               </svg>
+              </div>
             </div>
           </div>
         </div>
         <div className="archive-card">
-          <span>SCROLL TO</span>
+          <span></span>
           <svg
             width="159"
             height="90"

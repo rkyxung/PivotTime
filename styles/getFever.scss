@@ -199,12 +199,37 @@ $section-height: 100dvh;
   initial-value: 0deg;
 }
 
+@property --archive-shift-x {
+  syntax: "<length>";
+  inherits: true;
+  initial-value: 0vw;
+}
+
+@property --archive-shift-y {
+  syntax: "<length>";
+  inherits: true;
+  initial-value: 0vh;
+}
+
+@property --archive-scale {
+  syntax: "<number>";
+  inherits: true;
+  initial-value: 1;
+}
+
+@property --archive-rotation {
+  syntax: "<angle>";
+  inherits: true;
+  initial-value: -20deg;
+}
+
 body {
   margin: 0;
   background: #000;
   color: #fff;
   scroll-behavior: smooth;
   overflow-x: hidden;
+  scroll-snap-type: y mandatory;
 }
 
 .getFever {
@@ -263,14 +288,18 @@ body {
     width: 125vw;
     height: 125vw;
     pointer-events: none;
-    transform: translate(
-        calc(-50% + var(--hero-shift-x)),
-        calc(-50% + var(--hero-shift-y))
-      )
-      scale(var(--hero-scale));
+    transform: translate(-50%, -50%);
   }
 
-  .hero-object .orbit-layer {
+  .hero-object .object-shell {
+    width: 100%;
+    height: 100%;
+    transform: translate(var(--hero-shift-x), var(--hero-shift-y))
+      scale(var(--hero-scale));
+    transform-origin: 50% 50%;
+  }
+
+  .hero-object .object-shell .orbit-layer {
     position: absolute;
     top: 50%;
     left: 50%;
@@ -299,7 +328,7 @@ body {
     }
   }
 
-  .hero-object .year-marker {
+  .hero-object .object-shell .year-marker {
     position: absolute;
     display: flex;
     flex-direction: column;
@@ -310,7 +339,7 @@ body {
     letter-spacing: 0.08em;
     text-transform: uppercase;
     z-index: 20;
-    transform: rotateY(15deg) rotateX(-28deg)
+    transform: rotateY(30deg) rotateX(-13deg)
       rotate(calc(-1 * (var(--spin-angle) + var(--hero-rotation))));
 
     span {
@@ -326,17 +355,17 @@ body {
     }
   }
 
-  .hero-object .year-marker__2023 {
+  .hero-object .object-shell .year-marker__2023 {
     top: 34%;
     left: 14%;
   }
 
-  .hero-object .year-marker__2024 {
+  .hero-object .object-shell .year-marker__2024 {
     top: 20%;
     left: 46%;
   }
 
-  .hero-object .year-marker__2025 {
+  .hero-object .object-shell .year-marker__2025 {
     top: 15%;
     left: 82%;
   }
@@ -351,7 +380,7 @@ body {
     align-items: center;
     font-size: 0.875vw;
     color: #fff;
-    animation: bounce 1.8s cubic-bezier(0.68, -0.55, 0.27, 1.55) infinite;
+    animation: bounce 1.8s ease-in infinite;
 
     p {
       margin: 0;
@@ -372,6 +401,18 @@ body {
   }
 }
 
+@keyframes bounce {
+  0% {
+    transform: translate(-50%, 0);
+  }
+  50% {
+    transform: translate(-50%, 15%);
+  }
+  100% {
+    transform: translate(-50%, 0);
+  }
+}
+
 .archive-nav {
   min-height: 100vh;
   padding: 12vh 6vw;
@@ -387,25 +428,41 @@ body {
     width: 140vw;
     height: 140vw;
     pointer-events: none;
-    transform: translate(
-        calc(-55% + var(--archive-shift-x)),
-        calc(-40% + var(--archive-shift-y))
-      )
-      scale(var(--archive-scale));
+    transform: translate(-55%, -40%);
 
-    .orbit-layer {
+    .object-shell {
       position: absolute;
-      top: 50%;
-      left: 50%;
+      inset: 0;
+      transform: translate(var(--archive-shift-x), var(--archive-shift-y))
+        scale(var(--archive-scale));
+      transform-origin: 50% 50%;
+
+      .orbit-layer {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 100%;
+        height: 100%;
+        transform-style: preserve-3d;
+        transform-origin: 15% 70%;
+        transform: perspective(1000px)
+          translate(-50%, -50%)
+          rotateX(30deg)
+          rotateY(-18deg)
+          rotateZ(var(--archive-rotation));
+      }
+    }
+
+    .object-shell .svg-container {
+      position: absolute;
+      inset: 0;
       width: 100%;
       height: 100%;
-      transform-style: preserve-3d;
-      transform-origin: 15% 70%;
-      transform: perspective(1400px)
-        translate(-50%, -50%)
-        rotateX(18deg)
-        rotateY(-8deg)
-        rotateZ(var(--archive-rotation));
+
+      svg {
+        width: 100%;
+        height: 100%;
+      }
     }
   }
 }
