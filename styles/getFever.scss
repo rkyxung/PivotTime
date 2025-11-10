@@ -75,9 +75,6 @@ $font-weight-medium: 500;
 
 // typography.scss (compact version)
 
-$font-main: "Pretendard", sans-serif;
-$font-weight-medium: 500;
-
 // TITLE
 // 약 33.5px max
 @mixin title {
@@ -138,6 +135,7 @@ $font-weight-medium: 500;
     // 유동
     1.25rem // ~20px
   );
+  line-height: 1.6;
 }
 
 // SUB
@@ -171,25 +169,53 @@ $blue: #0051ff;
 $height: 56.25vw;
 $section-height: 100dvh;
 
-html,
+@property --hero-shift-x {
+  syntax: "<length>";
+  inherits: true;
+  initial-value: 0vw;
+}
+
+@property --hero-shift-y {
+  syntax: "<length>";
+  inherits: true;
+  initial-value: 0vh;
+}
+
+@property --hero-scale {
+  syntax: "<number>";
+  inherits: true;
+  initial-value: 1;
+}
+
+@property --hero-rotation {
+  syntax: "<angle>";
+  inherits: true;
+  initial-value: 0deg;
+}
+
+@property --spin-angle {
+  syntax: "<angle>";
+  inherits: true;
+  initial-value: 0deg;
+}
+
 body {
   margin: 0;
-  padding: 0;
   background: #000;
   color: #fff;
-  font-family: "Pretendard", sans-serif;
-  overflow: hidden;
+  scroll-behavior: smooth;
+  overflow-x: hidden;
 }
 
 .getFever {
   position: relative;
-  width: 100vw;
-  min-height: $section-height;
-  padding: clamp(2rem, 4vw, 4rem) clamp(2rem, 5vw, 6rem);
-  box-sizing: border-box;
-  color: #fff;
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
   background: #000;
-  overflow: hidden;
+  color: #fff;
+  scroll-snap-type: y mandatory;
 
   .webImage {
     position: absolute;
@@ -197,123 +223,213 @@ body {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    opacity: 0.2;
-    z-index: 0;
+    opacity: 0.5;
+    z-index: -1;
     pointer-events: none;
   }
 
   .hero {
     position: relative;
-    display: flex;
-    justify-content: space-between;
-    gap: clamp(2rem, 6vw, 8rem);
-    min-height: calc(100dvh - clamp(4rem, 8vw, 10rem));
-    z-index: 1;
+    min-height: 100vh;
+    overflow: hidden;
+    scroll-snap-align: start;
+    --hero-shift-x: 0vw;
+    --hero-shift-y: 0vh;
+    --hero-scale: 1;
+    --hero-rotation: 0deg;
   }
 
   .hero-txt {
-    flex: 0 0 40%;
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
-  }
+    padding: 21.45vh 0 0 2.8vw;
 
-  .logo {
-    svg {
-      width: clamp(12rem, 24vw, 32rem);
-      height: auto;
+    .logo {
+      padding-bottom: 2.4vh;
+      svg {
+        width: 34.29vw;
+      }
+    }
+
+    .slogan {
+      @include body;
+      color: #e1e1e1;
+      padding-left: 0.15vw;
     }
   }
 
-  .slogan {
-    font-size: clamp(1rem, 1.2vw, 1.4rem);
-    color: rgba(225, 225, 225, 0.72);
-    letter-spacing: 0.02em;
-  }
-
-  .object {
-    flex: 1;
-    position: relative;
-    min-height: 100%;
-  }
-
-  .object svg {
-    width: min(1200px, 90vw);
-    height: auto;
+  .hero-object {
     position: absolute;
-    top: 55%;
-    left: 60%;
-    transform: translate(-50%, -50%) rotate(-10deg);
-    opacity: 0.9;
-    animation: feverOrbit 36s linear infinite;
+    top: 50%;
+    left: 48%;
+    width: 125vw;
+    height: 125vw;
+    pointer-events: none;
+    transform: translate(
+        calc(-50% + var(--hero-shift-x)),
+        calc(-50% + var(--hero-shift-y))
+      )
+      scale(var(--hero-scale));
   }
 
-  .object div {
+  .hero-object .orbit-layer {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 100%;
+    height: 100%;
+    transform-style: preserve-3d;
+    transform-origin: 50% 66%;
+    transform: perspective(1400px)
+      translate(-50%, -50%)
+      rotateX(28deg)
+      rotateY(-14deg)
+      rotateZ(calc(var(--spin-angle) + var(--hero-rotation)));
+    animation: spinOrbit 60s linear infinite;
+  }
+
+  .hero-object .svg-container {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 5;
+
+    svg {
+      width: 100%;
+      height: 100%;
+    }
+  }
+
+  .hero-object .year-marker {
     position: absolute;
     display: flex;
+    flex-direction: column;
     align-items: center;
-    gap: 0.6rem;
-    font-size: clamp(0.8rem, 1vw, 1.2rem);
-    color: rgba(225, 225, 225, 0.85);
-    letter-spacing: 0.05em;
+    gap: 0.35vw;
+    font-size: clamp(0.85rem, 0.9vw, 1.1rem);
+    color: rgba(225, 225, 225, 0.45);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    z-index: 20;
+    transform: rotateY(15deg) rotateX(-28deg)
+      rotate(calc(-1 * (var(--spin-angle) + var(--hero-rotation))));
+
+    span {
+      width: 0.65vw;
+      height: 0.65vw;
+      border-radius: 50%;
+      background: #fff;
+      box-shadow: 0 0 12px rgba(255, 255, 255, 0.4);
+    }
+
+    p {
+      margin: 0;
+    }
   }
 
-  .object div span {
-    width: 0.55rem;
-    height: 0.55rem;
-    border-radius: 999px;
-    background: #fff;
-    box-shadow: 0 0 12px rgba(255, 255, 255, 0.6);
+  .hero-object .year-marker__2023 {
+    top: 34%;
+    left: 14%;
   }
 
-  .object [class="2023"] {
-    top: 48%;
-    left: 20%;
+  .hero-object .year-marker__2024 {
+    top: 20%;
+    left: 46%;
   }
 
-  .object [class="2024"] {
-    top: 30%;
-    right: 18%;
+  .hero-object .year-marker__2025 {
+    top: 15%;
+    left: 82%;
   }
 
-  .object [class="2025"] {
-    top: 12%;
-    right: 10%;
+  .scrollGuide {
+    position: absolute;
+    bottom: 8vh;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: 0.875vw;
+    color: #fff;
+    animation: bounce 1.8s cubic-bezier(0.68, -0.55, 0.27, 1.55) infinite;
+
+    p {
+      margin: 0;
+    }
+
+    svg {
+      width: 1.04vw;
+      margin-top: 1vh;
+    }
   }
 
   .infoBox {
     position: absolute;
-    bottom: clamp(1.5rem, 3vh, 3rem);
-    left: clamp(2rem, 5vw, 6rem);
-    z-index: 2;
+    display: flex;
+    bottom: 3vh;
+    justify-content: center;
+    margin: 0 3.35vw;
   }
 }
 
-@keyframes feverOrbit {
+.archive-nav {
+  min-height: 100vh;
+  padding: 12vh 6vw;
+  display: flex;
+  align-items: center;
+  background: #000;
+  scroll-snap-align: start;
+
+  .archive-object {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 140vw;
+    height: 140vw;
+    pointer-events: none;
+    transform: translate(
+        calc(-55% + var(--archive-shift-x)),
+        calc(-40% + var(--archive-shift-y))
+      )
+      scale(var(--archive-scale));
+
+    .orbit-layer {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 100%;
+      height: 100%;
+      transform-style: preserve-3d;
+      transform-origin: 15% 70%;
+      transform: perspective(1400px)
+        translate(-50%, -50%)
+        rotateX(18deg)
+        rotateY(-8deg)
+        rotateZ(var(--archive-rotation));
+    }
+  }
+}
+
+.archive-card {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  font-size: clamp(1rem, 1.1vw, 1.4rem);
+  color: #e1e1e1;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.archive-card .txt {
+  margin-top: 1rem;
+  text-transform: none;
+  letter-spacing: -0.01em;
+}
+@keyframes spinOrbit {
   from {
-    transform: translate(-50%, -50%) rotate(-10deg);
+    --spin-angle: 0deg;
   }
   to {
-    transform: translate(-50%, -50%) rotate(350deg);
-  }
-}
-
-@media (max-width: 1024px) {
-  .getFever {
-    padding: 2.5rem 2rem;
-
-    .hero {
-      flex-direction: column;
-      min-height: auto;
-    }
-
-    .object {
-      min-height: 60vh;
-    }
-
-    .object svg {
-      left: 50%;
-      width: min(900px, 120vw);
-    }
+    --spin-angle: 360deg;
   }
 }

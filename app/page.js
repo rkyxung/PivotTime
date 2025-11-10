@@ -54,13 +54,13 @@ export default function Home() {
 
 // import Nav from '../components/nav';
 // import VisualSection from "../components/mainSections/VisualSection";
-// import TypographySection from '../components/mainSections/TypographySection';
+// import GetFever from "../pages/getFever";
 
 // export default function Home() {
 //   return (
 //     <main>
 //       <Nav />
-//       <TypographySection/>
+//       <GetFever/>
 //     </main>
 //   );
 // }
